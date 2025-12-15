@@ -188,7 +188,7 @@ const Contact: React.FC = () => {
     }
     else if (cmd === 'github' || cmd === 'connect --github') {
       newOutput.push('Opening GitHub...');
-      setTimeout(() => window.open('https://github.com/AlBaraa-1', '_blank'), 500);
+      setTimeout(() => window.open('https://github.com/AlBaraa63', '_blank'), 500);
     }
     else if (cmd === 'email' || cmd === 'connect --email') {
       newOutput.push('Opening email...');

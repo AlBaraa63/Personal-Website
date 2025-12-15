@@ -9,7 +9,7 @@ const GitHubStreak: React.FC = () => {
   useEffect(() => {
     const fetchGitHubStreak = async () => {
       try {
-        const username = 'AlBaraa-1';
+        const username = 'AlBaraa63';
         
         // Fetch contribution calendar data from GitHub's public API
         const response = await fetch(
@@ -85,7 +85,7 @@ const GitHubStreak: React.FC = () => {
         border: '1px solid rgba(var(--accent-rgb), 0.2)',
       }}
       title={streak ? `${streak} day commit streak on GitHub` : 'GitHub streak unavailable'}
-      onClick={() => window.open('https://github.com/AlBaraa-1', '_blank')}
+      onClick={() => window.open('https://github.com/AlBaraa63', '_blank')}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = 'rgba(var(--accent-rgb), 0.15)';
         e.currentTarget.style.borderColor = 'rgba(var(--accent-rgb), 0.3)';

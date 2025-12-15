@@ -53,7 +53,7 @@ This gamified portfolio was created with:
 
 Want to collaborate? Let's connect!
 LinkedIn: http://www.linkedin.com/in/albaraa-alolabi-0693b5278
-GitHub: https://github.com/AlBaraa-1
+GitHub: https://github.com/AlBaraa63
 Email: 666645@gmail.com
 
 %cKeep exploring! 🎮

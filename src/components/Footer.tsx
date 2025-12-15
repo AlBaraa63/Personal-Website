@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
               </button>
 
               <button
-                onClick={() => window.open('https://github.com/AlBaraa-1', '_blank')}
+                onClick={() => window.open('https://github.com/AlBaraa63', '_blank')}
                 className="p-1.5 sm:p-2 rounded-md transition-all duration-200 hover:scale-105 glow-border"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
                 aria-label="GitHub"
