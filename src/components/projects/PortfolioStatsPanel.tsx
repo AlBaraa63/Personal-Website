@@ -204,7 +204,7 @@ const PortfolioStatsPanel: React.FC<PortfolioStatsPanelProps> = ({
         </div>
 
         {/* GitHub Stats */}
-        <GitHubStats username="AlBaraa-1" isVisible={isVisible} />
+        <GitHubStats username="AlBaraa63" isVisible={isVisible} />
 
         {/* CTA Card */}
         <div
