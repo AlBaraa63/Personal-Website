@@ -1,0 +1,17 @@
+# Robots.txt for albaraaalolabi.dev
+# Allow all search engines to index the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://albaraaalolabi.dev/sitemap.xml
+
+# Block access to sensitive or unnecessary paths
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /node_modules/
+Disallow: /.git/
+
+# Crawl-delay (optional, adjust if needed)
+# Crawl-delay: 1
