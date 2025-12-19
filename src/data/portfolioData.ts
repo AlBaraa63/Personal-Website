@@ -457,8 +457,8 @@ export const projects: Project[] = [
     category: 'web-dev',
     skills: ['HTML', 'CSS', 'Vanilla JavaScript', 'Responsive Design', 'UI/UX'],
     image: '/assets/images/athkar-website/cover.png',
-    github: 'https://github.com/AlBaraa-1/athkar_applacation',
-    liveDemo: 'https://albaraa-1.github.io/athkar_applacation/',
+    github: 'https://github.com/AlBaraa63/Athkar-Application',
+    liveDemo: 'https://albaraa63.github.io/Athkar-Application/',
     featured: true,
     detailedDescription: 'A fully responsive Islamic remembrance web application demonstrating proficiency in front-end development fundamentals. Features clean UI/UX design with vanilla JavaScript implementations including dark mode functionality for enhanced user experience.',
     challenges: [
