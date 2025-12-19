@@ -154,7 +154,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'YOLOv8', 'MCP Protocol', 'Computer Vision', 'Gradio', 'Gemini Vision', 'SQLite', 'AI Agents', 'Environmental Tech'],
     image: '/assets/images/clean-city/cover.png',
-    github: 'https://github.com/AlBaraa-1/clean_city',
+    github: 'https://github.com/AlBaraa63/Clean-City',
     liveDemo: 'https://huggingface.co/spaces/MCP-1st-Birthday/CleanCity',
     featured: true,
     detailedDescription: 'CleanCity Agent is an autonomous AI system that revolutionizes environmental action by turning smartphone photos into complete cleanup campaigns. Built with Model Context Protocol (MCP), it features 6 specialized tools working together: trash detection (YOLOv8 + Gemini Vision), intelligent cleanup planning with resource estimation, event logging to SQLite database, historical analytics for hotspot identification, and professional report generation. The system autonomously chains multiple AI steps - from detecting 23 items in 2 seconds to creating volunteer schedules and emailing city officials - all without manual intervention.',
