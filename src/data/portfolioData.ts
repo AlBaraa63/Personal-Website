@@ -1016,11 +1016,11 @@ export const research: Research[] = [
 
 // Resume Configuration - Update this one place to change resume across the entire site
 export const resumeConfig = {
-  fileId: '1xUL3HICuehPKl7bl4vCU2GqOVOAjdwSu',
+  fileId: '1mPqOImS4Rpy0ZHDU2J6-JyxCnyMZybmF',
   fileName: 'AlBaraa_Alolabi_Resume.pdf',
   // Computed URLs based on fileId
   get previewUrl() {
-    return `https://drive.google.com/file/d/1xUL3HICuehPKl7bl4vCU2GqOVOAjdwSu/preview`;
+    return `https://drive.google.com/file/d/${this.fileId}/preview`;
   },
   get downloadUrl() {
     return `https://drive.google.com/uc?export=download&id=${this.fileId}`;
