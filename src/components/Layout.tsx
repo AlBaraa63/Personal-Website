@@ -14,7 +14,7 @@ const Layout = ({ children }: LayoutProps) => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Alt + 1-6 for quick section navigation
       if (event.altKey && !event.shiftKey && !event.ctrlKey) {
-        const sections = ['home', 'about', 'projects', 'research', 'certifications', 'contact'];
+        const sections = ['home', 'about', 'experience', 'projects', 'research', 'certifications', 'contact'];
         const num = parseInt(event.key);
         if (num >= 1 && num <= sections.length) {
           event.preventDefault();

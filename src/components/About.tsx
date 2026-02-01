@@ -17,30 +17,36 @@ const About: React.FC = () => {
   const [showResumePreview, setShowResumePreview] = useState(false);
 
   const codeContent = `{
-  "role": "Computer Science Student @ AAU",
-  "focus": "Computer Vision & Deep Learning",
-  
+  "role": "CV Engineer @ Cellula Technologies",
+  "focus": "Computer Vision, Edge AI & Deep Learning",
+
   "expertise": {
     "ai_ml": [
-      "Computer Vision (OpenCV)",
+      "Computer Vision (OpenCV, YOLOv8, MediaPipe)",
       "Deep Learning (PyTorch, TensorFlow)",
       "NLP (Hugging Face BART)",
-      "ML (scikit-learn, SVM, Random Forest)"
+      "ML (scikit-learn, NumPy, Pandas)"
+    ],
+    "languages": [
+      "Python", "C++", "C", "Java",
+      "TypeScript", "JavaScript"
     ],
     "tools": [
       "Git & GitHub",
-      "FastAPI",
-      "Streamlit",
+      "Gradio", "Streamlit", "FastAPI",
+      "React Native", "Node.js", "SQLite",
       "MCP (Model Context Protocol)"
     ]
   },
 
   "certifications": [
     "CS50x - Harvard University",
-    "CS50p - Harvard University",
-    "AI Foundations"
+    "CS50P - Harvard University",
+    "CS50AI - Harvard (In Progress)",
+    "Samsung Innovation Campus",
+    "IEEE SNAMS 2025 - Published Author"
   ],
-  
+
   "status": "Open to opportunities",
   "availability": true
 }`;
@@ -154,7 +160,7 @@ const About: React.FC = () => {
             showElements.subtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`} 
              style={{ color: 'var(--text-secondary)' }}>
-            Teaching machines to see the world
+            Teaching machines to see, think, and act
           </p>
         </div>
 
@@ -163,7 +169,7 @@ const About: React.FC = () => {
           showElements.codeBlock ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <div 
-            className="rounded-xl overflow-hidden h-[520px] sm:h-[600px] md:h-[680px]"
+            className="rounded-xl overflow-hidden h-[620px] sm:h-[720px] md:h-[800px]"
             style={{
               background: 'var(--bg-secondary)',
               border: '1px solid var(--border)',
@@ -311,12 +317,12 @@ const About: React.FC = () => {
         <div className="mt-12 sm:mt-16 flex justify-center">
           <button
             onClick={() => {
-              const projectsSection = document.getElementById('projects');
-              if (projectsSection) {
-                projectsSection.scrollIntoView({ behavior: 'smooth' });
+              const experienceSection = document.getElementById('experience');
+              if (experienceSection) {
+                experienceSection.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            aria-label="Scroll to projects"
+            aria-label="Scroll to experience"
             className="p-2 rounded-full hover:bg-[var(--bg-secondary)] transition-colors"
           >
             <svg

@@ -45,6 +45,18 @@ export interface Certification {
   status?: 'completed' | 'in-progress';
 }
 
+export interface Experience {
+  id: string;
+  title: string;
+  company: string;
+  type: 'work' | 'program';
+  period: string;
+  current: boolean;
+  description: string;
+  highlights: string[];
+  skills: string[];
+}
+
 export interface Research {
   id: string;
   title: string;
@@ -958,7 +970,7 @@ export const certifications: Certification[] = [
     id: 'cs50p',
     title: 'CS50P: Introduction to Programming with Python',
     issuer: 'Harvard University',
-    date: '2024',
+    date: '2025',
     description: 'Advanced Python programming concepts and applications',
     icon: '🐍',
     imagePath: '/assets/certificates/cs50p-preview.jpg',
@@ -967,14 +979,25 @@ export const certifications: Certification[] = [
     featured: true
   },
   {
+    id: 'cs50ai',
+    title: 'CS50AI: Introduction to Artificial Intelligence with Python',
+    issuer: 'Harvard University',
+    date: 'In Progress',
+    description: 'Artificial intelligence concepts using Python - graph search, optimization, machine learning, neural networks',
+    icon: '🧠',
+    featured: true,
+    status: 'in-progress'
+  },
+  {
     id: 'samsung-innovation',
     title: 'Samsung Innovation Campus AI Course',
     issuer: 'Samsung',
-    date: 'Currently Attending',
+    date: 'Dec 2025',
     description: 'Artificial Intelligence and Machine Learning fundamentals program',
     icon: '🏫',
     link: '#',
-    featured: true
+    featured: true,
+    status: 'completed'
   },
   {
     id: 'intro-ai-2023',
@@ -1097,6 +1120,51 @@ export const certifications: Certification[] = [
     pdfPath: '/assets/certificates/google-digital-garage.pdf',
     link: '#'
   }
+];
+
+export const experience: Experience[] = [
+  {
+    id: 'cellula-cv-intern',
+    title: 'Computer Vision Engineer Intern',
+    company: 'Cellula Technologies',
+    type: 'work',
+    period: 'Jan 2026 - Present',
+    current: true,
+    description: 'Developing and optimizing computer vision models for real-world applications using PyTorch, OpenCV, and YOLO frameworks.',
+    highlights: [
+      'Building production-ready CV solutions with end-to-end pipelines including data preprocessing, model training, evaluation, and deployment',
+      'Collaborating with cross-functional teams on computer vision research and development',
+    ],
+    skills: ['PyTorch', 'OpenCV', 'YOLOv8', 'Deep Learning', 'Python'],
+  },
+  {
+    id: 'mafqood-ai',
+    title: 'AI Developer - Create Apps Championship 2025-2026',
+    company: 'Mafqood - AI Lost & Found Platform for Dubai',
+    type: 'work',
+    period: 'Oct 2025 - Present',
+    current: true,
+    description: 'Prototyping AI-powered visual matching system for photo-based lost item retrieval aiming to reduce item recovery time by 40% for Dubai residents.',
+    highlights: [
+      'Building intelligent visual matching with deep learning embeddings and object detection',
+      'Developing React Native app with bilingual Arabic/English support',
+    ],
+    skills: ['Computer Vision', 'React Native', 'Python', 'YOLOv8'],
+  },
+  {
+    id: 'samsung-innovation',
+    title: 'Selected Participant - AI & ML Program',
+    company: 'Samsung Innovation Campus',
+    type: 'program',
+    period: 'Sep 2025 - Dec 2025',
+    current: false,
+    description: 'Advanced training in ML, DL, NLP, and AI systems with hands-on project development.',
+    highlights: [
+      'Co-developed AI hazard awareness system for the visually impaired using MobileNetV2 and Transfer Learning',
+      'Engineered data pipeline: collected and processed 3,000+ images, achieving 85% classification accuracy',
+    ],
+    skills: ['Machine Learning', 'Deep Learning', 'NLP', 'MobileNetV2', 'Python'],
+  },
 ];
 
 export const research: Research[] = [

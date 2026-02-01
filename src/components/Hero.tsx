@@ -3,11 +3,10 @@ import { Play } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const roles = [
-    "Software Engineer",
-    "AI Researcher",
+    "Computer Vision Engineer",
     "AI Developer",
-    "Computer Vision",
-
+    "Edge AI Engineer",
+    "AI Researcher",
   ];
 
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
@@ -219,7 +218,7 @@ const Hero: React.FC = () => {
               letterSpacing: '0.02em',
               lineHeight: '1.6'
             }}>
-              I build intelligent systems that see the world
+              I build intelligent systems that see, think, and act
             </p>
           </div>
 
