@@ -609,7 +609,7 @@ export const projects: Project[] = [
     skills: ['Python', 'OpenCV', 'MediaPipe', 'Image Processing', 'Computer Vision'],
     image: '/assets/images/faceguard/cover.png',
     github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Face-Anonymizer',
-    detailedDescription: '🎯 FaceGuard is a comprehensive tool for face detection and anonymization, supporting images, video files, and live webcam feeds. It uses MediaPipe for robust face detection and OpenCV for fast, customizable blurring, providing an easy-to-use command-line interface with automatic input/output management.',
+    detailedDescription: 'FaceGuard is a comprehensive tool for face detection and anonymization, supporting images, video files, and live webcam feeds. It uses MediaPipe for robust face detection and OpenCV for fast, customizable blurring, providing an easy-to-use command-line interface with automatic input/output management.',
     challenges: [
       'Ensuring real-time performance for video and webcam processing while maintaining accurate detection',
       'Managing multiple input types (images, videos, live webcam) in a single, cohesive tool',
