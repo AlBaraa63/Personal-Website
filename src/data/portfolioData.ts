@@ -62,7 +62,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['React', 'TypeScript', 'Gemini API', 'Computer Vision', 'Vite', 'Tailwind CSS', 'AI Safety', 'Educational Tech'],
     image: '/assets/images/microscope-copilot/cover.png',
-    github: 'https://github.com/AlBaraa-1/Microscope-Copilot',
+    github: 'https://github.com/AlBaraa63/Microscope-Copilot',
     liveDemo: 'https://aistudio.google.com/apps/drive/19dqKyhgd7blfXUJD0GT_jbRD_37YnnW_?showPreview=true&showAssistant=true&fullscreenApplet=true',
     featured: true,
     detailedDescription: 'Microscope Copilot is an AI-powered educational assistant designed to help biology students and lab technicians analyze microscope images safely and effectively. The application features two distinct learning modes: Student Mode with simplified explanations using relatable analogies, and Expert Mode with technical terminology and detailed morphological analysis. Built with a safety-first approach, it strictly avoids clinical diagnoses while providing valuable feedback on cell culture quality, contamination assessment, and microscopy techniques. The system uses Google\'s Gemini 3 Pro Vision model for advanced image analysis, constrained by a comprehensive 2000+ word system prompt ensuring educational focus and safety compliance.',
@@ -274,7 +274,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'MCP Protocol', 'RAG', 'NLP', 'FastAPI', 'LangChain', 'Data Analysis', 'Machine Learning'],
     image: '/assets/images/mission_control_mcp/cover.png',
-    github: 'https://github.com/AlBaraa-1/mission_control_mcp',
+    github: 'https://github.com/AlBaraa63/Mission-Control-MCP',
     liveDemo: 'https://huggingface.co/spaces/AlBaraa63/MissionControlMCP',
     featured: true,
     detailedDescription: 'Mission Control MCP is an enterprise-grade Model Context Protocol server that bridges AI assistants with powerful business automation tools. It provides 8 specialized tools including RAG-based document search, intelligent email classification, automated KPI generation, data visualization, PDF processing, and web scraping capabilities. Designed for seamless integration with Claude Desktop and other MCP-compatible AI platforms.',
@@ -355,7 +355,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'OpenCV', 'face_recognition', 'NumPy', 'Computer Vision'],
     image: '/assets/images/face-recognition/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/face_recognition',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Face_Recognition',
     detailedDescription: 'A real-time face recognition system that identifies known faces from live webcam feeds. Implements strategic frame resizing optimization and face encoding comparison algorithms for efficient processing. Features automated face registration system and visual feedback with bounding boxes and name labels.',
     challenges: [
       'Optimizing real-time performance while maintaining recognition accuracy',
@@ -404,7 +404,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'Hugging Face BART', 'NLP', 'PDFPlumber', 'Pytest'],
     image: '/assets/images/ai-text-summarizer/cover.png',
-    github: 'https://github.com/AlBaraa-1/cs50p-projects/tree/main/FinalProject',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Text_Summarizer',
     detailedDescription: 'A professional-grade text summarization tool leveraging Hugging Face\'s BART transformer model for advanced Natural Language Processing. Demonstrates proficiency in NLP and API integration through efficient and customizable text summarization with comprehensive error handling and testing.',
     challenges: [
       'Integrating Hugging Face BART model with proper API authentication',
@@ -488,11 +488,11 @@ export const projects: Project[] = [
         "📱 Responsive Web Design - Implemented mobile-first responsive layouts",
         "🎨 UI/UX Design - Created clean interface with strong focus on user experience",
         "⚡ Vanilla JavaScript - Built features without framework dependencies",
-        "� Dark Mode Implementation - Engineered theme toggle with local storage persistence"
+        "🔧 Dark Mode Implementation - Engineered theme toggle with local storage persistence"
       ],
       bossFights: [
         "📱 Cross-Device Compatibility - Solved responsive design across all screen sizes",
-        "� Dark Mode Challenge - Implemented theme switching with vanilla JavaScript",
+        "🔧 Dark Mode Challenge - Implemented theme switching with vanilla JavaScript",
         "🎨 UX Optimization - Created intuitive navigation and clean interface design"
       ],
       bonusLevel: "✨ Advanced Feature: Includes local storage for user preferences and optimized Arabic typography for enhanced readability."
@@ -505,7 +505,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'OpenCV', 'NumPy', 'HSV Color Space', 'Computer Vision'],
     image: '/assets/images/color-detection/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/color_detection',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Color-Detection',
     liveDemo: 'https://huggingface.co/spaces/AlBaraa63/yellow_color_detection',
     detailedDescription: 'A real-time color detection system leveraging HSV color space for robust color tracking under varying lighting conditions. Processes live webcam feeds to detect specific colors, displays binary masks, and draws bounding boxes around detected regions. Built with modular utility functions for easy color switching.',
     challenges: [
@@ -558,7 +558,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'OpenCV', 'NumPy', 'Image Processing', 'Computer Vision Fundamentals'],
     image: '/assets/images/teaching-my-computer-to-see/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/baby_steps',
+    github: 'https://github.com/AlBaraa63/CV-Baby-Steps',
     detailedDescription: 'A structured "baby steps" learning repository containing 12 independent OpenCV modules covering image/video I/O, webcam streaming, cropping, resizing, color space conversions, blurring, thresholding, edge detection, drawing utilities, contours, and face detection. Designed for beginners to build hands-on experience with computer vision fundamentals.',
     challenges: [
       'Creating a clear learning progression accessible for absolute beginners',
@@ -608,7 +608,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'OpenCV', 'MediaPipe', 'Image Processing', 'Computer Vision'],
     image: '/assets/images/faceguard/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/face_anonymizer',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Face-Anonymizer',
     detailedDescription: '🎯 FaceGuard is a comprehensive tool for face detection and anonymization, supporting images, video files, and live webcam feeds. It uses MediaPipe for robust face detection and OpenCV for fast, customizable blurring, providing an easy-to-use command-line interface with automatic input/output management.',
     challenges: [
       'Ensuring real-time performance for video and webcam processing while maintaining accurate detection',
@@ -657,7 +657,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'OpenCV', 'Tesseract OCR', 'Streamlit', 'Image Processing', 'Computer Vision'],
     image: '/assets/images/ocr-text-detection/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/text_detection',
+    github: 'https://github.com/AlBaraa63/Text-Detection',
     liveDemo: 'https://huggingface.co/spaces/AlBaraa63/text_detection',
     featured: true,
     detailedDescription: 'An Optical Character Recognition system combining advanced computer vision preprocessing techniques with Tesseract OCR engine. Features dual interfaces: an interactive Streamlit web application with real-time text analytics (word/character/line counts) and a command-line tool for automation. Implements intelligent preprocessing with 8+ enhancement functions organized into 4 specialized modes.',
@@ -713,7 +713,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'scikit-learn', 'Machine Learning', 'SVM', 'OpenCV', 'Image Processing'],
     image: '/assets/images/car-image-classification/cover.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/image_classification',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/image_classification',
     detailedDescription: 'A production-ready machine learning classifier using Support Vector Machines (SVM) with RBF kernel to distinguish between car and non-car images. Implements automated hyperparameter tuning through GridSearchCV, testing multiple C and gamma values with 5-fold cross-validation. Features efficient image preprocessing with 15x15 pixel resizing and anti-aliasing, achieving near-perfect classification performance.',
     challenges: [
       'Achieving high accuracy while maintaining fast training times',
@@ -767,7 +767,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'PyTorch', 'Deep Learning', 'CNN', 'Computer Vision', 'ResNet', 'Image Classification', 'Medical Imaging'],
     image: '/assets/images/teeth-classification/cover.png',
-    github: 'https://github.com/AlBaraa-1/teeth-classification',
+    github: 'https://github.com/AlBaraa63/teeth-classification',
     detailedDescription: 'A deep learning computer vision project that classifies dental images into 7 distinct oral health conditions using a custom Convolutional Neural Network built from scratch with PyTorch. The model incorporates architectural concepts from landmark papers (AlexNet and ResNet), featuring residual blocks with skip connections for improved gradient flow and deeper learning. With ~2.7 million parameters (much smaller than ResNet-18), the model achieves 97.67% validation accuracy across 7 dental condition classes. Developed during an internship at Cellula Technologies.',
     challenges: [
       'Designing a custom CNN architecture from scratch that balances accuracy with model size',
@@ -863,7 +863,7 @@ export const projects: Project[] = [
     category: 'ai-cv',
     skills: ['Python', 'scikit-learn', 'Random Forest', 'Machine Learning', 'OpenCV', 'Data Visualization'],
     image: '/assets/images/weather-recognition/samples.png',
-    github: 'https://github.com/AlBaraa-1/Computer-vision/tree/main/weather_recognition',
+    github: 'https://github.com/AlBaraa63/Computer-Vision/tree/main/Weather_Recognition',
     detailedDescription: 'A comprehensive weather classification system using Random Forest machine learning algorithm to identify four weather conditions: cloudy, rainy, shine, and sunrise. Implements robust image preprocessing pipeline with resizing and flattening, organized train/validation data structure, and model persistence using joblib for deployment. Features detailed performance analysis with accuracy metrics and prediction capabilities.',
     challenges: [
       'Classifying weather conditions from diverse image datasets',
