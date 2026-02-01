@@ -913,6 +913,11 @@ export const projects: Project[] = [
     ],
     visuals: [
       {
+        src: '/assets/images/teeth-classification/cover.png',
+        alt: 'Sample Images from Each Dental Class',
+        caption: 'Sample images from all 7 dental condition classes (CaS, CoS, Gum, MC, OC, OLP, OT) at 256x256 resolution used for training'
+      },
+      {
         src: '/assets/images/teeth-classification/confusion_matrix.png',
         alt: 'Confusion Matrix for Teeth Classification',
         caption: 'Confusion matrix showing model performance across all 7 dental condition classes with 97%+ accuracy'
@@ -931,6 +936,26 @@ export const projects: Project[] = [
         src: '/assets/images/teeth-classification/sample_predictions.png',
         alt: 'Sample Predictions',
         caption: 'Sample predictions showing the model correctly identifying various dental conditions from test images'
+      },
+      {
+        src: '/assets/images/teeth-classification/class_distribution.png',
+        alt: 'Class Distribution in Training Set',
+        caption: 'Dataset distribution across 7 classes: MC and OLP highest (540 each), OC lowest (324), totaling 3,087 training images'
+      },
+      {
+        src: '/assets/images/teeth-classification/augmentation_comparison.png',
+        alt: 'Data Augmentation Visualization',
+        caption: 'Medical-conscious augmentation pipeline showing original vs 5 augmented variants (rotation, color jitter, affine transforms) compared to validation transform (no augmentation)'
+      },
+      {
+        src: '/assets/images/teeth-classification/normalization_explained.png',
+        alt: 'Understanding Normalization Pipeline',
+        caption: 'Three-stage normalization visualization: ToTensor (0-1 range), ImageNet Normalize (centered around 0), and Denormalize (back to 0-1) with pixel value histograms'
+      },
+      {
+        src: '/assets/images/teeth-classification/feature_maps.png',
+        alt: 'CNN Feature Maps at Each Layer',
+        caption: 'What the model sees: mean activations and Channel 0 feature maps across all 4 residual blocks (32ch 112x112 to 256ch 14x14) showing progressive abstraction'
       }
     ],
     techStack: {
