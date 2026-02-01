@@ -761,6 +761,102 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'teeth-classification',
+    title: 'Teeth Classification with Deep Learning',
+    description: 'Custom CNN with residual connections achieving 97.67% accuracy classifying dental images into 7 oral health conditions (Calculus, Caries, Gum Disease, Mouth Cancer, Oral Candidiasis, Oral Lichen Planus, Oral Trauma). Built from scratch using PyTorch with ResNet-inspired architecture, trained on 5,143 dental images during internship at Cellula Technologies.',
+    category: 'ai-cv',
+    skills: ['Python', 'PyTorch', 'Deep Learning', 'CNN', 'Computer Vision', 'ResNet', 'Image Classification', 'Medical Imaging'],
+    image: '/assets/images/teeth-classification/cover.png',
+    github: 'https://github.com/AlBaraa-1/teeth-classification',
+    detailedDescription: 'A deep learning computer vision project that classifies dental images into 7 distinct oral health conditions using a custom Convolutional Neural Network built from scratch with PyTorch. The model incorporates architectural concepts from landmark papers (AlexNet and ResNet), featuring residual blocks with skip connections for improved gradient flow and deeper learning. With ~2.7 million parameters (much smaller than ResNet-18), the model achieves 97.67% validation accuracy across 7 dental condition classes. Developed during an internship at Cellula Technologies.',
+    challenges: [
+      'Designing a custom CNN architecture from scratch that balances accuracy with model size',
+      'Implementing residual connections to enable effective gradient flow in deeper networks',
+      'Handling medical image classification with limited dataset of 5,143 dental images',
+      'Achieving high per-class accuracy across 7 visually similar dental conditions',
+      'Applying appropriate data augmentation without distorting diagnostically relevant features'
+    ],
+    solutions: [
+      'Built ResNet-inspired architecture with 4 stages of residual blocks and progressive channel expansion (32→64→128→256→512)',
+      'Implemented skip connections with proper downsampling for dimension matching between layers',
+      'Applied medical-conscious data augmentation: limited rotation (±15°), color jitter, random affine transforms',
+      'Used global average pooling to dramatically reduce parameters while maintaining spatial information',
+      'Employed Kaiming initialization, batch normalization, and dropout (0.5) for stable and regularized training'
+    ],
+    outcomes: [
+      'Achieved 97.67% validation accuracy and 97%+ test accuracy across 7 dental conditions',
+      'Per-class accuracy ranging from 92.6% to 100% demonstrating balanced performance',
+      'Model contains only ~2.7 million parameters — significantly smaller than standard ResNet-18',
+      'Successfully classifies: Calculus, Caries, Gum Disease, Mouth Cancer, Oral Candidiasis, Oral Lichen Planus, and Oral Trauma',
+      'Training converged in ~45 epochs with early stopping and learning rate scheduling'
+    ],
+    visuals: [
+      {
+        src: '/assets/images/teeth-classification/confusion_matrix.png',
+        alt: 'Confusion Matrix for Teeth Classification',
+        caption: 'Confusion matrix showing model performance across all 7 dental condition classes with 97%+ accuracy'
+      },
+      {
+        src: '/assets/images/teeth-classification/training_history.png',
+        alt: 'Training History',
+        caption: 'Training and validation accuracy/loss curves showing model convergence over ~45 epochs with early stopping'
+      },
+      {
+        src: '/assets/images/teeth-classification/per_class_accuracy.png',
+        alt: 'Per-Class Accuracy',
+        caption: 'Per-class accuracy breakdown ranging from 92.6% to 100% across all 7 dental conditions'
+      },
+      {
+        src: '/assets/images/teeth-classification/sample_predictions.png',
+        alt: 'Sample Predictions',
+        caption: 'Sample predictions showing the model correctly identifying various dental conditions from test images'
+      }
+    ],
+    techStack: {
+      ai: [
+        'PyTorch 2.2',
+        'Custom CNN with Residual Blocks',
+        'torchvision',
+        'Kaiming Initialization',
+        'Batch Normalization',
+        'Global Average Pooling'
+      ],
+      backend: [
+        'Python 3.12',
+        'NumPy',
+        'Matplotlib',
+        'Pillow (PIL)',
+        'tqdm'
+      ],
+      other: [
+        'Adam Optimizer',
+        'ReduceLROnPlateau Scheduler',
+        'Early Stopping',
+        'Cross-Entropy Loss',
+        'Data Augmentation Pipeline',
+        'ImageNet Normalization'
+      ]
+    },
+    gameDetails: {
+      questOverview: "🦷 Dental AI Quest Complete! Built a custom CNN from scratch with residual connections to classify 7 oral health conditions with 97.67% accuracy. From Calculus to Mouth Cancer detection — trained on 5,143 dental images during internship at Cellula Technologies!",
+      skillsUnlocked: [
+        "🧠 Custom CNN Architecture - Designed ResNet-inspired model with residual blocks from scratch",
+        "🔗 Residual Connections - Implemented skip connections for effective gradient flow in deeper networks",
+        "🦷 Medical Image Classification - Classified 7 dental conditions with per-class accuracy up to 100%",
+        "⚡ Training Optimization - Mastered learning rate scheduling, early stopping, and Kaiming initialization",
+        "📊 Data Pipeline Engineering - Built medical-conscious augmentation preserving diagnostic features",
+        "🏗️ Efficient Architecture - Achieved 97.67% accuracy with only ~2.7M parameters"
+      ],
+      bossFights: [
+        "⚔️ The Architecture Design Challenge - Building effective CNN from scratch without pretrained models",
+        "🐉 The Residual Connection Dragon - Implementing skip connections with proper dimension matching",
+        "🎯 The Medical Accuracy Beast - Achieving 97%+ accuracy across 7 visually similar dental conditions",
+        "🧪 The Small Dataset Challenge - Training effectively on only 5,143 dental images with smart augmentation"
+      ],
+      bonusLevel: "🌟 MEDICAL AI IMPACT: Built a foundation for automated dental condition screening that could serve as diagnostic support for dental professionals, educational resource for dental students, or basis for mobile/web deployment!"
+    }
+  },
+  {
     id: 'weather-recognition',
     title: 'Weather Recognition with Random Forest',
     description: 'Machine learning weather classifier using Random Forest algorithm to categorize weather conditions (cloudy, rainy, shine, sunrise) from images. Features comprehensive data preprocessing, model persistence with joblib, and detailed performance metrics visualization.',
