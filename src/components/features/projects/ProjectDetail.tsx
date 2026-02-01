@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExternalLink, Github, X, ZoomIn } from 'lucide-react';
-import { Project } from '../data/portfolioData';
+import { Project } from '@/data/portfolioData';
 
 interface ProjectDetailProps {
   project: Project;
@@ -8,7 +8,7 @@ interface ProjectDetailProps {
 
 const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
   const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null);
-  
+
   return (
     <div className="min-h-screen py-20" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -54,7 +54,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.frontend.map(tech => (
                       <span key={tech} className="px-3 py-1 rounded-full text-sm"
-                            style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+                        style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
                         {tech}
                       </span>
                     ))}
@@ -67,7 +67,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.backend.map(tech => (
                       <span key={tech} className="px-3 py-1 rounded-full text-sm"
-                            style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+                        style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
                         {tech}
                       </span>
                     ))}
@@ -80,7 +80,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.ai.map(tech => (
                       <span key={tech} className="px-3 py-1 rounded-full text-sm"
-                            style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+                        style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
                         {tech}
                       </span>
                     ))}
@@ -145,7 +145,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
             <div className="space-y-8">
               {project.visuals.map((visual, index) => (
                 <div key={index} className="group rounded-xl overflow-hidden cursor-pointer relative" style={{ backgroundColor: 'var(--bg-secondary)' }}
-                     onClick={() => setZoomedImage({ src: visual.src, alt: visual.alt })}>
+                  onClick={() => setZoomedImage({ src: visual.src, alt: visual.alt })}>
                   <div className="relative">
                     <img
                       src={visual.src}
@@ -180,7 +180,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
-              style={{ 
+              style={{
                 backgroundColor: 'var(--accent)',
                 color: 'var(--bg-primary)'
               }}
@@ -195,7 +195,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold border-2 transition-all duration-300 hover:scale-105"
-              style={{ 
+              style={{
                 borderColor: 'var(--accent)',
                 color: 'var(--accent)',
                 backgroundColor: 'transparent'
@@ -210,7 +210,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
 
       {/* Image Zoom Modal */}
       {zoomedImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fadeIn"
           onClick={() => setZoomedImage(null)}
           style={{ cursor: 'zoom-out' }}

@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { ExternalLink, Github, Trophy, Rocket, Swords, Map, Sparkles, Eye, ArrowLeft, X, ZoomIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Project } from '../data/portfolioData';
-import { generateProjectDetails } from '../utils/gamifiedDetails';
+import { Project } from '@/data/portfolioData';
+import { generateProjectDetails } from '@/utils/gamifiedDetails';
 
 type MediaItem = { type: 'image' | 'video' | 'gif'; src: string; alt?: string };
 
@@ -19,21 +19,21 @@ export interface GameProjectDetailProps {
 
 const Section: React.FC<{ title: string; icon?: React.ReactNode; children: React.ReactNode }>
   = ({ title, icon, children }) => (
-  <section className="mb-12 opacity-0 animate-fadeInUp" style={{ animationFillMode: 'forwards', animationDuration: '600ms' }}>
-    <div className="flex items-center gap-2 mb-4">
-      {icon}
-      <h2 className="text-2xl font-extrabold tracking-wide" style={{ color: 'var(--accent)' }}>{title}</h2>
-    </div>
-    <div className="rounded-xl border p-4 md:p-6 bg-black/20 backdrop-blur-sm"
-         style={{ borderColor: 'var(--border)' }}>
-      {children}
-    </div>
-  </section>
-);
+    <section className="mb-12 opacity-0 animate-fadeInUp" style={{ animationFillMode: 'forwards', animationDuration: '600ms' }}>
+      <div className="flex items-center gap-2 mb-4">
+        {icon}
+        <h2 className="text-2xl font-extrabold tracking-wide" style={{ color: 'var(--accent)' }}>{title}</h2>
+      </div>
+      <div className="rounded-xl border p-4 md:p-6 bg-black/20 backdrop-blur-sm"
+        style={{ borderColor: 'var(--border)' }}>
+        {children}
+      </div>
+    </section>
+  );
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
   <span className="px-3 py-1 rounded-full text-xs border shadow-sm hover:shadow-md transition-transform duration-200 hover:-translate-y-0.5"
-        style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>{children}</span>
+    style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>{children}</span>
 );
 
 const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
@@ -51,7 +51,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
   const items: MediaItem[] = media ?? [{ type: 'image', src: project.image, alt: project.title }];
   const skills = inventory ?? project.skills;
   const linkSet = { github: project.github, liveDemo: project.liveDemo, ...(links ?? {}) };
-  
+
   // Zoom modal state
   const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -71,8 +71,8 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
         <button
           onClick={handleBackClick}
           className="nav-transition flex items-center gap-2 px-4 py-2 rounded-lg border backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:shadow-lg"
-          style={{ 
-            backgroundColor: 'var(--bg-secondary)', 
+          style={{
+            backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border)',
             color: 'var(--text-primary)'
           }}
@@ -83,7 +83,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
       </div>
 
       {/* Hero Banner */}
-  <div className="relative overflow-hidden py-10 sm:py-14 md:py-20 border-b" style={{ borderColor: 'var(--border)' }}>
+      <div className="relative overflow-hidden py-10 sm:py-14 md:py-20 border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="h-full w-full opacity-20 animate-pulse-slow" style={{
             background: 'radial-gradient(1200px 400px at 50% -10%, rgba(99,102,241,0.4), transparent)'
@@ -93,7 +93,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full border animate-glow"
-                   style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping-slow" />
                 <span className="text-xs uppercase tracking-widest">{project.category}</span>
               </div>
@@ -107,7 +107,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
             </div>
             <div className="hidden md:block">
               <img src={project.image} alt={project.title} className="w-56 h-32 object-cover rounded-lg border"
-                   style={{ borderColor: 'var(--border)' }} />
+                style={{ borderColor: 'var(--border)' }} />
             </div>
           </div>
         </div>
@@ -115,22 +115,22 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-10">
         {/* Quest Log */}
-        <Section title="Quest Log" icon={<Rocket className="w-5 h-5 text-emerald-400" /> }>
+        <Section title="Quest Log" icon={<Rocket className="w-5 h-5 text-emerald-400" />}>
           <p className="leading-relaxed text-justify" style={{ color: 'var(--text-secondary)' }}>{summary}</p>
         </Section>
 
         {/* Visuals Carousel */}
-        <Section title="Visuals" icon={<Eye className="w-5 h-5 text-sky-400" /> }>
+        <Section title="Visuals" icon={<Eye className="w-5 h-5 text-sky-400" />}>
           <div className="-mx-2 sm:mx-0">
             <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory px-2 sm:px-0" role="list">
               {items.map((m, idx) => (
                 <div role="listitem" key={idx} className="group relative overflow-hidden rounded-xl border bg-black/30 flex-shrink-0 w-[82%] xs:w-[70%] sm:w-auto snap-center cursor-pointer"
-                     style={{ borderColor: 'var(--border)' }}
-                     onClick={() => (m.type === 'image' || m.type === 'gif') && setZoomedImage({ src: m.src, alt: m.alt ?? '' })}>
+                  style={{ borderColor: 'var(--border)' }}
+                  onClick={() => (m.type === 'image' || m.type === 'gif') && setZoomedImage({ src: m.src, alt: m.alt ?? '' })}>
                   {m.type === 'image' && (
                     <>
                       <img loading="lazy" src={m.src} alt={m.alt ?? ''}
-                           className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                       <div className="absolute top-2 right-2 p-2 rounded-full bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <ZoomIn className="w-4 h-4 text-white" />
@@ -140,7 +140,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
                   {m.type === 'gif' && (
                     <>
                       <img loading="lazy" src={m.src} alt={m.alt ?? ''}
-                           className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                       <div className="absolute top-2 right-2 p-2 rounded-full bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <ZoomIn className="w-4 h-4 text-white" />
@@ -162,7 +162,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
         </Section>
 
         {/* Inventory / Power-Ups */}
-        <Section title="Inventory" icon={<Sparkles className="w-5 h-5 text-fuchsia-400" /> }>
+        <Section title="Inventory" icon={<Sparkles className="w-5 h-5 text-fuchsia-400" />}>
           <div className="flex flex-wrap gap-2">
             {skills.map((s) => (
               <Badge key={s}>{s}</Badge>
@@ -172,7 +172,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
         {/* Quest Objectives */}
         {features && features.length > 0 && (
-          <Section title="Quest Objectives" icon={<Map className="w-5 h-5 text-orange-400" /> }>
+          <Section title="Quest Objectives" icon={<Map className="w-5 h-5 text-orange-400" />}>
             <ul className="space-y-2">
               {features.map((f, i) => (
                 <li key={i} className="flex items-start gap-2" style={{ color: 'var(--text-secondary)' }}>
@@ -186,7 +186,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
         {/* Interactive Demo */}
         {demoEmbed && (
-          <Section title="Interactive Demo" icon={<Swords className="w-5 h-5 text-red-400" /> }>
+          <Section title="Interactive Demo" icon={<Swords className="w-5 h-5 text-red-400" />}>
             <div className="aspect-video w-full rounded-xl overflow-hidden border bg-black/30" style={{ borderColor: 'var(--border)' }}>
               {demoEmbed}
             </div>
@@ -195,7 +195,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
         {/* Level Progression Timeline */}
         {timeline && timeline.length > 0 && (
-          <Section title="Level Progression" icon={<Map className="w-5 h-5 text-cyan-400" /> }>
+          <Section title="Level Progression" icon={<Map className="w-5 h-5 text-cyan-400" />}>
             <ol className="relative border-l pl-6 space-y-6" style={{ borderColor: 'var(--border)' }}>
               {timeline.map((t, i) => (
                 <li key={i} className="ml-2">
@@ -210,7 +210,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
         {/* Boss Fights */}
         {bossFights && bossFights.length > 0 && (
-          <Section title="Boss Fights" icon={<Swords className="w-5 h-5 text-rose-400" /> }>
+          <Section title="Boss Fights" icon={<Swords className="w-5 h-5 text-rose-400" />}>
             <div className="grid md:grid-cols-2 gap-4">
               {bossFights.map((bf, i) => (
                 <div key={i} className="rounded-lg p-4 border bg-black/30" style={{ borderColor: 'var(--border)' }}>
@@ -251,7 +251,7 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
 
       {/* Image Zoom Modal */}
       {zoomedImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fadeIn"
           onClick={() => setZoomedImage(null)}
           style={{ cursor: 'zoom-out' }}

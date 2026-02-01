@@ -1,40 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Download, Save } from 'lucide-react';
-import { resumeConfig } from '../data/portfolioData';
+import { Download } from 'lucide-react';
+import { resumeConfig } from '@/data/portfolioData';
 
 const Resume: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-  const [glitchText, setGlitchText] = useState('???');
   const sectionRef = useRef<HTMLElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const glitchCharacters = '!<>-_\\/%^#@&*+=[]{}~`';
-    const baseText = '[REDACTED]';
-    let interval: NodeJS.Timeout;
-
-    if (isVisible) {
-      interval = setInterval(() => {
-        const shouldGlitch = Math.random() < 0.7;
-        if (shouldGlitch) {
-          const glitched = baseText
-            .split('')
-            .map(char => 
-              Math.random() < 0.3 
-                ? glitchCharacters[Math.floor(Math.random() * glitchCharacters.length)]
-                : char
-            )
-            .join('');
-          setGlitchText(glitched);
-        } else {
-          setGlitchText(baseText);
-        }
-      }, 100);
-    }
-
-    return () => clearInterval(interval);
-  }, [isVisible]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,7 +35,7 @@ const Resume: React.FC = () => {
           const elementRect = element.getBoundingClientRect();
           const absoluteElementTop = elementRect.top + window.pageYOffset;
           const middle = absoluteElementTop - (window.innerHeight / 3); // Position at upper-middle of screen
-          
+
           window.scrollTo({
             top: middle,
             behavior: 'smooth'
@@ -87,52 +59,48 @@ const Resume: React.FC = () => {
     <section id="resume" ref={sectionRef} className="relative py-12 sm:py-16 md:py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-700 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 -translate-y-4'
-        }`}>
+        <div className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-700 ease-out ${isVisible
+          ? 'opacity-100 translate-y-0'
+          : 'opacity-0 -translate-y-4'
+          }`}>
           <h2 className="text-2xl md:text-3xl font-bold mb-3"
-              style={{
-                color: 'var(--text-primary)'
-              }}>
-            <span style={{ 
+            style={{
+              color: 'var(--text-primary)'
+            }}>
+            <span style={{
               color: 'var(--text-secondary)'
             }}>
               Resume
             </span>
           </h2>
-          <p className={`text-sm md:text-base mt-2 transition-all duration-700 delay-150 ${
-            isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-4'
-          }`} 
-             style={{ 
-               color: 'var(--text-secondary)'
-             }}>
+          <p className={`text-sm md:text-base mt-2 transition-all duration-700 delay-150 ${isVisible
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4'
+            }`}
+            style={{
+              color: 'var(--text-secondary)'
+            }}>
             Professional documentation
           </p>
         </div>
 
         {/* Minimal Resume Interface */}
-        <div className={`transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100' : 'opacity-0'
-        }`}>
+        <div className={`transition-all duration-700 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'
+          }`}>
           <div className="max-w-3xl mx-auto"
-               style={{
-                 background: 'var(--bg-secondary)',
-                 border: '1px solid var(--border)',
-                 borderRadius: '8px',
-                 padding: '24px',
-                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-               }}>
-            
+            style={{
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              padding: '24px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}>
+
             {/* Minimal Content */}
             <div className="space-y-5">
               {/* Header Info */}
-              <div className={`text-center space-y-1 transition-opacity duration-500 delay-100 ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}>
+              <div className={`text-center space-y-1 transition-opacity duration-500 delay-100 ${isVisible ? 'opacity-100' : 'opacity-0'
+                }`}>
                 <p className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
                   AlBaraa AlOlabi
                 </p>
@@ -142,9 +110,8 @@ const Resume: React.FC = () => {
               </div>
 
               {/* Key Highlights */}
-              <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 transition-opacity duration-500 delay-200 ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}>
+              <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 transition-opacity duration-500 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0'
+                }`}>
                 <div className="text-center space-y-0.5">
                   <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
                     Education
@@ -181,9 +148,8 @@ const Resume: React.FC = () => {
               </div>
 
               {/* Tech Stack */}
-              <div className={`transition-opacity duration-500 delay-300 ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}>
+              <div className={`transition-opacity duration-500 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0'
+                }`}>
                 <div className="flex flex-wrap justify-center gap-1.5">
                   {['Python', 'PyTorch', 'TensorFlow', 'OpenCV', 'YOLO'].map((tech) => (
                     <span
@@ -205,14 +171,13 @@ const Resume: React.FC = () => {
               <div className="w-16 h-px mx-auto" style={{ backgroundColor: 'var(--border)' }}></div>
 
               {/* Download Buttons */}
-              <div className={`text-center transition-opacity duration-500 delay-400 ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}>
+              <div className={`text-center transition-opacity duration-500 delay-400 ${isVisible ? 'opacity-100' : 'opacity-0'
+                }`}>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <button
                     onClick={handleDownload}
                     className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold text-sm border transition-all duration-200 hover:bg-[var(--bg-primary)]"
-                    style={{ 
+                    style={{
                       borderColor: 'var(--border)',
                       color: 'var(--text-primary)',
                       backgroundColor: 'transparent'
@@ -224,7 +189,7 @@ const Resume: React.FC = () => {
                   <button
                     onClick={() => setIsPreviewVisible(!isPreviewVisible)}
                     className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold text-sm border transition-all duration-200 hover:bg-[var(--bg-primary)]"
-                    style={{ 
+                    style={{
                       borderColor: 'var(--border)',
                       color: 'var(--text-primary)',
                       backgroundColor: 'transparent'
@@ -241,40 +206,36 @@ const Resume: React.FC = () => {
         </div>
 
         {/* Preview Section */}
-        <div 
+        <div
           ref={previewRef}
-          className={`mt-8 sm:mt-12 md:mt-16 transition-all duration-500 ${
-            isPreviewVisible 
-              ? 'opacity-100 max-h-[2000px]' 
-              : 'opacity-0 max-h-0 overflow-hidden'
-          }`}
+          className={`mt-8 sm:mt-12 md:mt-16 transition-all duration-500 ${isPreviewVisible
+            ? 'opacity-100 max-h-[2000px]'
+            : 'opacity-0 max-h-0 overflow-hidden'
+            }`}
         >
           <div className="max-w-4xl mx-auto rounded-lg border p-3 sm:p-4"
-               style={{ 
-                 background: 'var(--bg-secondary)',
-                 borderColor: 'var(--border)',
-                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-               }}>
-            <h3 className={`text-sm sm:text-base font-bold mb-3 sm:mb-4 text-center transition-all duration-800 ${
-              isPreviewVisible ? 'opacity-100 scale-110 translate-y-0 delay-200' : 'opacity-0 scale-90 translate-y-4'
-            }`} style={{ 
-              color: 'var(--text-primary)'
+            style={{
+              background: 'var(--bg-secondary)',
+              borderColor: 'var(--border)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}>
+            <h3 className={`text-sm sm:text-base font-bold mb-3 sm:mb-4 text-center transition-all duration-800 ${isPreviewVisible ? 'opacity-100 scale-110 translate-y-0 delay-200' : 'opacity-0 scale-90 translate-y-4'
+              }`} style={{
+                color: 'var(--text-primary)'
+              }}>
               Resume Preview
             </h3>
-            
+
             {/* PDF iframe - Works on both desktop and mobile with Google Drive */}
-            <div className={`relative w-full transition-all duration-1000 ${
-              isPreviewVisible ? 'opacity-100 scale-100 rotate-0 delay-400' : 'opacity-0 scale-95 rotate-2'
-            }`} style={{ 
-              paddingTop: '141.4%',
-              transform: isPreviewVisible ? 'perspective(800px) rotateY(0deg)' : 'perspective(800px) rotateY(-3deg)'
-            }}>
+            <div className={`relative w-full transition-all duration-1000 ${isPreviewVisible ? 'opacity-100 scale-100 rotate-0 delay-400' : 'opacity-0 scale-95 rotate-2'
+              }`} style={{
+                paddingTop: '141.4%',
+                transform: isPreviewVisible ? 'perspective(800px) rotateY(0deg)' : 'perspective(800px) rotateY(-3deg)'
+              }}>
               <iframe
                 src={`${resumeConfig.previewUrl}?rm=minimal`}
-                className={`absolute top-0 left-0 w-full h-full rounded-lg transition-all duration-700 ${
-                  isPreviewVisible ? 'shadow-2xl' : 'shadow-lg'
-                }`}
+                className={`absolute top-0 left-0 w-full h-full rounded-lg transition-all duration-700 ${isPreviewVisible ? 'shadow-2xl' : 'shadow-lg'
+                  }`}
                 style={{
                   boxShadow: isPreviewVisible ? '0 25px 50px rgba(0,0,0,0.6)' : '0 10px 20px rgba(0,0,0,0.3)'
                 }}

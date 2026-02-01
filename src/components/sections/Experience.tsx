@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Briefcase, GraduationCap } from 'lucide-react';
-import { experience } from '../data/portfolioData';
+import { experience } from '@/data/portfolioData';
 
 const Experience: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -84,9 +84,8 @@ const Experience: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className={`relative pl-12 sm:pl-16 ${smoothTransition} ${
-                    cardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                  }`}
+                  className={`relative pl-12 sm:pl-16 ${smoothTransition} ${cardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+                    }`}
                 >
                   {/* Timeline dot */}
                   <div

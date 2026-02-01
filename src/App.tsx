@@ -1,14 +1,14 @@
 // React import not required with the new JSX transform
-import { ThemeProvider } from './context/ThemeContext';
-import ErrorBoundary from './components/ErrorBoundary';
-import Layout from './components/Layout';
-import Hero from './components/Hero';
-import About from './components/About';
-import Projects from './components/Projects';
-import Research from './components/Research';
-import Certifications from './components/Certifications';
-import Contact from './components/Contact';
-import Experience from './components/Experience';
+import { ThemeProvider } from '@/context/ThemeContext';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import Layout from '@/components/common/Layout';
+import Hero from '@/components/sections/Hero';
+import About from '@/components/sections/About';
+import Projects from '@/components/sections/Projects';
+import Research from '@/components/sections/Research';
+import Certifications from '@/components/sections/Certifications';
+import Contact from '@/components/sections/Contact';
+import Experience from '@/components/sections/Experience';
 
 function App() {
   return (

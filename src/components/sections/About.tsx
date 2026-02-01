@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Download, Eye, EyeOff } from 'lucide-react';
-import { resumeConfig } from '../data/portfolioData';
+import { resumeConfig } from '@/data/portfolioData';
 
 const About: React.FC = () => {
   const [displayedCode, setDisplayedCode] = useState('');
@@ -56,7 +56,7 @@ const About: React.FC = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          
+
           // Staggered animation timeline
           const timeline = [
             { element: 'title', delay: 80 },
@@ -147,28 +147,25 @@ const About: React.FC = () => {
     >
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className={`text-center mb-8 sm:mb-12 ${smoothTransition} transform-gpu ${
-          showElements.title ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
-        }`}>
+        <div className={`text-center mb-8 sm:mb-12 ${smoothTransition} transform-gpu ${showElements.title ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
+          }`}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
-              style={{ color: 'var(--text-primary)' }}>
+            style={{ color: 'var(--text-primary)' }}>
             <span style={{ color: 'var(--accent)', fontWeight: '300' }}>[</span>
             {' '}./about{' '}
             <span style={{ color: 'var(--accent)', fontWeight: '300' }}>]</span>
           </h2>
-          <p className={`text-sm sm:text-base md:text-lg ${smoothTransition} ${
-            showElements.subtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`} 
-             style={{ color: 'var(--text-secondary)' }}>
+          <p className={`text-sm sm:text-base md:text-lg ${smoothTransition} ${showElements.subtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ color: 'var(--text-secondary)' }}>
             Teaching machines to see, think, and act
           </p>
         </div>
 
         {/* Code Block */}
-        <div className={`w-full max-w-2xl mx-auto ${smoothTransition} transform-gpu ${
-          showElements.codeBlock ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
-          <div 
+        <div className={`w-full max-w-2xl mx-auto ${smoothTransition} transform-gpu ${showElements.codeBlock ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
+          <div
             className="rounded-xl overflow-hidden h-[620px] sm:h-[720px] md:h-[800px]"
             style={{
               background: 'var(--bg-secondary)',
@@ -176,9 +173,9 @@ const About: React.FC = () => {
               boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
             }}>
             {/* Window Header */}
-            <div 
+            <div
               className="flex items-center gap-2 px-4 py-3 border-b"
-              style={{ 
+              style={{
                 borderColor: 'var(--border)',
                 background: 'rgba(var(--accent-rgb), 0.05)'
               }}>
@@ -189,9 +186,9 @@ const About: React.FC = () => {
                 📄 profile.json
               </span>
             </div>
-            
+
             {/* Code Content */}
-            <div 
+            <div
               className="p-3 sm:p-6 md:p-8"
               style={{
                 background: 'var(--bg-primary)',
@@ -201,16 +198,16 @@ const About: React.FC = () => {
                 <code
                   className="font-mono block"
                   dangerouslySetInnerHTML={{ __html: highlightSyntax(displayedCode) }}
-                  style={{ 
+                  style={{
                     color: 'var(--text-primary)',
                     wordBreak: 'break-word',
                     whiteSpace: 'pre-wrap'
                   }}
                 />
                 {isVisible && displayedCode.length < codeContent.length && (
-                  <span 
-                    className="animate-pulse inline-block ml-1" 
-                    style={{ 
+                  <span
+                    className="animate-pulse inline-block ml-1"
+                    style={{
                       color: 'var(--accent)',
                       fontSize: '1.2em'
                     }}>|</span>
@@ -241,8 +238,8 @@ const About: React.FC = () => {
             <div className="flex flex-col gap-4 relative z-10">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between items-center gap-3">
                 <div>
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] block mb-1" 
-                        style={{ color: 'var(--accent)' }}>
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] block mb-1"
+                    style={{ color: 'var(--accent)' }}>
                     Save Game
                   </span>
                   <h3 className="text-xs sm:text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
@@ -284,15 +281,14 @@ const About: React.FC = () => {
                   </button>
                 </div>
               </div>
-              
+
               {/* Preview iframe */}
               <div
                 id="resume-preview"
-                className={`origin-top overflow-hidden rounded-xl border ${smoothTransition} ${
-                  showResumePreview
+                className={`origin-top overflow-hidden rounded-xl border ${smoothTransition} ${showResumePreview
                     ? 'opacity-100 max-h-[1200px] scale-100 shadow-[0_28px_54px_rgba(0,0,0,0.32)]'
                     : 'opacity-0 max-h-0 scale-95 shadow-none pointer-events-none'
-                }`}
+                  }`}
                 style={{
                   borderColor: 'var(--border)',
                   backgroundColor: 'var(--bg-secondary)',

@@ -1,17 +1,6 @@
 import React from 'react';
 import ProjectCard from './ProjectCard';
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  skills: string[];
-  image?: string;
-  liveDemo?: string;
-  github?: string;
-  featured?: boolean;
-}
+import { Project } from '@/data/portfolioData';
 
 interface ProjectsGridProps {
   projects: Project[];
@@ -34,18 +23,18 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
           text-center py-16 rounded-2xl border border-dashed
           ${transition} ${entrance}
         `}
-        style={{ 
+        style={{
           borderColor: 'rgba(var(--accent-rgb), 0.3)',
           backgroundColor: 'rgba(var(--bg-secondary-rgb), 0.5)'
         }}
       >
-        <div 
+        <div
           className="text-4xl mb-4 opacity-50"
           style={{ filter: 'grayscale(50%)' }}
         >
           🔍
         </div>
-        <p 
+        <p
           className="text-base font-mono"
           style={{ color: 'var(--text-secondary)' }}
         >
@@ -64,12 +53,10 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
       `}
       style={{ transitionDelay: isVisible ? '200ms' : '0ms' }}
     >
-      {projects.map((project, index) => (
+      {projects.map((project) => (
         <ProjectCard
           key={project.id}
           project={project}
-          index={index}
-          isVisible={isVisible}
         />
       ))}
     </div>

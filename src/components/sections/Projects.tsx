@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
-import { projects } from '../data/portfolioData';
-import ProjectsHeader from './projects/ProjectsHeader';
-import CategoryFilter from './projects/CategoryFilter';
-import ProjectsGrid from './projects/ProjectsGrid';
-import PortfolioStatsPanel from './projects/PortfolioStatsPanel';
-import type { CategoryFilter as CategoryFilterType } from './projects/types';
+import { projects } from '@/data/portfolioData';
+import ProjectsHeader from '@/components/features/projects/ProjectsHeader';
+import CategoryFilter from '@/components/features/projects/CategoryFilter';
+import ProjectsGrid from '@/components/features/projects/ProjectsGrid';
+import PortfolioStatsPanel from '@/components/features/projects/PortfolioStatsPanel';
+import type { CategoryFilter as CategoryFilterType } from '@/components/features/projects/types';
 
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'ai-cv' | 'web-dev' | 'robotics' | 'other'>('all');
@@ -33,7 +33,7 @@ const Projects: React.FC = () => {
   const liveDemoCount = projects.filter(project => project.liveDemo).length;
   const totalSkills = projects.reduce((sum, project) => sum + project.skills.length, 0);
   const avgSkillsPerProject = totalProjects ? Math.round(totalSkills / totalProjects) : 0;
-  
+
   const categoryBreakdown = filters
     .filter(filter => filter.id !== 'all')
     .map(filter => ({
@@ -46,12 +46,12 @@ const Projects: React.FC = () => {
 
   // Mobile-specific limits
   const mobileLimit = 6;
-  const baseFilteredProjects = activeFilter === 'all' 
-    ? projects 
+  const baseFilteredProjects = activeFilter === 'all'
+    ? projects
     : projects.filter(project => project.category === activeFilter);
-  
-  const filteredProjects = isMobile && !showAllMobile 
-    ? baseFilteredProjects.slice(0, mobileLimit) 
+
+  const filteredProjects = isMobile && !showAllMobile
+    ? baseFilteredProjects.slice(0, mobileLimit)
     : baseFilteredProjects;
 
   // Detect mobile screen size
@@ -59,7 +59,7 @@ const Projects: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -73,11 +73,11 @@ const Projects: React.FC = () => {
   const handleShowMoreToggle = () => {
     const wasExpanded = showAllMobile;
     setShowAllMobile(!showAllMobile);
-    
+
     if (wasExpanded && showMoreButtonRef.current) {
       setTimeout(() => {
-        showMoreButtonRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
+        showMoreButtonRef.current?.scrollIntoView({
+          behavior: 'smooth',
           block: 'center'
         });
       }, 100);

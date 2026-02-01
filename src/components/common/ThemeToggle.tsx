@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '@/context/ThemeContext';
 
 const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -27,25 +27,25 @@ const ThemeToggle: React.FC = () => {
       {/* Icon with smooth rotation */}
       <div className="relative w-5 h-5">
         {theme === 'dark' ? (
-          <Moon 
-            className="w-5 h-5 transition-all duration-500 rotate-0" 
-            style={{ color: 'var(--accent)' }} 
+          <Moon
+            className="w-5 h-5 transition-all duration-500 rotate-0"
+            style={{ color: 'var(--accent)' }}
           />
         ) : (
-          <Sun 
-            className="w-5 h-5 transition-all duration-500 rotate-180" 
-            style={{ color: 'var(--accent)' }} 
+          <Sun
+            className="w-5 h-5 transition-all duration-500 rotate-180"
+            style={{ color: 'var(--accent)' }}
           />
         )}
       </div>
 
       {/* Minimal tooltip */}
       <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-2 py-1 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap"
-           style={{ 
-             backgroundColor: 'var(--bg-secondary)', 
-             color: 'var(--text-primary)',
-             border: '1px solid var(--border)'
-           }}>
+        style={{
+          backgroundColor: 'var(--bg-secondary)',
+          color: 'var(--text-primary)',
+          border: '1px solid var(--border)'
+        }}>
         {theme === 'dark' ? 'Light' : 'Dark'}
       </div>
     </button>

@@ -219,13 +219,13 @@ const Contact: React.FC = () => {
     }
 
     setTerminalOutput(newOutput);
-    
-    setTerminalOutput(newOutput);
+
+
   };
 
   const validateForm = () => {
     const newErrors: { name?: string; email?: string; message?: string } = {};
-    
+
     // Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
@@ -252,7 +252,7 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       const newOutput = [...terminalOutput];
       newOutput.push('> send-message --submit');
@@ -265,7 +265,7 @@ const Contact: React.FC = () => {
     const newOutput = [...terminalOutput];
     newOutput.push('> send-message --submit');
     newOutput.push('Sending message...');
-    
+
     try {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -277,7 +277,7 @@ const Contact: React.FC = () => {
         },
         EMAILJS_PUBLIC_KEY
       );
-      
+
       newOutput.push('Message sent successfully! ✅');
       newOutput.push('Thank you for reaching out. I\'ll get back to you soon!');
       newOutput.push(`Response time: ~12 hours`);
@@ -318,10 +318,10 @@ const Contact: React.FC = () => {
           >
             Let's Connect
           </h2>
-          
-          <p 
-            className={`text-base sm:text-lg ${smoothTransition}`}
-            style={{ 
+
+          <p
+            className={`text-base sm:text-lg ${smoothTransition} ${descriptionEntrance}`}
+            style={{
               color: 'var(--text-secondary)',
               transitionDelay: showElements.title ? '140ms' : '0ms'
             }}
@@ -348,8 +348,8 @@ const Contact: React.FC = () => {
             }}
           >
             {/* Terminal Header - Enhanced */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 pb-4 border-b" 
-                 style={{ borderColor: 'var(--border)' }}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 pb-4 border-b"
+              style={{ borderColor: 'var(--border)' }}>
               <div className="flex items-center gap-3">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500 hover:brightness-125 transition-all cursor-pointer" />
@@ -372,7 +372,7 @@ const Contact: React.FC = () => {
               <button
                 onClick={() => handleCommand('linkedin')}
                 className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{ 
+                style={{
                   borderColor: '#0077B5',
                   backgroundColor: 'rgba(0, 119, 181, 0.05)',
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -382,11 +382,11 @@ const Contact: React.FC = () => {
                 <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#0077B5', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
                 <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#0077B5' }}>LinkedIn</span>
               </button>
-              
+
               <button
                 onClick={() => handleCommand('github')}
                 className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{ 
+                style={{
                   borderColor: '#6e5494',
                   backgroundColor: 'rgba(110, 84, 148, 0.05)',
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -396,11 +396,11 @@ const Contact: React.FC = () => {
                 <Github className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#6e5494', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
                 <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#6e5494' }}>GitHub</span>
               </button>
-              
+
               <button
                 onClick={() => handleCommand('email')}
                 className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{ 
+                style={{
                   borderColor: '#EA4335',
                   backgroundColor: 'rgba(234, 67, 53, 0.05)',
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -410,11 +410,11 @@ const Contact: React.FC = () => {
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#EA4335', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
                 <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#EA4335' }}>Email</span>
               </button>
-              
+
               <button
                 onClick={() => handleCommand(showMessageForm ? 'close' : 'message')}
                 className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg overflow-hidden"
-                style={{ 
+                style={{
                   backgroundColor: 'var(--accent)',
                   border: '1px solid var(--accent)',
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -431,27 +431,27 @@ const Contact: React.FC = () => {
             {/* Status Indicators - Enhanced */}
             <div className="flex items-center justify-between gap-2 mb-4 p-2 rounded-lg flex-wrap" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md" 
-                     style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md"
+                  style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
                   <div className="relative">
-                    <div className="w-2 h-2 rounded-full" 
-                         style={{ 
-                           backgroundColor: connectionStatus === 'online' ? '#10b981' : 
-                                          connectionStatus === 'busy' ? '#f59e0b' : '#6b7280'
-                         }} />
+                    <div className="w-2 h-2 rounded-full"
+                      style={{
+                        backgroundColor: connectionStatus === 'online' ? '#10b981' :
+                          connectionStatus === 'busy' ? '#f59e0b' : '#6b7280'
+                      }} />
                     {connectionStatus === 'online' && (
-                      <div className="absolute inset-0 w-2 h-2 rounded-full animate-ping" 
-                           style={{ backgroundColor: '#10b981', opacity: 0.75 }} />
+                      <div className="absolute inset-0 w-2 h-2 rounded-full animate-ping"
+                        style={{ backgroundColor: '#10b981', opacity: 0.75 }} />
                     )}
                   </div>
                   <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>
                     {connectionStatus}
                   </span>
                 </div>
-                
+
                 {isTyping && (
-                  <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md animate-pulse" 
-                       style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
+                  <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md animate-pulse"
+                    style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
                     <div className="flex gap-1">
                       <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'bounce 1.4s infinite' }} />
                       <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'bounce 1.4s infinite 0.2s' }} />
@@ -461,9 +461,9 @@ const Contact: React.FC = () => {
                   </div>
                 )}
               </div>
-              
-              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md" 
-                   style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.08)' }}>
+
+              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md"
+                style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.08)' }}>
                 <span className="text-xs whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>Commands:</span>
                 <span className="text-xs font-bold font-mono" style={{ color: 'var(--accent)' }}>{commandCount}</span>
               </div>
@@ -487,17 +487,16 @@ const Contact: React.FC = () => {
 
             {/* Terminal Output */}
             <div
-              className={`rounded-lg p-3 sm:p-4 overflow-y-auto font-mono text-xs sm:text-sm ${smoothTransition} ${
-                !showMessageForm ? 'h-[250px] sm:h-[200px]' : 'h-[300px] sm:h-[calc(100vh*0.3)] sm:max-h-[300px] sm:min-h-[200px]'
-              }`}
-              style={{ 
+              className={`rounded-lg p-3 sm:p-4 overflow-y-auto font-mono text-xs sm:text-sm ${smoothTransition} ${!showMessageForm ? 'h-[250px] sm:h-[200px]' : 'h-[300px] sm:h-[calc(100vh*0.3)] sm:max-h-[300px] sm:min-h-[200px]'
+                }`}
+              style={{
                 transitionDelay: showElements.terminal ? '260ms' : '0ms',
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
                 border: '1px solid var(--border)'
               }}
             >
               <div className="h-full flex flex-col">
-                <div 
+                <div
                   className="flex-1 overflow-y-auto scroll-smooth"
                   ref={(el) => {
                     // Auto scroll to bottom when content changes
@@ -510,20 +509,20 @@ const Contact: React.FC = () => {
                   }}
                 >
                   {terminalOutput.map((line, index) => (
-                    <div 
-                      key={index} 
-                      className="mb-1" 
-                      style={{ 
-                        color: line.startsWith('> ') && !line.startsWith('> Terminal') && !line.startsWith('> Type') && !line.startsWith('> Ready') 
-                          ? 'var(--accent)' 
-                          : 'var(--terminal-green)' 
+                    <div
+                      key={index}
+                      className="mb-1"
+                      style={{
+                        color: line.startsWith('> ') && !line.startsWith('> Terminal') && !line.startsWith('> Type') && !line.startsWith('> Ready')
+                          ? 'var(--accent)'
+                          : 'var(--terminal-green)'
                       }}
                     >
                       {line}
                     </div>
                   ))}
                 </div>
-                <form 
+                <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     const input = e.currentTarget.elements.namedItem('command') as HTMLInputElement;
@@ -541,7 +540,7 @@ const Contact: React.FC = () => {
                     type="text"
                     name="command"
                     className="flex-1 ml-2 px-3 py-2 rounded-md border-none outline-none text-sm sm:text-base font-mono"
-                    style={{ 
+                    style={{
                       color: 'var(--accent)',
                       backgroundColor: 'rgba(var(--accent-rgb), 0.05)',
                       border: '1px solid rgba(var(--accent-rgb), 0.2)'
@@ -571,8 +570,8 @@ const Contact: React.FC = () => {
               minHeight: '600px'
             }}
           >
-            <div className="mb-6 pb-4 border-b" 
-                 style={{ borderColor: 'var(--border)' }}>
+            <div className="mb-6 pb-4 border-b"
+              style={{ borderColor: 'var(--border)' }}>
               <div className="flex items-center gap-3">
                 <Send className="w-5 h-5" style={{ color: 'var(--accent)' }} />
                 <div>
@@ -588,8 +587,8 @@ const Contact: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-2 terminal-prompt" 
-                       style={{ color: 'var(--accent)' }}>
+                <label className="block text-sm font-medium mb-2 terminal-prompt"
+                  style={{ color: 'var(--accent)' }}>
                   Name
                 </label>
                 <input
@@ -598,10 +597,9 @@ const Contact: React.FC = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${
-                    errors.name ? 'border-red-500' : ''
-                  }`}
-                  style={{ 
+                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${errors.name ? 'border-red-500' : ''
+                    }`}
+                  style={{
                     borderColor: errors.name ? 'rgb(239, 68, 68)' : 'var(--border)',
                     color: 'var(--text-primary)',
                     backgroundColor: 'var(--bg-primary)'
@@ -614,8 +612,8 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2 terminal-prompt" 
-                       style={{ color: 'var(--accent)' }}>
+                <label className="block text-sm font-medium mb-2 terminal-prompt"
+                  style={{ color: 'var(--accent)' }}>
                   Email
                 </label>
                 <input
@@ -624,10 +622,9 @@ const Contact: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${
-                    errors.email ? 'border-red-500' : ''
-                  }`}
-                  style={{ 
+                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${errors.email ? 'border-red-500' : ''
+                    }`}
+                  style={{
                     borderColor: errors.email ? 'rgb(239, 68, 68)' : 'var(--border)',
                     color: 'var(--text-primary)',
                     backgroundColor: 'var(--bg-primary)'
@@ -641,8 +638,8 @@ const Contact: React.FC = () => {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium terminal-prompt" 
-                         style={{ color: 'var(--accent)' }}>
+                  <label className="block text-sm font-medium terminal-prompt"
+                    style={{ color: 'var(--accent)' }}>
                     Message
                   </label>
                   <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -655,10 +652,9 @@ const Contact: React.FC = () => {
                   onChange={handleInputChange}
                   disabled={isSubmitting}
                   rows={5}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none resize-none ${
-                    errors.message ? 'border-red-500' : ''
-                  }`}
-                  style={{ 
+                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none resize-none ${errors.message ? 'border-red-500' : ''
+                    }`}
+                  style={{
                     borderColor: errors.message ? 'rgb(239, 68, 68)' : 'var(--border)',
                     color: 'var(--text-primary)',
                     backgroundColor: 'var(--bg-primary)'
@@ -673,10 +669,9 @@ const Contact: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`group relative w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-medium overflow-hidden ${
-                  isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
-                }`}
-                style={{ 
+                className={`group relative w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-medium overflow-hidden ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
+                  }`}
+                style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--bg-primary)',
                   border: 'none',
@@ -684,9 +679,8 @@ const Contact: React.FC = () => {
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-                <Send className={`w-5 h-5 relative z-10 ${
-                  isSubmitting ? 'animate-spin' : ''
-                }`} style={{ transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                <Send className={`w-5 h-5 relative z-10 ${isSubmitting ? 'animate-spin' : ''
+                  }`} style={{ transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
                 <span className="relative z-10 font-semibold" style={{ transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                   {isSubmitting ? 'Sending Your Message...' : 'Send Message →'}
                 </span>

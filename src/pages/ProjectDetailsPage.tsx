@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import GameProjectDetail from '../components/GameProjectDetail';
-import { projects } from '../data/portfolioData';
+import Layout from '@/components/common/Layout';
+import GameProjectDetail from '@/components/features/projects/GameProjectDetail';
+import { projects } from '@/data/portfolioData';
 
 type MediaItem = { type: 'image' | 'video' | 'gif'; src: string; alt?: string };
 

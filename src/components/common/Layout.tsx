@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import CodeRainBackground from './CodeRainBackground';
 import ScrollProgressBar from './ScrollProgressBar';
+import CodeRainBackground from '@/components/ui/CodeRainBackground';
 
 interface LayoutProps {
   children: ReactNode;
@@ -57,11 +57,11 @@ GitHub: https://github.com/AlBaraa63
 Email: 666645@gmail.com
 
 %cKeep exploring! 🎮
-      `, 
-      'color: #00ff41; font-family: monospace;',
-      'color: #00ff41; font-size: 16px; font-weight: bold;',
-      'color: #ffffff; font-size: 14px; line-height: 1.5;',
-      'color: #00ff41; font-size: 14px; font-weight: bold;'
+      `,
+        'color: #00ff41; font-family: monospace;',
+        'color: #00ff41; font-size: 16px; font-weight: bold;',
+        'color: #ffffff; font-size: 14px; line-height: 1.5;',
+        'color: #00ff41; font-size: 14px; font-weight: bold;'
       );
     };
 
@@ -74,7 +74,7 @@ Email: 666645@gmail.com
 
     // Show easter egg on load
     setTimeout(easterEgg, 2000);
-    
+
     window.addEventListener('keydown', handleKeyPress);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
@@ -85,8 +85,8 @@ Email: 666645@gmail.com
   return (
     <div className="min-h-screen relative">
       {/* Skip to main content link */}
-      <a 
-        href="#main-content" 
+      <a
+        href="#main-content"
         className="skip-link"
         onClick={(e) => {
           e.preventDefault();
@@ -99,21 +99,21 @@ Email: 666645@gmail.com
       >
         Skip to main content
       </a>
-      
+
       <CodeRainBackground />
       <ScrollProgressBar />
       <Navbar />
-      
-      <main 
-        id="main-content" 
-        className="relative z-10" 
+
+      <main
+        id="main-content"
+        className="relative z-10"
         tabIndex={-1}
         role="main"
         aria-label="Main content"
       >
         {children}
       </main>
-      
+
       <Footer />
     </div>
   );

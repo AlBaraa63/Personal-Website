@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { certifications, Certification } from '../data/portfolioData';
+import { certifications, Certification } from '@/data/portfolioData';
 import CertificateViewer from './CertificateViewer';
 
 const Certifications: React.FC = () => {
@@ -14,7 +14,7 @@ const Certifications: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // Changed from 768 to 1024 for better tablet support
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -23,8 +23,8 @@ const Certifications: React.FC = () => {
   // Mobile-specific limits
   const mobileLimit = 6; // Increased from 4 to 6 for better experience
   const nonFeaturedCerts = certifications.filter(cert => !cert.featured);
-  const displayedCerts = isMobile && !showAllMobile 
-    ? nonFeaturedCerts.slice(0, mobileLimit) 
+  const displayedCerts = isMobile && !showAllMobile
+    ? nonFeaturedCerts.slice(0, mobileLimit)
     : nonFeaturedCerts;
 
   useEffect(() => {
@@ -99,71 +99,71 @@ const Certifications: React.FC = () => {
                     onClick={() => setSelectedCert(cert)}
                   >
                     <div className="relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-full flex flex-col"
-                       style={{ 
-                         borderColor: '#f59e0b',
-                         backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                         boxShadow: '0 10px 30px rgba(245, 158, 11, 0.2)'
-                         }}>
-                    {/* Certificate Preview */}
-                    <div className="relative aspect-[1.414/1] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden flex-shrink-0">
-                      {cert.pdfPath || cert.imagePath ? (
-                        <>
-                          {/* Desktop: Show PDF iframe if available, otherwise image */}
-                          {cert.pdfPath ? (
-                            <iframe
-                              src={`${cert.pdfPath}#toolbar=0&navpanes=0&scrollbar=0`}
-                              className="hidden lg:block w-full h-full pointer-events-none border-0"
-                              style={{ transform: 'scale(1.1)', transformOrigin: 'center' }}
-                              title={cert.title}
-                              loading="lazy"
-                            />
-                          ) : null}                          {/* Mobile & Tablet: Show image preview if available, otherwise placeholder */}
-                          {cert.imagePath ? (
-                            <img
-                              src={cert.imagePath}
-                              alt={cert.title}
-                              loading="lazy"
-                              decoding="async"
-                              className={`w-full h-full object-cover ${cert.pdfPath ? 'lg:hidden' : ''}`}
-                              style={{ objectPosition: 'center center' }}
-                            />
-                          ) : (
-                            <div className="lg:hidden w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
-                              <div className="text-center p-4 sm:p-6">
-                                <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">{cert.icon}</div>
-                                <div className="text-sm sm:text-base font-bold mb-2 sm:mb-3 px-2" style={{ color: '#f59e0b' }}>
-                                  {cert.title.split(':')[0]}
-                                </div>
-                                <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold shadow-lg" style={{ 
-                                  backgroundColor: '#f59e0b',
-                                  color: 'white'
-                                }}>
-                                  📄 Tap to View
+                      style={{
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                        boxShadow: '0 10px 30px rgba(245, 158, 11, 0.2)'
+                      }}>
+                      {/* Certificate Preview */}
+                      <div className="relative aspect-[1.414/1] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden flex-shrink-0">
+                        {cert.pdfPath || cert.imagePath ? (
+                          <>
+                            {/* Desktop: Show PDF iframe if available, otherwise image */}
+                            {cert.pdfPath ? (
+                              <iframe
+                                src={`${cert.pdfPath}#toolbar=0&navpanes=0&scrollbar=0`}
+                                className="hidden lg:block w-full h-full pointer-events-none border-0"
+                                style={{ transform: 'scale(1.1)', transformOrigin: 'center' }}
+                                title={cert.title}
+                                loading="lazy"
+                              />
+                            ) : null}                          {/* Mobile & Tablet: Show image preview if available, otherwise placeholder */}
+                            {cert.imagePath ? (
+                              <img
+                                src={cert.imagePath}
+                                alt={cert.title}
+                                loading="lazy"
+                                decoding="async"
+                                className={`w-full h-full object-cover ${cert.pdfPath ? 'lg:hidden' : ''}`}
+                                style={{ objectPosition: 'center center' }}
+                              />
+                            ) : (
+                              <div className="lg:hidden w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+                                <div className="text-center p-4 sm:p-6">
+                                  <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">{cert.icon}</div>
+                                  <div className="text-sm sm:text-base font-bold mb-2 sm:mb-3 px-2" style={{ color: '#f59e0b' }}>
+                                    {cert.title.split(':')[0]}
+                                  </div>
+                                  <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold shadow-lg" style={{
+                                    backgroundColor: '#f59e0b',
+                                    color: 'white'
+                                  }}>
+                                    📄 Tap to View
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-center p-4">
-                            <div className="text-6xl mb-4">{cert.icon}</div>
-                            <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                              Click to view online
+                            )}
+                          </>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="text-center p-4">
+                              <div className="text-6xl mb-4">{cert.icon}</div>
+                              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                                Click to view online
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                      
-                      {/* Overlay on hover - Desktop only */}
-                      <div className="hidden lg:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center">
-                        <div className="text-white text-center p-4">
-                          <div className="text-sm font-semibold mb-2">Click to view full size</div>
-                          <div className="text-xs opacity-80">📄 {cert.pdfPath ? 'PDF' : cert.imagePath ? 'Image' : 'External Link'}</div>
+                        )}
+
+                        {/* Overlay on hover - Desktop only */}
+                        <div className="hidden lg:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center">
+                          <div className="text-white text-center p-4">
+                            <div className="text-sm font-semibold mb-2">Click to view full size</div>
+                            <div className="text-xs opacity-80">📄 {cert.pdfPath ? 'PDF' : cert.imagePath ? 'Image' : 'External Link'}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                      
+
                       {/* Certificate Info - Fixed Height */}
                       <div className="p-3 sm:p-4 border-t-2 flex-grow" style={{ borderColor: '#f59e0b' }}>
                         <div className="flex items-start gap-2 sm:gap-3 h-full">
@@ -181,7 +181,7 @@ const Certifications: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       {/* Featured Badge */}
                       <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-lg">
                         ⭐ Featured
@@ -228,11 +228,11 @@ const Certifications: React.FC = () => {
                   onClick={() => setSelectedCert(cert)}
                 >
                   <div className="relative overflow-hidden rounded-lg border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl h-full flex flex-col"
-                       style={{ 
-                         borderColor: 'var(--accent)',
-                         backgroundColor: 'rgba(var(--accent-rgb), 0.03)',
-                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                       }}>
+                    style={{
+                      borderColor: 'var(--accent)',
+                      backgroundColor: 'rgba(var(--accent-rgb), 0.03)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    }}>
                     {/* Certificate Preview */}
                     <div className="relative aspect-[1.414/1] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden flex-shrink-0">
                       {cert.pdfPath || cert.imagePath ? (
@@ -247,7 +247,7 @@ const Certifications: React.FC = () => {
                               loading="lazy"
                             />
                           ) : null}
-                          
+
                           {/* Mobile & Tablet: Show image preview if available, otherwise placeholder */}
                           {cert.imagePath ? (
                             <img
@@ -265,7 +265,7 @@ const Certifications: React.FC = () => {
                                 <div className="text-[10px] sm:text-xs md:text-sm font-semibold mb-1.5 sm:mb-2 px-1" style={{ color: 'var(--accent)' }}>
                                   {cert.title.split(':')[0]}
                                 </div>
-                                <div className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg text-[9px] sm:text-xs md:text-xs font-medium" style={{ 
+                                <div className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg text-[9px] sm:text-xs md:text-xs font-medium" style={{
                                   backgroundColor: 'rgba(var(--accent-rgb), 0.2)',
                                   color: 'var(--accent)',
                                   border: '1px solid var(--accent)'
@@ -294,7 +294,7 @@ const Certifications: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Certificate Info - Fixed Height */}
                     <div className="p-2 sm:p-3 border-t-2 flex-grow" style={{ borderColor: 'var(--accent)' }}>
                       <div className="flex flex-col gap-1 sm:gap-1.5">

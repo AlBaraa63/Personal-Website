@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Github, Eye } from 'lucide-react';
-import { Project } from '../data/portfolioData';
+import { Project } from '@/data/portfolioData';
 import { useNavigate } from 'react-router-dom';
 
 interface ProjectCardProps {
@@ -59,9 +59,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   return (
     <div
-        ref={cardRef}
-        className={`bg-opacity-20 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-500 sm:hover:scale-105 active:scale-98 sm:hover:shadow-xl transform flex flex-col h-full ${isInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-        style={{ backgroundColor: 'var(--bg-secondary)' }}
+      ref={cardRef}
+      className={`bg-opacity-20 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-500 sm:hover:scale-105 active:scale-98 sm:hover:shadow-xl transform flex flex-col h-full ${isInView ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+      style={{ backgroundColor: 'var(--bg-secondary)' }}
     >
       {/* Project Image */}
       <div className="relative overflow-hidden aspect-video">
@@ -82,11 +82,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           }}
         />
         <div className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-opacity duration-500 ${isInView || 'group-hover' ? 'opacity-100' : 'opacity-0'}`} />
-        
+
         {/* Featured Badge */}
         {project.featured && (
           <div className="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-semibold animate-glow"
-               style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
+            style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
             ⭐ Featured
           </div>
         )}
@@ -96,12 +96,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <div className="p-4 sm:p-6 flex flex-col flex-1 relative">
         <div className="flex-1 space-y-3">
           <h3 className="text-lg sm:text-xl font-bold line-clamp-2"
-              style={{ color: 'var(--text-primary)' }}>
+            style={{ color: 'var(--text-primary)' }}>
             {project.title}
           </h3>
-          
+
           <p className="text-xs sm:text-sm leading-relaxed line-clamp-2"
-             style={{ color: 'var(--text-secondary)' }}>
+            style={{ color: 'var(--text-secondary)' }}>
             {project.description}
           </p>
 
@@ -115,7 +115,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               <span
                 key={skill}
                 className="px-3 py-1 text-xs font-medium rounded-md transition-all duration-200"
-                style={{ 
+                style={{
                   backgroundColor: 'rgba(var(--accent-rgb, 34, 197, 94), 0.1)',
                   color: 'var(--accent)',
                   border: '1px solid rgba(var(--accent-rgb, 34, 197, 94), 0.2)'
@@ -127,7 +127,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             {remainingSkillsCount > 0 && (
               <span
                 className="px-3 py-1 text-xs font-semibold rounded-md"
-                style={{ 
+                style={{
                   backgroundColor: 'rgba(var(--accent-rgb, 34, 197, 94), 0.2)',
                   color: 'var(--accent)',
                   border: '1px solid rgba(var(--accent-rgb, 34, 197, 94), 0.3)'
@@ -142,7 +142,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {/* Action Buttons */}
         <div className="flex flex-row gap-2 mt-auto pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
           {/* Removed Quest toggle button */}
-          
+
           {project.liveDemo && (
             <button
               onClick={() => window.open(project.liveDemo, '_blank')}
@@ -169,7 +169,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               </div>
             </button>
           )}
-          
+
           {project.github && (
             <button
               onClick={() => window.open(project.github, '_blank')}
@@ -196,7 +196,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               </div>
             </button>
           )}
-          
+
           <button
             onClick={() => {
               // Add a smooth transition effect before navigation
@@ -235,8 +235,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           </button>
         </div>
       </div>
-      
-      
+
+
     </div>
   );
 };
