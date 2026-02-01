@@ -187,8 +187,8 @@ const Navbar: React.FC = () => {
                   aria-label={`Navigate to ${item.label} section (Alt+${index + 1})`}
                   aria-current={activeSection === item.id ? 'page' : undefined}
                   className={`group relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 transform-gpu active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${activeSection === item.id
-                      ? 'active-nav-item'
-                      : 'inactive-nav-item'
+                    ? 'active-nav-item'
+                    : 'inactive-nav-item'
                     }`}
                   style={{
                     color: activeSection === item.id ? 'var(--accent)' : 'var(--text-primary)',
@@ -226,7 +226,7 @@ const Navbar: React.FC = () => {
 
           {/* Theme Toggle and GitHub Streak */}
           <div className="hidden md:flex items-center gap-3">
-            <GitHubStreak />
+            <GitHubStreak username="AlBaraa63" />
             <ColorThemeSelector />
             <ThemeToggle />
           </div>
@@ -234,7 +234,7 @@ const Navbar: React.FC = () => {
           <div className="md:hidden">
             <div className="flex items-center gap-1.5">
               <div className="hidden xs:block">
-                <GitHubStreak />
+                <GitHubStreak username="AlBaraa63" />
               </div>
               <ColorThemeSelector />
               <ThemeToggle />
