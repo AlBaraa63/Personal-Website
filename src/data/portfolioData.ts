@@ -280,6 +280,115 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'mafqood',
+    title: 'Mafqood - AI Lost & Found Platform for Dubai',
+    description: 'Dubai\'s AI-powered, photo-first lost & found platform built for Create Apps Championship 2025-2026. Features YOLOv8 object detection + ResNet50 embeddings with weighted multi-signal similarity scoring. Dual implementation: React web MVP and production-grade React Native mobile app with bilingual Arabic/English support, targeting 40% reduction in item recovery time for Dubai\'s 3.4M residents and 17M annual tourists.',
+    category: 'ai-cv',
+    skills: ['Python', 'PyTorch', 'YOLOv8', 'ResNet50', 'FastAPI', 'React Native', 'TypeScript', 'PostgreSQL', 'FAISS', 'OpenCV', 'Expo', 'Tailwind CSS'],
+    image: '/assets/images/mafqood/cover.png',
+    liveDemo: 'https://mafqood.albaraaalolabi.dev/',
+    github: 'https://github.com/AlBaraa63/Mafqood-App',
+    featured: true,
+    detailedDescription: 'Mafqood ("Lost" in Arabic) is a comprehensive AI-powered lost & found platform designed to unify Dubai\'s fragmented item recovery systems. The project features two parallel implementations: a React web MVP with SQLite backend for rapid prototyping, and a production-grade React Native mobile app with PostgreSQL, pgvector, Redis, and Celery for enterprise-scale deployment. The AI pipeline processes items in ~200-300ms: YOLOv8 detects and auto-categorizes objects, ResNet50 extracts 512-dimensional visual embeddings, and a weighted scoring algorithm combines visual similarity (65%), category match (15%), color (8%), geolocation (7%), temporal proximity (3%), and brand detection (2%) to rank matches. The platform supports JWT authentication, real-time WebSocket notifications, full Arabic/English bilingual interface with RTL support, and privacy-first architecture ready for face/ID blurring.',
+    challenges: [
+      'Designing multi-signal matching that goes beyond visual similarity alone to handle real-world lost & found scenarios',
+      'Building for Dubai\'s scale: 3.4M residents and 17M annual tourists with items scattered across malls, metro, taxis, and hotels',
+      'Implementing privacy-first architecture for personal item photos while maintaining matching accuracy',
+      'Developing dual platforms (React web + React Native mobile) with shared backend architecture',
+      'Creating accurate AI categorization across diverse item types (phones, wallets, bags, passports, jewelry, etc.)'
+    ],
+    solutions: [
+      'Engineered weighted scoring algorithm: 65% visual similarity, 15% category, 8% color, 7% location, 3% time, 2% brand for robust multi-signal matching',
+      'Deployed pgvector + FAISS for fast vector similarity search at scale with <10ms matching latency',
+      'Integrated YOLOv8 for automatic object detection and categorization with confidence-based filtering',
+      'Built shared FastAPI backend serving both React web frontend and React Native mobile app via REST API',
+      'Implemented full bilingual support (English/Arabic) with RTL layout and custom lightweight i18n system'
+    ],
+    outcomes: [
+      'Production-ready AI pipeline processing items in ~200-300ms (detection + extraction + matching)',
+      '8/8 backend integration tests passing with 100% success rate',
+      'Full authentication system with JWT tokens, refresh rotation, and rate limiting',
+      'Real-time notification system via WebSockets with push notification support (FCM ready)',
+      'Bilingual Arabic/English interface with complete RTL support across both web and mobile platforms',
+      'Comprehensive async backend architecture with PostgreSQL, Redis caching, and Celery task queue'
+    ],
+    visuals: [
+      {
+        src: '/assets/images/mafqood/cover.png',
+        alt: 'Mafqood Logo',
+        caption: 'Mafqood branding with AI magnifying glass icon representing intelligent item search'
+      },
+      {
+        src: '/assets/images/mafqood/home-screen.png',
+        alt: 'Mafqood Home Screen',
+        caption: 'Home screen with quick actions for reporting lost/found items, platform stats (24h fast results, 100% trusted, free), and AI image matching highlights'
+      },
+      {
+        src: '/assets/images/mafqood/report-screen.png',
+        alt: 'Mafqood Report Screen',
+        caption: 'Multi-step reporting flow (6 steps) with lost/found item selection, photo-first approach for faster AI matching, and privacy-first design with face/ID blurring'
+      },
+      {
+        src: '/assets/images/mafqood/login.png',
+        alt: 'Mafqood Login Screen',
+        caption: 'Clean authentication interface with email/password login, guest access option, and account creation for Dubai residents and tourists'
+      }
+    ],
+    techStack: {
+      frontend: [
+        'React Native 0.81',
+        'Expo 54',
+        'TypeScript 5.9',
+        'NativeWind (Tailwind CSS)',
+        'Zustand (State Management)',
+        'TanStack React Query',
+        'React Navigation 7'
+      ],
+      backend: [
+        'FastAPI',
+        'SQLAlchemy 2.0 + asyncpg',
+        'PostgreSQL + pgvector',
+        'Redis + Celery',
+        'Alembic (Migrations)',
+        'JWT Authentication'
+      ],
+      ai: [
+        'PyTorch 2.x',
+        'YOLOv8 (Ultralytics)',
+        'ResNet50 (Feature Extraction)',
+        'FAISS (Vector Search)',
+        'OpenCV (Image Processing)',
+        'scikit-learn'
+      ],
+      other: [
+        'React 18 + Vite (Web MVP)',
+        'SQLite (Web Backend)',
+        'Bilingual i18n (AR/EN)',
+        'AWS S3 (Storage)',
+        'WebSocket Notifications'
+      ]
+    },
+    gameDetails: {
+      questOverview: "🔍 Lost & Found Quest Complete! Built Dubai's AI-powered platform that turns item photos into instant matches. From YOLOv8 detection to ResNet50 embeddings to weighted multi-signal scoring - helping 3.4M residents and 17M tourists recover their belongings faster!",
+      skillsUnlocked: [
+        "🤖 Multi-Signal AI Matching - Engineered weighted scoring across visual, spatial, temporal, and categorical dimensions",
+        "👁️ Dual Vision Pipeline - Integrated YOLOv8 object detection with ResNet50 feature extraction",
+        "📱 Cross-Platform Development - Built React web MVP and React Native mobile app with shared backend",
+        "🔒 Enterprise Auth - Implemented JWT with refresh token rotation and rate limiting",
+        "🌐 Bilingual Architecture - Full Arabic/English with RTL support and lightweight i18n",
+        "⚡ Vector Search at Scale - Deployed pgvector + FAISS for sub-10ms similarity matching"
+      ],
+      bossFights: [
+        "⚔️ The Multi-Signal Scoring Challenge - Balancing 6 weighted factors for accurate real-world matching",
+        "🐉 The Scale Dragon - Designing for Dubai's 3.4M residents and 17M annual tourists",
+        "🎯 The Privacy Guardian - Building face/ID-ready blurring while maintaining match accuracy",
+        "🌍 The Bilingual Beast - Full RTL Arabic support across dual platforms",
+        "⚡ The Latency Hydra - Achieving ~200-300ms end-to-end AI processing per item"
+      ],
+      bonusLevel: "🏆 CREATE APPS CHAMPIONSHIP 2025-2026: Built a platform that could reduce item recovery time by 40% for Dubai, replacing fragmented systems (mall desks, metro, taxis, hotels, social media) with one unified AI-powered solution!"
+    }
+  },
+  {
     id: 'mission-control-mcp',
     title: 'Mission Control MCP Server',
     description: 'A comprehensive Model Context Protocol (MCP) server providing AI-powered business automation tools including RAG search, email intent classification, KPI generation, data visualization, and document processing. Built for seamless integration with AI assistants.',
@@ -1136,20 +1245,6 @@ export const experience: Experience[] = [
       'Collaborating with cross-functional teams on computer vision research and development',
     ],
     skills: ['PyTorch', 'OpenCV', 'YOLOv8', 'Deep Learning', 'Python'],
-  },
-  {
-    id: 'mafqood-ai',
-    title: 'AI Developer - Create Apps Championship 2025-2026',
-    company: 'Mafqood - AI Lost & Found Platform for Dubai',
-    type: 'work',
-    period: 'Oct 2025 - Present',
-    current: true,
-    description: 'Prototyping AI-powered visual matching system for photo-based lost item retrieval aiming to reduce item recovery time by 40% for Dubai residents.',
-    highlights: [
-      'Building intelligent visual matching with deep learning embeddings and object detection',
-      'Developing React Native app with bilingual Arabic/English support',
-    ],
-    skills: ['Computer Vision', 'React Native', 'Python', 'YOLOv8'],
   },
   {
     id: 'samsung-innovation',
