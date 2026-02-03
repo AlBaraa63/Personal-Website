@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Briefcase, GraduationCap } from 'lucide-react';
 import { experience } from '@/data/portfolioData';
+import HudFrame from '@/components/ui/HudFrame';
 
 const Experience: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [visibleItemIndex, setVisibleItemIndex] = useState(-1);
   const sectionRef = useRef<HTMLElement>(null);
   const timeoutsRef = useRef<number[]>([]);
@@ -14,7 +14,6 @@ const Experience: React.FC = () => {
       ([entry]) => {
         if (entry.isIntersecting && !hasTriggeredRef.current) {
           hasTriggeredRef.current = true;
-          setIsVisible(true);
           experience.forEach((_, index) => {
             const timeout = window.setTimeout(() => {
               setVisibleItemIndex(index);
@@ -37,216 +36,124 @@ const Experience: React.FC = () => {
   }, []);
 
   const smoothTransition = 'transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]';
-  const headerEntrance = isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6';
 
   return (
     <section
       id="experience"
       ref={sectionRef}
-      className="relative py-12 sm:py-16 md:py-20"
+      className="relative py-16 sm:py-20 px-4 sm:px-6 overflow-hidden"
       style={{ scrollMarginTop: '4rem' }}
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className={`text-center mb-8 sm:mb-12 md:mb-16 ${smoothTransition} ${headerEntrance}`}>
-          <h2
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            <span style={{ color: 'var(--accent)', fontWeight: '300' }}>[</span>
-            {' '}./experience{' '}
-            <span style={{ color: 'var(--accent)', fontWeight: '300' }}>]</span>
-          </h2>
-          <p
-            className={`text-sm sm:text-base md:text-lg ${smoothTransition} ${headerEntrance}`}
-            style={{
-              color: 'var(--text-secondary)',
-              transitionDelay: isVisible ? '140ms' : '0ms',
-            }}
-          >
-            Career log and mission history
-          </p>
-        </div>
+      <div className="max-w-5xl mx-auto">
+        <HudFrame title="CAREER_LOGS" className="w-full">
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical timeline line */}
-          <div
-            className="absolute left-4 sm:left-6 top-0 bottom-0 w-px"
-            style={{ backgroundColor: 'var(--accent)', opacity: 0.3 }}
-          />
+          {/* Header */}
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+              Experience <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-500">& Education</span>
+            </h2>
+            <p className="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+              Chronological archive of professional missions and academic uploads.
+            </p>
+          </div>
 
-          <div className="space-y-6 sm:space-y-8">
-            {experience.map((item, index) => {
-              const cardVisible = visibleItemIndex >= index;
-              const Icon = item.type === 'work' ? Briefcase : GraduationCap;
+          {/* Timeline */}
+          <div className="relative px-2 sm:px-8 pb-8">
+            {/* Vertical timeline line */}
+            <div
+              className="absolute left-[1.65rem] sm:left-[3.5rem] top-0 bottom-0 w-px bg-gradient-to-b from-accent/50 via-accent/20 to-transparent"
+            />
 
-              return (
-                <div
-                  key={item.id}
-                  className={`relative pl-12 sm:pl-16 ${smoothTransition} ${cardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                    }`}
-                >
-                  {/* Timeline dot */}
+            <div className="space-y-8 sm:space-y-12">
+              {experience.map((item, index) => {
+                const cardVisible = visibleItemIndex >= index;
+                const Icon = item.type === 'work' ? Briefcase : GraduationCap;
+
+                return (
                   <div
-                    className="absolute left-2.5 sm:left-4 w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 z-10"
-                    style={{
-                      borderColor: 'var(--accent)',
-                      backgroundColor: item.current ? 'var(--accent)' : 'var(--bg-primary)',
-                      boxShadow: item.current ? '0 0 12px var(--accent)' : 'none',
-                      top: '1.75rem',
-                    }}
-                  />
-
-                  {/* Card */}
-                  <div
-                    className="rounded-xl border overflow-hidden"
-                    style={{
-                      borderColor: 'var(--border)',
-                      backgroundColor: 'var(--bg-secondary)',
-                      boxShadow: cardVisible
-                        ? '0 12px 28px rgba(0,0,0,0.18), 0 0 16px rgba(var(--accent-rgb),0.1)'
-                        : 'none',
-                    }}
+                    key={item.id}
+                    className={`relative pl-12 sm:pl-20 ${smoothTransition} ${cardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+                      }`}
                   >
-                    {/* Terminal header bar */}
+                    {/* Timeline dot */}
                     <div
-                      className="flex items-center gap-2 px-4 py-2 border-b"
+                      className="absolute left-4 sm:left-[2.75rem] w-6 h-6 rounded-full border-2 z-10 flex items-center justify-center bg-bg-primary"
                       style={{
-                        borderColor: 'var(--border)',
-                        background: 'rgba(var(--accent-rgb), 0.05)',
+                        borderColor: item.current ? 'var(--accent)' : 'var(--border)',
+                        boxShadow: item.current ? '0 0 10px var(--accent)' : 'none',
+                        top: '0',
                       }}
                     >
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                      <span
-                        className="ml-2 text-xs font-mono truncate"
-                        style={{ color: 'var(--accent)' }}
-                      >
-                        {item.company}
-                      </span>
-                      {item.current && (
-                        <span
-                          className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-semibold flex-shrink-0"
-                          style={{
-                            backgroundColor: 'rgba(var(--accent-rgb), 0.15)',
-                            color: 'var(--accent)',
-                            border: '1px solid var(--accent)',
-                          }}
-                        >
-                          ACTIVE
-                        </span>
-                      )}
+                      <div className={`w-2 h-2 rounded-full ${item.current ? 'bg-accent animate-pulse' : 'bg-text-secondary'}`} />
                     </div>
 
-                    {/* Content */}
-                    <div className="p-4 sm:p-6">
-                      <div className="flex items-start gap-3 mb-3">
-                        <Icon
-                          className="w-5 h-5 mt-0.5 flex-shrink-0"
-                          style={{ color: 'var(--accent)' }}
-                        />
-                        <div>
-                          <h3
-                            className="text-base sm:text-lg font-bold"
-                            style={{ color: 'var(--text-primary)' }}
-                          >
-                            {item.title}
-                          </h3>
-                          <p
-                            className="text-xs sm:text-sm font-mono"
-                            style={{ color: 'var(--accent)' }}
-                          >
-                            {item.period}
-                          </p>
-                        </div>
-                      </div>
+                    {/* Card */}
+                    <div
+                      className="group relative rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden hover:border-accent/40 transition-colors duration-300"
+                    >
+                      {/* Hover Glow */}
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-accent to-purple-500 opacity-0 group-hover:opacity-10 transition duration-500 blur-lg" />
 
-                      <p
-                        className="text-sm mb-3"
-                        style={{ color: 'var(--text-secondary)' }}
-                      >
-                        {item.description}
-                      </p>
-
-                      {/* Highlights as terminal output lines */}
-                      <div className="space-y-1 mb-4">
-                        {item.highlights.map((h, i) => (
-                          <div key={i} className="flex gap-2 text-xs sm:text-sm">
-                            <span
-                              style={{ color: 'var(--accent)' }}
-                              className="flex-shrink-0"
-                            >
-                              $
-                            </span>
-                            <span style={{ color: 'var(--text-secondary)' }}>
-                              {h}
-                            </span>
+                      <div className="relative p-5 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-accent/10 text-accent">
+                              <Icon size={20} />
+                            </div>
+                            <div>
+                              <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-accent transition-colors">
+                                {item.title}
+                              </h3>
+                              <p className="text-sm font-mono text-accent/80">
+                                {item.company}
+                              </p>
+                            </div>
                           </div>
-                        ))}
-                      </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs sm:text-sm font-mono text-text-secondary border border-white/10 px-3 py-1 rounded bg-black/30">
+                              {item.period}
+                            </span>
+                            {item.current && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/30 animate-pulse">
+                                ACTIVE
+                              </span>
+                            )}
+                          </div>
+                        </div>
 
-                      {/* Skills tags */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {item.skills.map((skill) => (
-                          <span
-                            key={skill}
-                            className="text-[10px] sm:text-xs px-2 py-0.5 rounded border font-mono"
-                            style={{
-                              borderColor: 'var(--accent)',
-                              color: 'var(--accent)',
-                              backgroundColor: 'rgba(var(--accent-rgb), 0.08)',
-                            }}
-                          >
-                            {skill}
-                          </span>
-                        ))}
+                        <p className="text-sm sm:text-base text-text-secondary mb-4 leading-relaxed">
+                          {item.description}
+                        </p>
+
+                        {/* Highlights */}
+                        <div className="space-y-2 mb-5">
+                          {item.highlights.map((h, i) => (
+                            <div key={i} className="flex gap-2 text-xs sm:text-sm text-gray-300">
+                              <span className="text-accent flex-shrink-0 mt-0.5">›</span>
+                              <span>{h}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Skills */}
+                        <div className="flex flex-wrap gap-2">
+                          {item.skills.map((skill) => (
+                            <span
+                              key={skill}
+                              className="text-[10px] sm:text-xs px-2.5 py-1 rounded-md border border-white/10 bg-white/5 text-gray-300 font-mono hover:border-accent/30 hover:text-accent transition-colors"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-
-        {/* Scroll indicator to Projects */}
-        <div className="mt-12 sm:mt-16 flex justify-center">
-          <button
-            onClick={() => {
-              const el = document.getElementById('projects');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            aria-label="Scroll to projects"
-            className="p-2 rounded-full hover:bg-[var(--bg-secondary)] transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="36"
-              height="36"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="soft-bounce"
-              style={{ color: 'var(--accent)' }}
-            >
-              <path
-                d="M12 5v14"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M19 12l-7 7-7-7"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+        </HudFrame>
       </div>
     </section>
   );

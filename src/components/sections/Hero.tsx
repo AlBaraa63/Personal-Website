@@ -94,7 +94,7 @@ const Hero: React.FC = () => {
 
             {/* Main Title */}
             <motion.h1
-              className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter"
+              className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -120,18 +120,18 @@ const Hero: React.FC = () => {
             {/* Role Typewriter */}
             <div className="h-16 sm:h-20 flex items-center justify-center">
               <motion.div
-                className="px-4 py-2 bg-accent/10 border-l-2 border-r-2 border-accent/50 min-w-[280px] sm:min-w-[400px]"
+                className="px-4 py-2 bg-accent/10 border-l-2 border-r-2 border-accent/50 min-w-[240px] xs:min-w-[280px] sm:min-w-[400px]"
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: "auto", opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <p className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-mono text-accent truncate">
+                <p className="text-base xs:text-xl sm:text-2xl md:text-3xl font-mono text-accent truncate">
                   <span className="mr-2 opacity-50">&gt;</span>
                   {displayText}
                   <motion.span
                     animate={{ opacity: [0, 1, 0] }}
                     transition={{ duration: 0.8, repeat: Infinity }}
-                    className="inline-block w-2 h-5 sm:h-8 bg-accent ml-1 align-middle"
+                    className="inline-block w-2 h-4 sm:h-8 bg-accent ml-1 align-middle"
                   />
                 </p>
               </motion.div>
@@ -139,7 +139,7 @@ const Hero: React.FC = () => {
 
             {/* Description */}
             <motion.p
-              className="max-w-2xl text-text-secondary text-sm sm:text-base md:text-lg leading-relaxed font-light"
+              className="max-w-2xl text-text-secondary text-xs xs:text-sm sm:text-base md:text-lg leading-relaxed font-light"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}

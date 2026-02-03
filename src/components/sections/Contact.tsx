@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
-import { Send, Linkedin, Github, Mail, Terminal } from 'lucide-react';
-
+import { Send, Linkedin, Github, Mail, Terminal, Wifi } from 'lucide-react';
+import HudFrame from '@/components/ui/HudFrame';
+import CyberButton from '@/components/ui/CyberButton';
 import emailjs from '@emailjs/browser';
 
 // EmailJS configuration
@@ -27,7 +28,6 @@ const Contact: React.FC = () => {
     message?: string;
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'online' | 'idle' | 'busy'>('online');
   const [commandCount, setCommandCount] = useState(0);
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
@@ -89,8 +89,6 @@ const Contact: React.FC = () => {
     const cmd = command.toLowerCase().trim();
     const newOutput = [...terminalOutput, `> ${command}`];
     setCommandCount(prev => prev + 1);
-    setIsTyping(true);
-    setTimeout(() => setIsTyping(false), 800);
 
     // Handle clear command first (special case)
     if (cmd === 'clear') {
@@ -303,7 +301,7 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" ref={sectionRef} className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Enhanced */}
+        {/* Section Header */}
         <div className={`text-center mb-16 ${smoothTransition} ${titleEntrance}`}>
           <h2
             className={`text-5xl md:text-6xl font-bold mb-4 ${smoothTransition} ${titleEntrance}`}
@@ -331,362 +329,158 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 relative items-stretch">
-          {/* Terminal Interface - Now the Main Focus */}
-          <div
-            className={`code-block ${smoothTransition} ${terminalEntrance} ${!showMessageForm ? 'lg:col-span-2 lg:max-w-3xl lg:mx-auto w-full' : 'lg:max-w-full'} flex flex-col`}
-            style={{
-              transitionDelay: showElements.terminal ? '220ms' : '0ms',
-              background: 'var(--bg-secondary)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid var(--border)',
-              borderRadius: '16px',
-              padding: '20px',
-              boxShadow: showElements.terminal
-                ? '0 18px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)'
-                : '0 8px 24px rgba(0,0,0,0.18)',
-              minHeight: showMessageForm ? '600px' : 'auto'
-            }}
+
+          {/* Terminal Interface */}
+          <HudFrame
+            title="TERMINAL_ACCESS"
+            className={`${smoothTransition} ${terminalEntrance} ${!showMessageForm ? 'lg:col-span-2 lg:max-w-3xl lg:mx-auto w-full' : 'lg:max-w-full'}`}
           >
-            {/* Terminal Header - Enhanced */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 pb-4 border-b"
-              style={{ borderColor: 'var(--border)' }}>
-              <div className="flex items-center gap-3">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500 hover:brightness-125 transition-all cursor-pointer" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500 hover:brightness-125 transition-all cursor-pointer" />
-                  <div className="w-3 h-3 rounded-full bg-green-500 hover:brightness-125 transition-all cursor-pointer" />
+            <div className="flex flex-col min-h-[600px]">
+              {/* Terminal Header */}
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-accent/20">
+                <div className="flex items-center gap-3">
+                  <Terminal className="w-4 h-4 text-accent" />
+                  <span className="text-sm font-mono text-text-secondary">interactive_terminal.sh</span>
                 </div>
-                <Terminal className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-                <span className="text-sm font-mono truncate" style={{ color: 'var(--text-secondary)' }}>
-                  interactive_terminal.sh
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                <span className="hidden sm:inline">session_id:</span>
-                <span className="font-mono" style={{ color: 'var(--accent)' }}>{Math.random().toString(36).substring(2, 8)}</span>
-              </div>
-            </div>
-
-            {/* Quick Action Buttons - Enhanced Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6">
-              <button
-                onClick={() => handleCommand('linkedin')}
-                className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{
-                  borderColor: '#0077B5',
-                  backgroundColor: 'rgba(0, 119, 181, 0.05)',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0077B5]/10 to-transparent opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#0077B5', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#0077B5' }}>LinkedIn</span>
-              </button>
-
-              <button
-                onClick={() => handleCommand('github')}
-                className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{
-                  borderColor: '#6e5494',
-                  backgroundColor: 'rgba(110, 84, 148, 0.05)',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#6e5494]/10 to-transparent opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <Github className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#6e5494', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#6e5494' }}>GitHub</span>
-              </button>
-
-              <button
-                onClick={() => handleCommand('email')}
-                className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg border overflow-hidden"
-                style={{
-                  borderColor: '#EA4335',
-                  backgroundColor: 'rgba(234, 67, 53, 0.05)',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#EA4335]/10 to-transparent opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: '#EA4335', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: '#EA4335' }}>Email</span>
-              </button>
-
-              <button
-                onClick={() => handleCommand(showMessageForm ? 'close' : 'message')}
-                className="group relative flex flex-col items-center justify-center gap-1.5 sm:gap-2 px-3 py-3 sm:px-4 sm:py-4 rounded-lg overflow-hidden"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  border: '1px solid var(--accent)',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100" style={{ transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <Send className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" style={{ color: 'var(--bg-primary)', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <span className="text-[10px] sm:text-xs font-medium relative z-10" style={{ color: 'var(--bg-primary)' }}>
-                  {showMessageForm ? 'Close' : 'Message'}
-                </span>
-              </button>
-            </div>
-
-            {/* Status Indicators - Enhanced */}
-            <div className="flex items-center justify-between gap-2 mb-4 p-2 rounded-lg flex-wrap" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md"
-                  style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
-                  <div className="relative">
-                    <div className="w-2 h-2 rounded-full"
-                      style={{
-                        backgroundColor: connectionStatus === 'online' ? '#10b981' :
-                          connectionStatus === 'busy' ? '#f59e0b' : '#6b7280'
-                      }} />
-                    {connectionStatus === 'online' && (
-                      <div className="absolute inset-0 w-2 h-2 rounded-full animate-ping"
-                        style={{ backgroundColor: '#10b981', opacity: 0.75 }} />
-                    )}
-                  </div>
-                  <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>
-                    {connectionStatus}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${connectionStatus === 'online' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+                  <span className="text-xs font-mono text-accent uppercase">{connectionStatus}</span>
                 </div>
-
-                {isTyping && (
-                  <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md animate-pulse"
-                    style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', border: '1px solid var(--border)' }}>
-                    <div className="flex gap-1">
-                      <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'bounce 1.4s infinite' }} />
-                      <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'bounce 1.4s infinite 0.2s' }} />
-                      <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)', animation: 'bounce 1.4s infinite 0.4s' }} />
-                    </div>
-                    <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'var(--accent)' }}>processing</span>
-                  </div>
-                )}
               </div>
 
-              <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-md"
-                style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.08)' }}>
-                <span className="text-xs whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>Commands:</span>
-                <span className="text-xs font-bold font-mono" style={{ color: 'var(--accent)' }}>{commandCount}</span>
-              </div>
-            </div>
-
-            {/* Command Hint - Enhanced */}
-            <div className="mb-3 p-3 rounded-lg overflow-x-auto" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.05)', border: '1px solid var(--border)' }}>
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--accent)' }} />
-                <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>Pro Commands</span>
-              </div>
-              <div className="text-xs sm:text-sm font-mono flex flex-wrap gap-1 sm:gap-2" style={{ color: 'var(--text-secondary)' }}>
-                <span className="whitespace-nowrap">Try:</span>
-                <span className="px-2 py-0.5 rounded whitespace-nowrap" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.15)', color: 'var(--accent)' }}>help</span>
-                <span className="hidden sm:inline">·</span>
-                <span className="px-2 py-0.5 rounded whitespace-nowrap" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.15)', color: 'var(--accent)' }}>whoami</span>
-                <span className="hidden sm:inline">·</span>
-                <span className="px-2 py-0.5 rounded whitespace-nowrap" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.15)', color: 'var(--accent)' }}>coffee</span>
-              </div>
-            </div>
-
-            {/* Terminal Output */}
-            <div
-              className={`rounded-lg p-3 sm:p-4 overflow-y-auto font-mono text-xs sm:text-sm ${smoothTransition} ${!showMessageForm ? 'h-[250px] sm:h-[200px]' : 'h-[300px] sm:h-[calc(100vh*0.3)] sm:max-h-[300px] sm:min-h-[200px]'
-                }`}
-              style={{
-                transitionDelay: showElements.terminal ? '260ms' : '0ms',
-                backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '1px solid var(--border)'
-              }}
-            >
-              <div className="h-full flex flex-col">
-                <div
-                  className="flex-1 overflow-y-auto scroll-smooth"
-                  ref={(el) => {
-                    // Auto scroll to bottom when content changes
-                    if (el) {
-                      el.scrollTo({
-                        top: el.scrollHeight,
-                        behavior: 'smooth'
-                      });
-                    }
-                  }}
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                <button
+                  onClick={() => handleCommand('linkedin')}
+                  className="p-3 border border-white/10 hover:border-[#0077B5]/50 bg-white/5 hover:bg-[#0077B5]/10 rounded flex flex-col items-center gap-2 transition-all group"
                 >
-                  {terminalOutput.map((line, index) => (
-                    <div
-                      key={index}
-                      className="mb-1"
-                      style={{
-                        color: line.startsWith('> ') && !line.startsWith('> Terminal') && !line.startsWith('> Type') && !line.startsWith('> Ready')
-                          ? 'var(--accent)'
-                          : 'var(--terminal-green)'
-                      }}
-                    >
+                  <Linkedin size={20} className="text-[#0077B5] group-hover:scale-110 transition-transform" />
+                  <span className="text-xs text-text-secondary">LinkedIn</span>
+                </button>
+                <button
+                  onClick={() => handleCommand('github')}
+                  className="p-3 border border-white/10 hover:border-[#6e5494]/50 bg-white/5 hover:bg-[#6e5494]/10 rounded flex flex-col items-center gap-2 transition-all group"
+                >
+                  <Github size={20} className="text-[#6e5494] group-hover:scale-110 transition-transform" />
+                  <span className="text-xs text-text-secondary">GitHub</span>
+                </button>
+                <button
+                  onClick={() => handleCommand('email')}
+                  className="p-3 border border-white/10 hover:border-[#EA4335]/50 bg-white/5 hover:bg-[#EA4335]/10 rounded flex flex-col items-center gap-2 transition-all group"
+                >
+                  <Mail size={20} className="text-[#EA4335] group-hover:scale-110 transition-transform" />
+                  <span className="text-xs text-text-secondary">Email</span>
+                </button>
+                <button
+                  onClick={() => handleCommand(showMessageForm ? 'close' : 'message')}
+                  className="p-3 border border-accent/20 hover:border-accent bg-accent/5 hover:bg-accent/10 rounded flex flex-col items-center gap-2 transition-all group"
+                >
+                  <Send size={20} className="text-accent group-hover:scale-110 transition-transform" />
+                  <span className="text-xs text-accent font-bold">{showMessageForm ? 'Close' : 'Message'}</span>
+                </button>
+              </div>
+
+              {/* Terminal Output Area */}
+              <div className="flex-1 bg-black/40 rounded border border-white/10 p-4 font-mono text-sm overflow-hidden flex flex-col">
+                <div className="flex-1 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-accent/20">
+                  {terminalOutput.map((line, i) => (
+                    <div key={i} className={`${line.startsWith('>') ? 'text-accent' : 'text-text-secondary'}`}>
                       {line}
                     </div>
                   ))}
                 </div>
+                {/* Command Input */}
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     const input = e.currentTarget.elements.namedItem('command') as HTMLInputElement;
-                    const command = input.value.trim();
-                    if (command) {
-                      handleCommand(command);
+                    if (input.value.trim()) {
+                      handleCommand(input.value);
                       input.value = '';
                     }
                   }}
-                  className="flex items-center mt-3 pt-3 border-t"
-                  style={{ borderColor: 'var(--border)' }}
+                  className="mt-2 flex items-center gap-2 border-t border-white/10 pt-2"
                 >
-                  <span className="text-base font-bold" style={{ color: 'var(--accent)' }}>&gt; </span>
+                  <span className="text-accent animate-pulse">{'>'}</span>
                   <input
                     type="text"
                     name="command"
-                    className="flex-1 ml-2 px-3 py-2 rounded-md border-none outline-none text-sm sm:text-base font-mono"
-                    style={{
-                      color: 'var(--accent)',
-                      backgroundColor: 'rgba(var(--accent-rgb), 0.05)',
-                      border: '1px solid rgba(var(--accent-rgb), 0.2)'
-                    }}
-                    placeholder="Type a command..."
                     autoComplete="off"
-                    spellCheck="false"
+                    className="flex-1 bg-transparent border-none outline-none text-text-primary font-mono placeholder-white/20"
+                    placeholder="Enter command..."
+                    autoFocus
                   />
                 </form>
               </div>
             </div>
-          </div>
+          </HudFrame>
 
           {/* Contact Form */}
-          <div
-            className={`code-block ${smoothTransition} ${formEntrance} ${showMessageForm ? 'flex flex-col' : 'hidden'}`}
-            style={{
-              transitionDelay: showMessageForm ? '260ms' : '0ms',
-              background: 'var(--bg-secondary)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid var(--border)',
-              borderRadius: '16px',
-              padding: '20px',
-              boxShadow: showMessageForm
-                ? '0 18px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)'
-                : '0 8px 24px rgba(0,0,0,0.18)',
-              minHeight: '600px'
-            }}
-          >
-            <div className="mb-6 pb-4 border-b"
-              style={{ borderColor: 'var(--border)' }}>
-              <div className="flex items-center gap-3">
-                <Send className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-                <div>
-                  <h3 className="text-xl font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Quick Message
-                  </h3>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-                    I'll get back to you as soon as I can!
-                  </p>
+          {showMessageForm && (
+            <HudFrame
+              title="COMM_LINK"
+              className={`${smoothTransition} ${formEntrance} border-accent/50 shadow-[0_0_30px_rgba(var(--accent-rgb),0.1)]`}
+            >
+              <div className="flex flex-col h-full justify-center">
+                <div className="text-center mb-8">
+                  <Wifi className="w-8 h-8 mx-auto text-accent mb-2 animate-pulse" />
+                  <h3 className="text-xl font-bold text-white">ESTABLISH UPLINK</h3>
+                  <p className="text-xs text-text-secondary font-mono">ENCRYPTED CONNECTION SECURE</p>
                 </div>
-              </div>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium mb-2 terminal-prompt"
-                  style={{ color: 'var(--accent)' }}>
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${errors.name ? 'border-red-500' : ''
-                    }`}
-                  style={{
-                    borderColor: errors.name ? 'rgb(239, 68, 68)' : 'var(--border)',
-                    color: 'var(--text-primary)',
-                    backgroundColor: 'var(--bg-primary)'
-                  }}
-                  placeholder="Enter your name"
-                />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-                )}
-              </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-accent">USER_ID (Name)</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className={`w-full bg-black/50 border ${errors.name ? 'border-red-500' : 'border-accent/30'} focus:border-accent text-white px-4 py-3 rounded font-mono outline-none transition-colors`}
+                      placeholder="Enter your name"
+                    />
+                    {errors.name && <span className="text-red-500 text-xs font-mono">{errors.name}</span>}
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2 terminal-prompt"
-                  style={{ color: 'var(--accent)' }}>
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none ${errors.email ? 'border-red-500' : ''
-                    }`}
-                  style={{
-                    borderColor: errors.email ? 'rgb(239, 68, 68)' : 'var(--border)',
-                    color: 'var(--text-primary)',
-                    backgroundColor: 'var(--bg-primary)'
-                  }}
-                  placeholder="Enter your email"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                )}
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-accent">RETURN_ADDRESS (Email)</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={`w-full bg-black/50 border ${errors.email ? 'border-red-500' : 'border-accent/30'} focus:border-accent text-white px-4 py-3 rounded font-mono outline-none transition-colors`}
+                      placeholder="Enter your email"
+                    />
+                    {errors.email && <span className="text-red-500 text-xs font-mono">{errors.email}</span>}
+                  </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium terminal-prompt"
-                    style={{ color: 'var(--accent)' }}>
-                    Message
-                  </label>
-                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    {formData.message.length} characters
-                  </span>
-                </div>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  rows={5}
-                  className={`w-full px-4 py-3 sm:py-3.5 rounded-lg border bg-transparent text-base ${smoothTransition} focus:outline-none resize-none ${errors.message ? 'border-red-500' : ''
-                    }`}
-                  style={{
-                    borderColor: errors.message ? 'rgb(239, 68, 68)' : 'var(--border)',
-                    color: 'var(--text-primary)',
-                    backgroundColor: 'var(--bg-primary)'
-                  }}
-                  placeholder="Enter your message"
-                />
-                {errors.message && (
-                  <p className="mt-1 text-sm text-red-500">{errors.message}</p>
-                )}
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-accent">DATA_PACKET (Message)</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className={`w-full bg-black/50 border ${errors.message ? 'border-red-500' : 'border-accent/30'} focus:border-accent text-white px-4 py-3 rounded font-mono outline-none transition-colors resize-none`}
+                      placeholder="Enter transmission..."
+                    />
+                    {errors.message && <span className="text-red-500 text-xs font-mono">{errors.message}</span>}
+                  </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`group relative w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-medium overflow-hidden ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
-                  }`}
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--bg-primary)',
-                  border: 'none',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-                <Send className={`w-5 h-5 relative z-10 ${isSubmitting ? 'animate-spin' : ''
-                  }`} style={{ transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                <span className="relative z-10 font-semibold" style={{ transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-                  {isSubmitting ? 'Sending Your Message...' : 'Send Message →'}
-                </span>
-              </button>
-            </form>
-          </div>
+                  <CyberButton
+                    type="submit"
+                    className="w-full justify-center"
+                    disabled={isSubmitting}
+                    variant="primary"
+                  >
+                    {isSubmitting ? 'TRANSMITTING...' : 'INITIATE UPLOAD'}
+                  </CyberButton>
+                </form>
+              </div>
+            </HudFrame>
+          )}
+
         </div>
       </div>
     </section>

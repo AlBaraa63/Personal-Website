@@ -5,6 +5,7 @@ export interface Project {
   category: 'ai-cv' | 'web-dev' | 'robotics' | 'other';
   skills: string[];
   image: string;
+  videoUrl?: string;
   liveDemo?: string;
   github?: string;
   featured?: boolean;

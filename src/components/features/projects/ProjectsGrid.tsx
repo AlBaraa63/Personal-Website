@@ -48,7 +48,7 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
   return (
     <div
       className={`
-        grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6
+        grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6
         ${transition} ${entrance}
       `}
       style={{ transitionDelay: isVisible ? '200ms' : '0ms' }}
