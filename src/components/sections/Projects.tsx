@@ -9,9 +9,9 @@ import type { CategoryFilter as CategoryFilterType } from '@/components/features
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'ai-cv' | 'web-dev' | 'robotics' | 'other'>('all');
   const [showElements, setShowElements] = useState({
-    title: false,
-    filters: false,
-    cards: false
+    title: true,
+    filters: true,
+    cards: true
   });
   const [showAllMobile, setShowAllMobile] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -85,33 +85,24 @@ const Projects: React.FC = () => {
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasTriggeredTimelineRef.current) {
-          hasTriggeredTimelineRef.current = true;
-          const timeline = [
-            { element: 'title' as const, delay: 100 },
-            { element: 'filters' as const, delay: 240 },
-            { element: 'cards' as const, delay: 400 }
-          ];
+    // Auto-trigger animations when app opens
+    if (!hasTriggeredTimelineRef.current) {
+      hasTriggeredTimelineRef.current = true;
+      const timeline = [
+        { element: 'title' as const, delay: 100 },
+        { element: 'filters' as const, delay: 240 },
+        { element: 'cards' as const, delay: 400 }
+      ];
 
-          timeline.forEach(({ element, delay }) => {
-            const timeoutId = window.setTimeout(() => {
-              setShowElements(prev => ({ ...prev, [element]: true }));
-            }, delay);
-            timelineTimeoutsRef.current.push(timeoutId);
-          });
-        }
-      },
-      { threshold: 0.08, rootMargin: '120px 0px' }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+      timeline.forEach(({ element, delay }) => {
+        const timeoutId = window.setTimeout(() => {
+          setShowElements(prev => ({ ...prev, [element]: true }));
+        }, delay);
+        timelineTimeoutsRef.current.push(timeoutId);
+      });
     }
 
     return () => {
-      observer.disconnect();
       clearTimeouts(timelineTimeoutsRef);
     };
   }, []);
@@ -120,7 +111,7 @@ const Projects: React.FC = () => {
   const cardsEntrance = showElements.cards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4';
 
   return (
-    <section id="projects" ref={sectionRef} className="relative min-h-screen py-20">
+    <section id="projects" ref={sectionRef} className="relative h-full w-full p-4 sm:p-8 overflow-y-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <ProjectsHeader isVisible={showElements.title} />
@@ -188,31 +179,6 @@ const Projects: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="mt-16" />
-      <button
-        onClick={() => {
-          const researchSection = document.getElementById('research');
-          if (researchSection) {
-            researchSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
-        aria-label="Scroll to research"
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center justify-center p-2 rounded-full bg-transparent hover:bg-[var(--bg-secondary)] transition-colors duration-200"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="36"
-          height="36"
-          viewBox="0 0 24 24"
-          fill="none"
-          className="text-[var(--accent)] soft-bounce"
-          aria-hidden="true"
-        >
-          <path d="M12 5v14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
     </section>
   );
 };

@@ -1,29 +1,28 @@
-// React import not required with the new JSX transform
 import { ThemeProvider } from '@/context/ThemeContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import Layout from '@/components/common/Layout';
-import Hero from '@/components/sections/Hero';
-import About from '@/components/sections/About';
-import Projects from '@/components/sections/Projects';
-import Research from '@/components/sections/Research';
-import Certifications from '@/components/sections/Certifications';
-import Contact from '@/components/sections/Contact';
-import Experience from '@/components/sections/Experience';
+import { OSProvider } from '@/context/OSContext';
+import { SoundProvider } from '@/context/SoundContext';
+import Desktop from '@/components/os/Desktop';
+import CustomCursor from '@/components/effects/CustomCursor';
 
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider>
-        <Layout>
-          <Hero />
-          <About />
-          <Experience />
-          <Projects />
-          <Research />
-          <Certifications />
-          <Contact />
-        </Layout>
-      </ThemeProvider>
+      <SoundProvider>
+        <OSProvider>
+          <ThemeProvider>
+            {/* Custom Cursor */}
+            <CustomCursor />
+            {/* 
+              The OSProvider wraps everything. 
+              The 'Desktop' component is the main view manager. 
+              We no longer use specific Layout/Hero components directly here.
+              They are loaded as 'Apps' inside Desktop.tsx 
+            */}
+            <Desktop />
+          </ThemeProvider>
+        </OSProvider>
+      </SoundProvider>
     </ErrorBoundary>
   );
 }

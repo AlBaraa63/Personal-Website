@@ -9,7 +9,7 @@
 
 **A modern, responsive portfolio showcasing my projects and skills**
 
-[Live Demo](https://albaraa63.github.io/Personal-Website) • [Source Code](https://github.com/AlBaraa63/Personal-Website)
+[Live Demo](https://albaraaalolabi.dev) • [Source Code](https://github.com/AlBaraa63/Personal-Website)
 
 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Download, Eye, EyeOff, Terminal, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { resumeConfig } from '@/data/portfolioData';
@@ -9,8 +9,10 @@ const About: React.FC = () => {
   const [displayedCode, setDisplayedCode] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [showResumePreview, setShowResumePreview] = useState(false);
+  const [tiltStyle, setTiltStyle] = useState({ transform: '' });
   const sectionRef = useRef<HTMLElement>(null);
   const resumeCardRef = useRef<HTMLDivElement>(null);
+  const codeBlockRef = useRef<HTMLDivElement>(null);
 
   const codeContent = `{
   "role": "CV Engineer @ Cellula Technologies",
@@ -47,21 +49,32 @@ const About: React.FC = () => {
   "availability": true
 }`;
 
+  // 3D tilt effect for code block
+  const handleCodeBlockMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!codeBlockRef.current) return;
+
+    const rect = codeBlockRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+    });
+  }, []);
+
+  const handleCodeBlockMouseLeave = useCallback(() => {
+    setTiltStyle({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)' });
+  }, []);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    // Trigger animation immediately when window opens
+    const timer = setTimeout(() => setIsVisible(true), 300);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -95,25 +108,36 @@ const About: React.FC = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center py-16 sm:py-20 px-4 sm:px-6 overflow-hidden"
+      className="relative h-full w-full p-4 sm:p-8 overflow-y-auto"
     >
       <div className="w-full max-w-7xl mx-auto flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-8 items-start">
 
-        {/* Left Column: Code Terminal (Bottom on mobile) */}
+        {/* Left Column: Code Terminal with 3D Tilt */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={isVisible ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8 }}
           className="w-full"
+          ref={codeBlockRef}
+          onMouseMove={handleCodeBlockMouseMove}
+          onMouseLeave={handleCodeBlockMouseLeave}
+          style={{
+            ...tiltStyle,
+            transition: 'transform 0.1s ease-out',
+          }}
         >
-          <HudFrame title="IDENTITY_CORE" className="h-full">
+          <HudFrame title="IDENTITY_CORE" className="h-full glass-panel aurora-border">
             <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
               <Terminal size={14} className="text-accent" />
               <span className="text-xs font-mono text-accent/80">profile.json</span>
-              <div className="ml-auto w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="ml-auto flex items-center gap-2">
+                <span className="text-[10px] font-mono text-accent/50">LIVE</span>
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              </div>
             </div>
 
-            <div className="h-auto w-full p-2 font-mono text-xs sm:text-sm">
+            {/* Scanline effect */}
+            <div className="relative h-auto w-full p-2 font-mono text-xs sm:text-sm scanlines">
               <pre className="whitespace-pre-wrap break-words">
                 <code dangerouslySetInnerHTML={{ __html: highlightSyntax(displayedCode) }} />
               </pre>
@@ -124,7 +148,7 @@ const About: React.FC = () => {
         {/* Right Column: Content & Resume */}
         <div className="flex flex-col gap-10">
 
-          {/* Header */}
+          {/* Header with gradient */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -133,16 +157,16 @@ const About: React.FC = () => {
             <div className="flex items-center gap-3 mb-4">
               <Cpu className="text-accent" />
               <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold tracking-tight">
-                About <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-500">Me</span>
+                About <span className="gradient-text">Me</span>
               </h2>
             </div>
             <p className="text-sm xs:text-base sm:text-lg text-text-secondary leading-relaxed">
-              I am a passionate <span className="text-accent font-semibold">Computer Vision Engineer</span> dedicated to bridging the gap between theoretical AI models and real-world edge deployment.
+              I am a passionate <span className="text-accent font-semibold neon-glow">Computer Vision Engineer</span> dedicated to bridging the gap between theoretical AI models and real-world edge deployment.
               My work focuses on optimizing deep learning algorithms to run efficiently on resource-constrained devices without compromising accuracy.
             </p>
           </motion.div>
 
-          {/* Resume 'Cartridge' */}
+          {/* Resume 'Cartridge' with enhanced effects */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isVisible ? { opacity: 1, scale: 1 } : {}}
@@ -150,15 +174,15 @@ const About: React.FC = () => {
             className="group relative"
             ref={resumeCardRef}
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 to-purple-500/20 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-500" />
-            <div className="relative border border-accent/30 bg-black/60 backdrop-blur-md rounded-xl p-6 sm:p-8 overflow-hidden">
+            <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 via-purple-500/20 to-cyan-500/20 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" />
+            <div className="relative border border-accent/30 bg-black/60 backdrop-blur-md rounded-xl p-6 sm:p-8 overflow-hidden glass-panel">
 
               {/* Decorative scanline */}
               <motion.div
-                className="absolute top-0 left-0 w-full h-[2px] bg-accent/50"
+                className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-accent via-cyan-400 to-purple-500"
                 animate={{ top: ["0%", "100%"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                style={{ boxShadow: "0 0 10px var(--accent)" }}
+                style={{ boxShadow: "0 0 15px var(--accent)" }}
               />
 
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-6">

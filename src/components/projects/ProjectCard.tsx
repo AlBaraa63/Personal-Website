@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { ExternalLink, Github, Eye, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,13 +22,49 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [tiltStyle, setTiltStyle] = useState({ transform: '', transition: '' });
+  const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const transition = 'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]';
-  const cardEntrance = isVisible 
-    ? 'opacity-100 translate-y-0 scale-100' 
+  const cardEntrance = isVisible
+    ? 'opacity-100 translate-y-0 scale-100'
     : 'opacity-0 translate-y-8 scale-[0.96]';
+
+  // 3D Tilt effect
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Calculate rotation (max 8 degrees)
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
+      transition: 'transform 0.1s ease-out',
+    });
+
+    // Update spotlight position
+    setSpotlightPos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    setTiltStyle({
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+      transition: 'transform 0.5s ease-out',
+    });
+  }, []);
 
   // Calculate visible skills
   const maxVisibleSkills = 4;
@@ -66,13 +102,23 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
         backgroundColor: 'var(--bg-secondary)',
         border: '1px solid rgba(var(--accent-rgb), 0.1)',
         transitionDelay: `${index * 80}ms`,
-        boxShadow: isHovered 
-          ? '0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(var(--accent-rgb), 0.1)'
-          : '0 4px 20px rgba(0,0,0,0.15)'
+        boxShadow: isHovered
+          ? '0 25px 50px rgba(0,0,0,0.4), 0 0 40px rgba(var(--accent-rgb), 0.15)'
+          : '0 4px 20px rgba(0,0,0,0.15)',
+        ...tiltStyle,
       }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
+      {/* Spotlight effect */}
+      <div
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+        style={{
+          background: `radial-gradient(circle at ${spotlightPos.x}% ${spotlightPos.y}%, rgba(var(--accent-rgb), 0.15) 0%, transparent 60%)`,
+        }}
+      />
+
       {/* Thumbnail / Image Section */}
       <div className="relative overflow-hidden aspect-video">
         {/* Image or Placeholder */}
@@ -80,7 +126,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
           <>
             {/* Loading skeleton */}
             {!imageLoaded && (
-              <div 
+              <div
                 className="absolute inset-0 animate-pulse"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
               />
@@ -90,7 +136,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
               alt={`${project.title} thumbnail`}
               className={`
                 w-full h-full object-cover transition-all duration-500
-                ${isHovered ? 'scale-105' : 'scale-100'}
+                ${isHovered ? 'scale-110' : 'scale-100'}
                 ${imageLoaded ? 'opacity-100' : 'opacity-0'}
               `}
               loading="lazy"
@@ -100,13 +146,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
           </>
         ) : (
           // Gradient placeholder with initials
-          <div 
+          <div
             className="absolute inset-0 flex items-center justify-center"
             style={{
               background: 'linear-gradient(135deg, rgba(var(--accent-rgb), 0.2) 0%, var(--bg-primary) 100%)'
             }}
           >
-            <span 
+            <span
               className="text-3xl sm:text-4xl font-bold opacity-30"
               style={{ color: 'var(--accent)' }}
             >
@@ -116,24 +162,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
         )}
 
         {/* Gradient overlay */}
-        <div 
+        <div
           className={`
             absolute inset-0 transition-opacity duration-300
-            ${isHovered ? 'opacity-60' : 'opacity-40'}
+            ${isHovered ? 'opacity-70' : 'opacity-40'}
           `}
           style={{
             background: 'linear-gradient(to top, var(--bg-secondary) 0%, transparent 60%)'
           }}
         />
 
-        {/* Featured badge */}
+        {/* Featured badge with glow */}
         {project.featured && (
-          <div 
-            className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
-            style={{ 
+          <div
+            className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm animate-pulse"
+            style={{
               backgroundColor: 'rgba(var(--accent-rgb), 0.9)',
               color: 'var(--bg-primary)',
-              boxShadow: '0 0 15px rgba(var(--accent-rgb), 0.4)'
+              boxShadow: '0 0 20px rgba(var(--accent-rgb), 0.6), 0 0 40px rgba(var(--accent-rgb), 0.3)'
             }}
           >
             <Sparkles className="w-3 h-3" />
@@ -142,9 +188,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
         )}
 
         {/* Category tag */}
-        <div 
+        <div
           className="absolute top-3 left-3 px-2 py-1 rounded-md text-[0.65rem] font-medium uppercase tracking-wider backdrop-blur-sm"
-          style={{ 
+          style={{
             backgroundColor: 'rgba(var(--bg-primary-rgb), 0.7)',
             color: 'var(--text-secondary)',
             border: '1px solid rgba(var(--accent-rgb), 0.2)'
@@ -156,34 +202,35 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
 
       {/* Content Section */}
       <div className="flex flex-col flex-1 p-4 sm:p-5">
-        {/* Title */}
-        <h3 
+        {/* Title with hover glow */}
+        <h3
           className={`
             text-base sm:text-lg font-bold line-clamp-2 mb-2
-            transition-colors duration-300
+            transition-all duration-300
           `}
-          style={{ 
-            color: isHovered ? 'var(--accent)' : 'var(--text-primary)' 
+          style={{
+            color: isHovered ? 'var(--accent)' : 'var(--text-primary)',
+            textShadow: isHovered ? '0 0 20px rgba(var(--accent-rgb), 0.5)' : 'none'
           }}
         >
           {project.title}
         </h3>
 
         {/* Description */}
-        <p 
+        <p
           className="text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4 flex-grow"
           style={{ color: 'var(--text-secondary)' }}
         >
           {project.description}
         </p>
 
-        {/* Tech Tags */}
+        {/* Tech Tags with hover effects */}
         <div className="flex flex-wrap gap-1.5 mb-4">
           {visibleSkills.map((skill) => (
             <span
               key={skill}
-              className="px-2 py-0.5 text-[0.65rem] sm:text-xs font-medium rounded-md transition-all duration-200"
-              style={{ 
+              className="px-2 py-0.5 text-[0.65rem] sm:text-xs font-medium rounded-md transition-all duration-200 hover:scale-105"
+              style={{
                 backgroundColor: 'rgba(var(--accent-rgb), 0.1)',
                 color: 'var(--accent)',
                 border: '1px solid rgba(var(--accent-rgb), 0.2)'
@@ -195,7 +242,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
           {remainingSkillsCount > 0 && (
             <span
               className="px-2 py-0.5 text-[0.65rem] sm:text-xs font-semibold rounded-md"
-              style={{ 
+              style={{
                 backgroundColor: 'rgba(var(--accent-rgb), 0.15)',
                 color: 'var(--accent)',
               }}
@@ -206,7 +253,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
         </div>
 
         {/* Action Buttons */}
-        <div 
+        <div
           className="flex gap-2 pt-3 mt-auto"
           style={{ borderTop: '1px solid rgba(var(--accent-rgb), 0.1)' }}
         >
@@ -216,7 +263,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
                 e.stopPropagation();
                 window.open(project.liveDemo, '_blank');
               }}
-              className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
               style={{
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 color: '#60a5fa',
@@ -227,14 +274,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
               <span>Demo</span>
             </button>
           )}
-          
+
           {project.github && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 window.open(project.github, '_blank');
               }}
-              className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
               style={{
                 backgroundColor: 'rgba(156, 163, 175, 0.1)',
                 color: 'var(--text-secondary)',
@@ -245,14 +292,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
               <span>GitHub</span>
             </button>
           )}
-          
+
           <button
             onClick={handleNavigate}
-            className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="group/btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] glow-pulse"
             style={{
               backgroundColor: 'rgba(var(--accent-rgb), 0.1)',
               color: 'var(--accent)',
-              border: '1px solid rgba(var(--accent-rgb), 0.2)'
+              border: '1px solid rgba(var(--accent-rgb), 0.3)'
             }}
           >
             <Eye className="w-3.5 h-3.5 transition-transform group-hover/btn:scale-110" />
@@ -261,15 +308,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
         </div>
       </div>
 
-      {/* Hover border glow */}
-      <div 
+      {/* Aurora border glow on hover */}
+      <div
         className={`
-          absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300
+          absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500
           ${isHovered ? 'opacity-100' : 'opacity-0'}
         `}
         style={{
-          border: '1px solid rgba(var(--accent-rgb), 0.4)',
-          boxShadow: 'inset 0 0 20px rgba(var(--accent-rgb), 0.05)'
+          border: '1px solid transparent',
+          background: 'linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box, linear-gradient(135deg, rgba(var(--accent-rgb), 0.5), rgba(0, 200, 255, 0.3), rgba(160, 0, 255, 0.3)) border-box',
+          borderRadius: '1rem',
         }}
       />
     </div>

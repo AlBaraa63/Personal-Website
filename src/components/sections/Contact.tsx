@@ -31,7 +31,8 @@ const Contact: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState<'online' | 'idle' | 'busy'>('online');
   const [commandCount, setCommandCount] = useState(0);
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
-    '> Terminal ready',
+    '> System initialized...',
+    '> Secure connection established',
     '> Type "help" for available commands'
   ]);
   const sectionRef = useRef<HTMLElement>(null);
@@ -299,7 +300,7 @@ const Contact: React.FC = () => {
   const formEntrance = showElements.form ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6';
 
   return (
-    <section id="contact" ref={sectionRef} className="py-20">
+    <section id="contact" ref={sectionRef} className="h-full w-full p-4 sm:p-8 overflow-y-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center mb-16 ${smoothTransition} ${titleEntrance}`}>

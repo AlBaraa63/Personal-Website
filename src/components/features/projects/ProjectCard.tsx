@@ -40,10 +40,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, priority = false }) 
       className="group relative h-full flex flex-col"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
     >
       {/* Card Frame */}
       <div
