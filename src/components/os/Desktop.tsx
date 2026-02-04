@@ -30,10 +30,10 @@ const LiveClock: React.FC = () => {
 
     return (
         <div className="text-center">
-            <div className="text-6xl md:text-8xl font-black tracking-tight text-white tabular-nums">
+            <div className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight text-white tabular-nums">
                 {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
             </div>
-            <div className="text-lg text-white/40 tracking-widest uppercase mt-2">
+            <div className="text-sm md:text-lg text-white/40 tracking-widest uppercase mt-2">
                 {time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </div>
         </div>
@@ -236,8 +236,8 @@ const Desktop: React.FC = () => {
                 </div>
             </div>
 
-            {/* Desktop Icons Layer - Now on the right side */}
-            <div className="absolute right-0 top-0 bottom-16 z-10 p-6 flex flex-col gap-4 content-start w-24">
+            {/* Desktop Icons Layer - Hidden on mobile */}
+            <div className="absolute right-0 top-0 bottom-16 z-10 p-6 hidden md:flex flex-col gap-4 content-start w-24">
                 <DesktopIcon id="bio" label="Bio.exe" icon={<User size={28} />} />
                 <DesktopIcon id="experience" label="Timeline" icon={<Briefcase size={28} />} />
                 <DesktopIcon id="projects" label="Projects" icon={<FolderGit2 size={28} />} />

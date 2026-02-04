@@ -1,160 +1,163 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
-import { Wifi, Battery, Menu, X, Search } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Wifi, Battery, Menu } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+// Hook to detect mobile viewport
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    return isMobile;
+};
 
 const Taskbar: React.FC = () => {
     const { windows, activeWindowId, focusWindow, openWindow, minimizeWindow } = useOS();
     const { playSound } = useSound();
     const [time, setTime] = useState(new Date());
-    const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    const handleAppClick = (id: string, isOpen: boolean, isMinimized: boolean, isActive: boolean) => {
+    const activeWindow = activeWindowId ? windows[activeWindowId] : null;
+
+    // Get dock apps (all registered windows)
+    const dockApps = Object.values(windows);
+
+    const handleDockClick = (id: string) => {
         playSound('click');
-        if (!isOpen) {
-            playSound('open');
-            openWindow(id);
-        } else if (isMinimized) {
-            playSound('open');
-            focusWindow(id);
-        } else if (isActive) {
-            playSound('minimize');
-            minimizeWindow(id);
+        const win = windows[id];
+        if (win.isOpen) {
+            if (win.isMinimized || activeWindowId !== id) {
+                focusWindow(id);
+            } else {
+                minimizeWindow(id);
+            }
         } else {
-            playSound('click');
-            focusWindow(id);
+            openWindow(id);
         }
     };
 
-    const handleStartMenuApp = (id: string) => {
-        playSound('click');
-        playSound('open');
-        openWindow(id);
-        setIsStartMenuOpen(false);
-    };
-
-    return (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none">
-
-            {/* Start Menu */}
-            <AnimatePresence>
-                {isStartMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="mb-4 pointer-events-auto glass-panel rounded-2xl border border-white/10 p-6 w-80 backdrop-blur-2xl bg-black/80 shadow-2xl"
-                    >
-                        {/* Header */}
-                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
-                            <h3 className="text-sm font-bold text-white tracking-widest uppercase">All Apps</h3>
+    // Mobile: Show header with back button when window is open
+    if (isMobile && activeWindow && !activeWindow.isMinimized) {
+        return (
+            <div className="fixed bottom-0 left-0 right-0 z-50">
+                {/* Mobile Bottom Nav */}
+                <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
+                    <div className="flex justify-around items-center">
+                        {dockApps.slice(0, 5).map(app => (
                             <button
-                                onClick={() => {
-                                    playSound('click');
-                                    setIsStartMenuOpen(false);
-                                }}
-                                className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                                key={app.id}
+                                onClick={() => handleDockClick(app.id)}
+                                className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
+                                    ${activeWindowId === app.id ? 'bg-accent/20' : 'hover:bg-white/5'}
+                                `}
                             >
-                                <X size={16} className="text-white/50" />
+                                <div className={`text-xl ${activeWindowId === app.id ? 'text-accent' : 'text-white/60'}`}>
+                                    {app.icon}
+                                </div>
+                                <span className={`text-[10px] ${activeWindowId === app.id ? 'text-accent' : 'text-white/40'}`}>
+                                    {app.title.split(' ')[0]}
+                                </span>
                             </button>
-                        </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
+    // Mobile: Show bottom nav when no window is open
+    if (isMobile) {
+        return (
+            <div className="fixed bottom-0 left-0 right-0 z-50">
+                <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
+                    <div className="flex justify-around items-center">
+                        {dockApps.slice(0, 5).map(app => (
+                            <button
+                                key={app.id}
+                                onClick={() => handleDockClick(app.id)}
+                                className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
+                                    ${app.isOpen ? 'bg-accent/10' : 'hover:bg-white/5'}
+                                `}
+                            >
+                                <div className={`text-xl ${app.isOpen ? 'text-accent' : 'text-white/60'}`}>
+                                    {app.icon}
+                                </div>
+                                <span className={`text-[10px] ${app.isOpen ? 'text-accent' : 'text-white/40'}`}>
+                                    {app.title.split(' ')[0]}
+                                </span>
+                                {app.isOpen && (
+                                    <div className="w-1 h-1 rounded-full bg-accent" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-                        {/* Apps Grid */}
-                        <div className="grid grid-cols-4 gap-3">
-                            {Object.values(windows).map((win) => (
-                                <motion.button
-                                    key={win.id}
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => handleStartMenuApp(win.id)}
-                                    onMouseEnter={() => playSound('hover')}
-                                    className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-colors group"
-                                >
-                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 group-hover:border-accent/30 group-hover:bg-accent/10 transition-all text-accent">
-                                        {win.icon}
-                                    </div>
-                                    <span className="text-[10px] text-white/60 group-hover:text-white truncate max-w-full transition-colors">
-                                        {win.title.split(' ')[0]}
-                                    </span>
-                                </motion.button>
-                            ))}
-                        </div>
-
-                        {/* Footer */}
-                        <div className="mt-4 pt-3 border-t border-white/10 text-center">
-                            <span className="text-[10px] text-white/30 tracking-widest uppercase">Holo-OS v5.0.0</span>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Main Dock Container */}
-            <div className="glass-panel px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-4 pointer-events-auto shadow-2xl backdrop-blur-2xl bg-black/40">
-
-                {/* Start / Menu */}
-                <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                        playSound('click');
-                        setIsStartMenuOpen(!isStartMenuOpen);
-                    }}
-                    className={`p-2.5 rounded-xl border transition-colors group relative
-                        ${isStartMenuOpen
-                            ? 'bg-accent/20 border-accent/50 text-accent'
-                            : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-accent/30'}`}
+    // Desktop: Original dock layout
+    return (
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-2 pointer-events-none">
+            <motion.div
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, type: "spring", damping: 20 }}
+                className="pointer-events-auto flex items-center gap-1 px-3 py-2 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl"
+            >
+                {/* Start Menu Button */}
+                <button
+                    onClick={() => playSound('click')}
+                    onMouseEnter={() => playSound('hover')}
+                    className="p-2 rounded-xl hover:bg-white/10 text-accent transition-colors"
                 >
-                    <Menu size={20} className={`transition-colors ${isStartMenuOpen ? 'text-accent' : 'text-white group-hover:text-accent'}`} />
-                </motion.button>
+                    <Menu size={20} />
+                </button>
 
-                <div className="w-[1px] h-8 bg-white/10" />
+                <div className="w-px h-6 bg-white/10 mx-1" />
 
-                {/* Icons Dock area */}
-                <div className="flex items-end gap-2">
-                    {Object.values(windows).map((win) => (
+                {/* Dock Icons */}
+                <div className="flex items-center gap-1">
+                    {dockApps.map((app) => (
                         <DockIcon
-                            key={win.id}
-                            icon={win.icon}
-                            title={win.title}
-                            isOpen={win.isOpen}
-                            isActive={win.id === activeWindowId && !win.isMinimized}
-                            onClick={() => handleAppClick(win.id, win.isOpen, win.isMinimized, win.id === activeWindowId && !win.isMinimized)}
+                            key={app.id}
+                            icon={app.icon}
+                            title={app.title}
+                            isOpen={app.isOpen}
+                            isActive={activeWindowId === app.id}
+                            onClick={() => handleDockClick(app.id)}
                         />
                     ))}
                 </div>
 
-                <div className="w-[1px] h-8 bg-white/10" />
+                <div className="w-px h-6 bg-white/10 mx-1" />
 
-                {/* System Tray (Mini) */}
-                <div className="flex items-center gap-3 pl-2 pr-2">
-                    <div className="flex flex-col items-end">
-                        <span className="text-xs font-bold text-white leading-none">
-                            {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <span className="text-[10px] text-white/50 leading-none mt-0.5">
-                            {time.toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                        </span>
-                    </div>
-                    <div className="flex gap-2 text-white/60">
-                        <Wifi size={14} />
-                        <Battery size={14} />
+                {/* System Tray */}
+                <div className="flex items-center gap-2 px-2">
+                    <Wifi size={14} className="text-white/50" />
+                    <Battery size={14} className="text-white/50" />
+                    <div className="text-xs text-white/70 font-mono tracking-wider">
+                        {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
                     </div>
                 </div>
-
-            </div>
+            </motion.div>
         </div>
     );
 };
 
-// Isolated Dock Icon Component for Magnetic Effect
+// Dock Icon Component
 function DockIcon({ icon, title, isOpen, isActive, onClick }: {
     icon: React.ReactNode,
     title: string,
@@ -162,15 +165,10 @@ function DockIcon({ icon, title, isOpen, isActive, onClick }: {
     isActive: boolean,
     onClick: () => void
 }) {
-    const ref = useRef<HTMLButtonElement>(null);
     const { playSound } = useSound();
-
-    // Hover state is managed by CSS/Framer mostly, but could enhance with mouse position tracking
-    // For simplicity and performance, we'll use framer's layout animations
 
     return (
         <motion.button
-            ref={ref}
             layout
             onClick={onClick}
             onMouseEnter={() => playSound('hover')}
@@ -210,7 +208,7 @@ function DockIcon({ icon, title, isOpen, isActive, onClick }: {
                 {title}
             </div>
 
-            {/* Reflection/Glow on Hover */}
+            {/* Glow on Hover */}
             <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         </motion.button>
     );

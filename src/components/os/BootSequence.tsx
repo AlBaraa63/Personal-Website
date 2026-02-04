@@ -3,6 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Cpu, Wifi, Fingerprint, Eye, Lock, ShieldCheck, Zap } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
 
+// Hook to detect mobile viewport
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    return isMobile;
+};
+
 interface BootSequenceProps {
     onComplete: () => void;
 }
@@ -13,6 +27,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
     const [phase, setPhase] = useState<'click' | 'auth' | 'bios' | 'loading' | 'complete'>('click');
     const logsEndRef = useRef<HTMLDivElement>(null);
+    const isMobile = useIsMobile();
 
     // Auto-scroll logs
     useEffect(() => {
@@ -24,11 +39,11 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
         playSound('boot');
         setPhase('auth');
 
-        // Auto-advance auth after delay
+        // Auto-advance auth after delay (faster on mobile)
         setTimeout(() => {
             playSound('success');
             setPhase('bios');
-        }, 3000);
+        }, isMobile ? 1500 : 3000);
     };
 
     // Phase 2: BIOS Logs (Triggered after Auth)
