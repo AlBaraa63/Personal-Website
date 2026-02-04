@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
-import { Wifi, Battery, Menu } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Wifi, Battery, Menu, X, Grid3X3 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Hook to detect mobile viewport
 const useIsMobile = () => {
@@ -22,6 +22,7 @@ const Taskbar: React.FC = () => {
     const { windows, activeWindowId, focusWindow, openWindow, minimizeWindow } = useOS();
     const { playSound } = useSound();
     const [time, setTime] = useState(new Date());
+    const [menuOpen, setMenuOpen] = useState(false);
     const isMobile = useIsMobile();
 
     useEffect(() => {
@@ -29,13 +30,12 @@ const Taskbar: React.FC = () => {
         return () => clearInterval(timer);
     }, []);
 
-    const activeWindow = activeWindowId ? windows[activeWindowId] : null;
-
     // Get dock apps (all registered windows)
     const dockApps = Object.values(windows);
 
     const handleDockClick = (id: string) => {
         playSound('click');
+        setMenuOpen(false);
         const win = windows[id];
         if (win.isOpen) {
             if (win.isMinimized || activeWindowId !== id) {
@@ -48,112 +48,184 @@ const Taskbar: React.FC = () => {
         }
     };
 
-    // Mobile: Show header with back button when window is open
-    if (isMobile && activeWindow && !activeWindow.isMinimized) {
-        return (
-            <div className="fixed bottom-0 left-0 right-0 z-50">
-                {/* Mobile Bottom Nav */}
-                <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
-                    <div className="flex justify-around items-center">
-                        {dockApps.slice(0, 5).map(app => (
-                            <button
-                                key={app.id}
-                                onClick={() => handleDockClick(app.id)}
-                                className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
-                                    ${activeWindowId === app.id ? 'bg-accent/20' : 'hover:bg-white/5'}
-                                `}
-                            >
-                                <div className={`text-xl ${activeWindowId === app.id ? 'text-accent' : 'text-white/60'}`}>
-                                    {app.icon}
-                                </div>
-                                <span className={`text-[10px] ${activeWindowId === app.id ? 'text-accent' : 'text-white/40'}`}>
-                                    {app.title.split(' ')[0]}
-                                </span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    const toggleMenu = () => {
+        playSound('click');
+        setMenuOpen(!menuOpen);
+    };
 
-    // Mobile: Show bottom nav when no window is open
+    // Mobile: Show bottom nav with more button
     if (isMobile) {
         return (
-            <div className="fixed bottom-0 left-0 right-0 z-50">
-                <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
-                    <div className="flex justify-around items-center">
-                        {dockApps.slice(0, 5).map(app => (
+            <>
+                {/* App Launcher Menu (Mobile) */}
+                <AnimatePresence>
+                    {menuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 100 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 100 }}
+                            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl p-6 pt-12"
+                        >
                             <button
-                                key={app.id}
-                                onClick={() => handleDockClick(app.id)}
-                                className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
-                                    ${app.isOpen ? 'bg-accent/10' : 'hover:bg-white/5'}
-                                `}
+                                onClick={toggleMenu}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white"
                             >
-                                <div className={`text-xl ${app.isOpen ? 'text-accent' : 'text-white/60'}`}>
-                                    {app.icon}
-                                </div>
-                                <span className={`text-[10px] ${app.isOpen ? 'text-accent' : 'text-white/40'}`}>
-                                    {app.title.split(' ')[0]}
-                                </span>
-                                {app.isOpen && (
-                                    <div className="w-1 h-1 rounded-full bg-accent" />
-                                )}
+                                <X size={24} />
                             </button>
-                        ))}
+
+                            <h2 className="text-white/60 text-sm uppercase tracking-widest mb-6">All Apps</h2>
+
+                            <div className="grid grid-cols-4 gap-4">
+                                {dockApps.map(app => (
+                                    <button
+                                        key={app.id}
+                                        onClick={() => handleDockClick(app.id)}
+                                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition-all"
+                                    >
+                                        <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center text-accent text-2xl">
+                                            {app.icon}
+                                        </div>
+                                        <span className="text-xs text-white/70 text-center truncate w-full">
+                                            {app.title.split(' ')[0]}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Mobile Bottom Nav */}
+                <div className="fixed bottom-0 left-0 right-0 z-50">
+                    <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
+                        <div className="flex justify-around items-center">
+                            {dockApps.slice(0, 4).map(app => (
+                                <button
+                                    key={app.id}
+                                    onClick={() => handleDockClick(app.id)}
+                                    className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
+                                        ${activeWindowId === app.id || app.isOpen ? 'bg-accent/10' : 'hover:bg-white/5'}
+                                    `}
+                                >
+                                    <div className={`text-xl ${activeWindowId === app.id ? 'text-accent' : app.isOpen ? 'text-accent/60' : 'text-white/60'}`}>
+                                        {app.icon}
+                                    </div>
+                                    <span className={`text-[10px] ${activeWindowId === app.id ? 'text-accent' : 'text-white/40'}`}>
+                                        {app.title.split(' ')[0]}
+                                    </span>
+                                </button>
+                            ))}
+
+                            {/* More Apps Button */}
+                            <button
+                                onClick={toggleMenu}
+                                className="flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] hover:bg-white/5 transition-all"
+                            >
+                                <div className="text-xl text-white/60">
+                                    <Grid3X3 size={20} />
+                                </div>
+                                <span className="text-[10px] text-white/40">More</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 
-    // Desktop: Original dock layout
+    // Desktop: Original dock layout with working menu
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-2 pointer-events-none">
-            <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, type: "spring", damping: 20 }}
-                className="pointer-events-auto flex items-center gap-1 px-3 py-2 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl"
-            >
-                {/* Start Menu Button */}
-                <button
-                    onClick={() => playSound('click')}
-                    onMouseEnter={() => playSound('hover')}
-                    className="p-2 rounded-xl hover:bg-white/10 text-accent transition-colors"
-                >
-                    <Menu size={20} />
-                </button>
-
-                <div className="w-px h-6 bg-white/10 mx-1" />
-
-                {/* Dock Icons */}
-                <div className="flex items-center gap-1">
-                    {dockApps.map((app) => (
-                        <DockIcon
-                            key={app.id}
-                            icon={app.icon}
-                            title={app.title}
-                            isOpen={app.isOpen}
-                            isActive={activeWindowId === app.id}
-                            onClick={() => handleDockClick(app.id)}
+        <>
+            {/* App Launcher Menu (Desktop) */}
+            <AnimatePresence>
+                {menuOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setMenuOpen(false)}
+                            className="fixed inset-0 z-40"
                         />
-                    ))}
-                </div>
 
-                <div className="w-px h-6 bg-white/10 mx-1" />
+                        {/* Menu Panel */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                            className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 w-96 max-w-[90vw] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl"
+                        >
+                            <h2 className="text-white/60 text-xs uppercase tracking-widest mb-4 px-2">All Applications</h2>
 
-                {/* System Tray */}
-                <div className="flex items-center gap-2 px-2">
-                    <Wifi size={14} className="text-white/50" />
-                    <Battery size={14} className="text-white/50" />
-                    <div className="text-xs text-white/70 font-mono tracking-wider">
-                        {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                            <div className="grid grid-cols-4 gap-2">
+                                {dockApps.map(app => (
+                                    <button
+                                        key={app.id}
+                                        onClick={() => handleDockClick(app.id)}
+                                        onMouseEnter={() => playSound('hover')}
+                                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition-all group"
+                                    >
+                                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:scale-110 group-hover:border-accent/30 transition-all">
+                                            {app.icon}
+                                        </div>
+                                        <span className="text-[10px] text-white/70 text-center truncate w-full">
+                                            {app.title.split(' ')[0]}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* Desktop Taskbar */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-2 pointer-events-none">
+                <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5, type: "spring", damping: 20 }}
+                    className="pointer-events-auto flex items-center gap-1 px-3 py-2 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl"
+                >
+                    {/* Start Menu Button */}
+                    <button
+                        onClick={toggleMenu}
+                        onMouseEnter={() => playSound('hover')}
+                        className={`p-2 rounded-xl transition-colors ${menuOpen ? 'bg-accent/20 text-accent' : 'hover:bg-white/10 text-accent'}`}
+                    >
+                        <Menu size={20} />
+                    </button>
+
+                    <div className="w-px h-6 bg-white/10 mx-1" />
+
+                    {/* Dock Icons */}
+                    <div className="flex items-center gap-1">
+                        {dockApps.map((app) => (
+                            <DockIcon
+                                key={app.id}
+                                icon={app.icon}
+                                title={app.title}
+                                isOpen={app.isOpen}
+                                isActive={activeWindowId === app.id}
+                                onClick={() => handleDockClick(app.id)}
+                            />
+                        ))}
                     </div>
-                </div>
-            </motion.div>
-        </div>
+
+                    <div className="w-px h-6 bg-white/10 mx-1" />
+
+                    {/* System Tray */}
+                    <div className="flex items-center gap-2 px-2">
+                        <Wifi size={14} className="text-white/50" />
+                        <Battery size={14} className="text-white/50" />
+                        <div className="text-xs text-white/70 font-mono tracking-wider">
+                            {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        </>
     );
 };
 
