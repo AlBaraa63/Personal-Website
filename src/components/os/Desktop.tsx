@@ -5,7 +5,7 @@ import WindowManager from './WindowManager';
 import Taskbar from './Taskbar';
 import BootSequence from './BootSequence';
 import SysMatrixBackground from './SysMatrixBackground';
-import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, ChevronRight, Activity, Zap } from 'lucide-react';
+import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, ChevronRight, Activity, Zap, Presentation } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Import our "App" contents
@@ -50,12 +50,17 @@ const WelcomeWidget: React.FC = () => {
         { id: 'projects', label: 'Projects', icon: <FolderGit2 size={18} /> },
         { id: 'experience', label: 'Experience', icon: <Briefcase size={18} /> },
         { id: 'contact', label: 'Contact', icon: <Mail size={18} /> },
+        { id: 'presentation', label: 'View Presentation', icon: <Presentation size={18} />, external: 'attrition_presentation_final.html' },
     ];
 
-    const handleQuickAction = (id: string) => {
+    const handleQuickAction = (id: string, external?: string) => {
         playSound('click');
-        playSound('open');
-        openWindow(id);
+        if (external) {
+            window.open(external, '_blank');
+        } else {
+            playSound('open');
+            openWindow(id);
+        }
     };
 
     return (
@@ -102,7 +107,7 @@ const WelcomeWidget: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.7 + index * 0.1 }}
-                        onClick={() => handleQuickAction(action.id)}
+                        onClick={() => handleQuickAction(action.id, (action as any).external)}
                         onMouseEnter={() => playSound('hover')}
                         className="group flex items-center gap-2 px-4 py-2.5 rounded-full
                             bg-white/5 border border-white/10 backdrop-blur-sm
@@ -246,6 +251,7 @@ const Desktop: React.FC = () => {
                 <DesktopIcon id="neural" label="Holo-AI" icon={<Cpu size={28} />} />
                 <DesktopIcon id="retro" label="Arcade" icon={<Gamepad2 size={28} />} />
                 <DesktopIcon id="settings" label="Config" icon={<Settings size={28} />} />
+                <DesktopIconExternal label="Presentation" icon={<Presentation size={28} />} url="attrition_presentation_final.html" />
             </div>
 
             {/* Windows Layer */}
@@ -279,6 +285,36 @@ const DesktopIcon: React.FC<DesktopIconProps> = ({ id, label, icon }) => {
         playSound('click');
         playSound('open');
         openWindow(id);
+    };
+
+    return (
+        <button
+            onClick={handleClick}
+            onMouseEnter={() => playSound('hover')}
+            className="group flex flex-col items-center gap-2 p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer text-center"
+        >
+            <div className="w-16 h-16 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 shadow-lg group-hover:scale-105 group-hover:border-accent/50 transition-all duration-300 backdrop-blur-sm text-accent">
+                {icon}
+            </div>
+            <span className="text-xs font-medium text-white/80 group-hover:text-white bg-black/40 px-2 py-0.5 rounded shadow-sm backdrop-blur-md">
+                {label}
+            </span>
+        </button>
+    );
+};
+
+interface DesktopIconExternalProps {
+    label: string;
+    icon: React.ReactNode;
+    url: string;
+}
+
+const DesktopIconExternal: React.FC<DesktopIconExternalProps> = ({ label, icon, url }) => {
+    const { playSound } = useSound();
+
+    const handleClick = () => {
+        playSound('click');
+        window.open(url, '_blank');
     };
 
     return (
