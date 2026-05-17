@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Volume2, Zap, Palette, Sun, Moon, VolumeX, Monitor } from 'lucide-react';
+import { Settings as SettingsIcon, Volume2, Zap, Palette, VolumeX, Monitor } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
-import { useTheme } from '@/context/ThemeContext';
 
 const DEFAULT_ACCENT = '#22c55e';
 const DEFAULT_ACCENT_RGB = '34, 197, 94';
@@ -25,7 +24,6 @@ const SectionHeader: React.FC<{ icon: React.ReactNode; label: string }> = ({ ico
 
 const Settings: React.FC = () => {
     const { playSound, isMuted, toggleMute, setVolume, volume } = useSound();
-    const { theme, toggleTheme } = useTheme();
 
     const [scanlineIntensity, setScanlineIntensity] = useState(() => {
         const saved = localStorage.getItem('scanlineIntensity');
@@ -122,27 +120,6 @@ const Settings: React.FC = () => {
                                     </button>
                                 );
                             })}
-                        </div>
-                    </section>
-
-                    {/* Theme */}
-                    <section>
-                        <SectionHeader icon={<Sun size={12} />} label="Appearance" />
-                        <div className="flex items-center justify-between px-3 py-2.5 border border-[var(--border)]">
-                            <div>
-                                <div className="text-xs font-bold uppercase tracking-wider">Theme Mode</div>
-                                <div className="text-[10px] text-[var(--text-faint)] mt-0.5">Light / dark</div>
-                            </div>
-                            <button
-                                onClick={() => { playSound('click'); toggleTheme(); }}
-                                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-                                className={`flex items-center gap-2 px-3 py-1.5 border transition-colors text-xs uppercase tracking-wider font-bold
-                                    ${theme === 'dark' ? 'border-accent text-accent' : 'border-[var(--border-strong)] text-[var(--text-primary)]'}
-                                `}
-                            >
-                                {theme === 'dark' ? <Moon size={12} /> : <Sun size={12} />}
-                                {theme}
-                            </button>
                         </div>
                     </section>
 

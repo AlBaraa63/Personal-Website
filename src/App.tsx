@@ -1,30 +1,26 @@
-import { ThemeProvider } from '@/context/ThemeContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { OSProvider } from '@/context/OSContext';
 import { SoundProvider } from '@/context/SoundContext';
+import { NotificationProvider } from '@/context/NotificationContext';
 import Desktop from '@/components/os/Desktop';
 import CustomCursor from '@/components/effects/CustomCursor';
 
+// HOLO-OS is dark-first. The previous ThemeProvider/light-mode toggle was vestigial
+// from an earlier non-OS version of the site and never rendered correctly inside the OS,
+// so it's been removed.
 function App() {
-  return (
-    <ErrorBoundary>
-      <SoundProvider>
-        <OSProvider>
-          <ThemeProvider>
-            {/* Custom Cursor */}
-            <CustomCursor />
-            {/* 
-              The OSProvider wraps everything. 
-              The 'Desktop' component is the main view manager. 
-              We no longer use specific Layout/Hero components directly here.
-              They are loaded as 'Apps' inside Desktop.tsx 
-            */}
-            <Desktop />
-          </ThemeProvider>
-        </OSProvider>
-      </SoundProvider>
-    </ErrorBoundary>
-  );
+    return (
+        <ErrorBoundary>
+            <SoundProvider>
+                <OSProvider>
+                    <NotificationProvider>
+                        <CustomCursor />
+                        <Desktop />
+                    </NotificationProvider>
+                </OSProvider>
+            </SoundProvider>
+        </ErrorBoundary>
+    );
 }
 
 export default App;

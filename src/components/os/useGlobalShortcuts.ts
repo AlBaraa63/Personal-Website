@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useOS } from '@/context/OSContext';
-import { SidebarApp } from './Sidebar';
+import { LauncherApp } from './Desktop';
 
 const isMac = typeof navigator !== 'undefined' && navigator.platform.toUpperCase().includes('MAC');
 
@@ -18,7 +18,7 @@ const isTypingTarget = (target: EventTarget | null): boolean => {
  *   ⌘M / Ctrl+M   minimize active window
  *   ⌘1..9 / Ctrl+1..9   open/focus the Nth app from the launcher
  */
-export const useGlobalShortcuts = (apps: SidebarApp[]) => {
+export const useGlobalShortcuts = (apps: LauncherApp[]) => {
     const { activeWindowId, openWindow, closeWindow, minimizeWindow, focusWindow, windows } = useOS();
 
     useEffect(() => {

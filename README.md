@@ -97,6 +97,42 @@ Personal-Website/
 
 ---
 
+## 🤖 Holo-AI Backend (optional)
+
+The Holo-AI window inside HOLO-OS runs on a two-tier brain:
+
+1. **Local agent (default)** — intent matching + static FAQ in `src/components/apps/holoAI.ts`. Works without any API key. Can drive the OS (open/close/focus windows, deep-link projects).
+2. **Claude-powered (optional)** — a Vercel Edge Function at `api/chat.ts` wraps Anthropic's API. Same `{message, actions}` shape, so the frontend code doesn't change. Claude can call tools to control the OS the same way the local agent can.
+
+### Enabling the Claude backend on Vercel
+
+1. Add an Anthropic API key to your Vercel project:
+   - Vercel dashboard → Project → **Settings → Environment Variables**
+   - Name: `ANTHROPIC_API_KEY`
+   - Value: your `sk-ant-...` key
+   - Apply to Production (and Preview if desired)
+2. Redeploy. The frontend automatically POSTs to `/api/chat` in production.
+
+If `ANTHROPIC_API_KEY` is missing or the function errors, the frontend silently falls back to the local agent.
+
+**Model:** `claude-haiku-4-5` (fast + cheap). System prompt + tool definitions are prompt-cached, so repeat requests cost ~$0.001 each.
+
+### Pointing at a different endpoint
+
+Set `VITE_AI_ENDPOINT` at build time to override:
+
+```bash
+VITE_AI_ENDPOINT=https://my-custom-endpoint.example.com/chat npm run build
+```
+
+The endpoint must accept `POST { message: string }` and return `{ message: string, actions?: HoloAction[] }`.
+
+### Optional: live GitHub presence widget
+
+The desktop shows your latest public GitHub activity. To raise the rate-limit ceiling from 60/hr to 5000/hr, set `VITE_GITHUB_TOKEN` (a fine-grained PAT with read-only public access is enough).
+
+---
+
 ## 📝 License
 
 MIT License - see [LICENSE](LICENSE) for details.

@@ -3,11 +3,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Search, CornerDownLeft, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
-import { SidebarApp } from './Sidebar';
+import { LauncherApp } from './Desktop';
 import { projects } from '@/data/portfolioData';
 
 interface CommandPaletteProps {
-    apps: SidebarApp[];
+    apps: LauncherApp[];
 }
 
 interface Item {

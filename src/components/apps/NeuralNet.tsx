@@ -19,7 +19,12 @@ const SUGGESTED_PROMPTS = [
     'How do I contact you?',
 ];
 
-const AI_ENDPOINT = (import.meta.env.VITE_AI_ENDPOINT as string | undefined) || '';
+// In production, default to the Vercel Edge Function at /api/chat. In dev,
+// only hit a remote endpoint if VITE_AI_ENDPOINT is explicitly set. Either way,
+// queryRemote falls back to the local agent if the request errors.
+const AI_ENDPOINT =
+    (import.meta.env.VITE_AI_ENDPOINT as string | undefined) ||
+    (import.meta.env.PROD ? '/api/chat' : '');
 
 const NeuralNet: React.FC = () => {
     const { playSound } = useSound();
