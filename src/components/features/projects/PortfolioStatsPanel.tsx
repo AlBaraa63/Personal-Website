@@ -51,23 +51,23 @@ const PortfolioStatsPanel: React.FC<PortfolioStatsPanelProps> = ({
   const entrance = isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4';
 
   const stats = [
-    { 
-      label: 'Projects', 
-      value: totalProjects, 
+    {
+      label: 'Projects',
+      value: totalProjects,
       icon: <Layers className="w-4 h-4" />,
-      color: 'var(--accent)' 
+      color: 'var(--accent)'
     },
-    { 
-      label: 'Live Demos', 
-      value: liveDemos, 
+    {
+      label: 'Live Demos',
+      value: liveDemos,
       icon: <Zap className="w-4 h-4" />,
-      color: '#60a5fa' 
+      color: 'var(--accent)'
     },
-    { 
-      label: 'Avg Skills', 
-      value: avgSkillsPerProject, 
+    {
+      label: 'Avg Skills',
+      value: avgSkillsPerProject,
       icon: <Activity className="w-4 h-4" />,
-      color: '#a78bfa' 
+      color: 'var(--text-primary)'
     },
   ];
 

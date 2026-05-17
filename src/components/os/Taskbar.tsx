@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
-import { Wifi, Battery, Menu, X, Grid3X3 } from 'lucide-react';
+import { Wifi, WifiOff, Battery, BatteryCharging, BatteryLow, Grid3X3, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { APP_LAUNCHER } from './Desktop';
+import { useSystemTray } from './useSystemTray';
 
-// Hook to detect mobile viewport
 const useIsMobile = () => {
     const [isMobile, setIsMobile] = useState(false);
 
@@ -22,110 +23,168 @@ const Taskbar: React.FC = () => {
     const { windows, activeWindowId, focusWindow, openWindow, minimizeWindow } = useOS();
     const { playSound } = useSound();
     const [time, setTime] = useState(new Date());
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const isMobile = useIsMobile();
+    const tray = useSystemTray();
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    // Get dock apps (all registered windows)
-    const dockApps = Object.values(windows);
+    // Only open windows show on desktop taskbar — this is the "real OS" behavior.
+    const openApps = Object.values(windows).filter(w => w.isOpen);
 
-    const handleDockClick = (id: string) => {
+    const handleAppClick = (id: string) => {
         playSound('click');
-        setMenuOpen(false);
         const win = windows[id];
-        if (win.isOpen) {
-            if (win.isMinimized || activeWindowId !== id) {
-                focusWindow(id);
-            } else {
-                minimizeWindow(id);
-            }
+        if (!win) return;
+        if (win.isOpen && !win.isMinimized && activeWindowId === id) {
+            // Click active app to minimize
+            minimizeWindow(id);
+        } else if (win.isOpen) {
+            focusWindow(id);
         } else {
             openWindow(id);
         }
     };
 
-    const toggleMenu = () => {
+    const handleLaunchFromDrawer = (id: string) => {
         playSound('click');
-        setMenuOpen(!menuOpen);
+        playSound('open');
+        setDrawerOpen(false);
+        const win = windows[id];
+        if (win?.isOpen) {
+            focusWindow(id);
+        } else {
+            openWindow(id);
+        }
     };
 
-    // Mobile: Show bottom nav with more button
+    const timeStr = time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+
     if (isMobile) {
         return (
             <>
-                {/* App Launcher Menu (Mobile) */}
+                {/* Full-screen app drawer */}
                 <AnimatePresence>
-                    {menuOpen && (
+                    {drawerOpen && (
                         <motion.div
-                            initial={{ opacity: 0, y: 100 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 100 }}
-                            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl p-6 pt-12"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.18 }}
+                            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex flex-col p-5 pt-10 font-mono overflow-y-auto"
                         >
-                            <button
-                                onClick={toggleMenu}
-                                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white"
-                            >
-                                <X size={24} />
-                            </button>
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-2">
+                                <div>
+                                    <div className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-faint)]">// holo-os · launcher</div>
+                                    <h2 className="text-[var(--text-primary)] text-base font-bold uppercase tracking-[0.2em]">All Applications</h2>
+                                </div>
+                                <button
+                                    onClick={() => setDrawerOpen(false)}
+                                    aria-label="Close launcher"
+                                    className="p-2 border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-accent hover:text-accent transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
 
-                            <h2 className="text-white/60 text-sm uppercase tracking-widest mb-6">All Apps</h2>
+                            {/* Status counter */}
+                            <div className="text-[10px] text-[var(--text-faint)] uppercase tracking-widest mb-6">
+                                {openApps.length === 0
+                                    ? 'No active windows · select an app to launch'
+                                    : `${openApps.length} active window${openApps.length === 1 ? '' : 's'}`}
+                            </div>
 
-                            <div className="grid grid-cols-4 gap-4">
-                                {dockApps.map(app => (
-                                    <button
-                                        key={app.id}
-                                        onClick={() => handleDockClick(app.id)}
-                                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition-all"
-                                    >
-                                        <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center text-accent text-2xl">
-                                            {app.icon}
-                                        </div>
-                                        <span className="text-xs text-white/70 text-center truncate w-full">
-                                            {app.title.split(' ')[0]}
-                                        </span>
-                                    </button>
-                                ))}
+                            {/* Cards */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {APP_LAUNCHER.map((app, idx) => {
+                                    const win = windows[app.id];
+                                    const isOpen = !!win?.isOpen;
+                                    const isActive = activeWindowId === app.id && isOpen;
+                                    return (
+                                        <motion.button
+                                            key={app.id}
+                                            onClick={() => handleLaunchFromDrawer(app.id)}
+                                            aria-pressed={isActive}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.035, duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                                            className="relative flex items-center gap-4 px-4 py-3 text-left transition-colors border"
+                                            style={{
+                                                borderColor: isActive ? 'var(--accent)' : 'var(--border)',
+                                                backgroundColor: isActive ? 'rgba(var(--accent-rgb), 0.08)' : 'var(--surface)',
+                                            }}
+                                        >
+                                            {isActive && (
+                                                <>
+                                                    <span aria-hidden className="absolute -top-px -left-px w-2 h-2 border-t border-l border-accent" />
+                                                    <span aria-hidden className="absolute -top-px -right-px w-2 h-2 border-t border-r border-accent" />
+                                                    <span aria-hidden className="absolute -bottom-px -left-px w-2 h-2 border-b border-l border-accent" />
+                                                    <span aria-hidden className="absolute -bottom-px -right-px w-2 h-2 border-b border-r border-accent" />
+                                                </>
+                                            )}
+
+                                            <div className={`w-12 h-12 flex items-center justify-center border flex-shrink-0
+                                                ${isActive ? 'border-accent text-accent bg-[rgba(var(--accent-rgb),0.12)]' :
+                                                    isOpen ? 'border-[var(--border-strong)] text-[var(--text-primary)]' :
+                                                        'border-[var(--border)] text-[var(--text-muted)]'}
+                                            `}>
+                                                {app.icon}
+                                            </div>
+
+                                            <div className="flex-1 min-w-0">
+                                                <div className={`text-sm font-bold uppercase tracking-wider truncate
+                                                    ${isActive ? 'text-accent' : 'text-[var(--text-primary)]'}
+                                                `}>
+                                                    {app.label}
+                                                </div>
+                                                {app.subtitle && (
+                                                    <div className="text-[10px] uppercase tracking-widest text-[var(--text-faint)] truncate">
+                                                        {app.subtitle}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {isOpen && (
+                                                <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 border flex-shrink-0
+                                                    ${isActive ? 'border-accent text-accent' : 'border-[var(--border)] text-[var(--text-muted)]'}
+                                                `}>
+                                                    {isActive ? 'Active' : 'Open'}
+                                                </span>
+                                            )}
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Footer */}
+                            <div className="mt-6 text-center text-[10px] text-[var(--text-faint)] uppercase tracking-widest">
+                                Tap any app to launch · {APP_LAUNCHER.length} total
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                {/* Mobile Bottom Nav */}
-                <div className="fixed bottom-0 left-0 right-0 z-50">
-                    <div className="bg-black/80 backdrop-blur-xl border-t border-white/10 px-2 py-2 safe-area-pb">
-                        <div className="flex justify-around items-center">
-                            {dockApps.slice(0, 4).map(app => (
-                                <button
-                                    key={app.id}
-                                    onClick={() => handleDockClick(app.id)}
-                                    className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] transition-all
-                                        ${activeWindowId === app.id || app.isOpen ? 'bg-accent/10' : 'hover:bg-white/5'}
-                                    `}
-                                >
-                                    <div className={`text-xl ${activeWindowId === app.id ? 'text-accent' : app.isOpen ? 'text-accent/60' : 'text-white/60'}`}>
-                                        {app.icon}
-                                    </div>
-                                    <span className={`text-[10px] ${activeWindowId === app.id ? 'text-accent' : 'text-white/40'}`}>
-                                        {app.title.split(' ')[0]}
-                                    </span>
-                                </button>
-                            ))}
-
-                            {/* More Apps Button */}
-                            <button
-                                onClick={toggleMenu}
-                                className="flex flex-col items-center gap-1 p-2 rounded-xl min-w-[56px] hover:bg-white/5 transition-all"
-                            >
-                                <div className="text-xl text-white/60">
-                                    <Grid3X3 size={20} />
-                                </div>
-                                <span className="text-[10px] text-white/40">More</span>
-                            </button>
+                {/* Mobile bottom bar — hamburger + clock only, per brief */}
+                <div className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--surface)]/90 backdrop-blur-md border-t border-[var(--border)]">
+                    <div className="flex items-center justify-between px-4 h-14 font-mono">
+                        <div className="w-10" />
+                        <button
+                            onClick={() => {
+                                playSound('click');
+                                setDrawerOpen(true);
+                            }}
+                            aria-label="Open application launcher"
+                            className="flex items-center gap-2 px-4 py-2 rounded border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-accent hover:text-accent transition-colors"
+                        >
+                            <Grid3X3 size={18} />
+                            <span className="text-[10px] uppercase tracking-[0.2em]">Apps</span>
+                        </button>
+                        <div className="text-xs text-[var(--text-muted)] tabular-nums tracking-wider w-10 text-right">
+                            {timeStr}
                         </div>
                     </div>
                 </div>
@@ -133,157 +192,110 @@ const Taskbar: React.FC = () => {
         );
     }
 
-    // Desktop: Original dock layout with working menu
+    // Desktop taskbar — open windows only + system tray
     return (
-        <>
-            {/* App Launcher Menu (Desktop) */}
-            <AnimatePresence>
-                {menuOpen && (
-                    <>
-                        {/* Backdrop */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setMenuOpen(false)}
-                            className="fixed inset-0 z-40"
-                        />
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-3 pointer-events-none">
+            <motion.div
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, type: 'spring', damping: 24 }}
+                className="pointer-events-auto flex items-center gap-3 px-3 py-2 bg-[var(--surface)]/85 backdrop-blur-xl border border-[var(--border)] rounded font-mono"
+                style={{ minWidth: 280 }}
+            >
+                {/* Open apps list */}
+                <div className="flex items-center gap-1 min-h-[36px]">
+                    {openApps.length === 0 ? (
+                        <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--text-faint)] px-2">
+                            No active windows
+                        </span>
+                    ) : (
+                        openApps.map(app => {
+                            const isActive = activeWindowId === app.id && !app.isMinimized;
+                            return (
+                                <OpenAppChip
+                                    key={app.id}
+                                    icon={app.icon}
+                                    title={app.title}
+                                    isActive={isActive}
+                                    isMinimized={app.isMinimized}
+                                    onClick={() => handleAppClick(app.id)}
+                                />
+                            );
+                        })
+                    )}
+                </div>
 
-                        {/* Menu Panel */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                            className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 w-96 max-w-[90vw] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl"
-                        >
-                            <h2 className="text-white/60 text-xs uppercase tracking-widest mb-4 px-2">All Applications</h2>
+                <div className="w-px h-6 bg-[var(--border)]" />
 
-                            <div className="grid grid-cols-4 gap-2">
-                                {dockApps.map(app => (
-                                    <button
-                                        key={app.id}
-                                        onClick={() => handleDockClick(app.id)}
-                                        onMouseEnter={() => playSound('hover')}
-                                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition-all group"
-                                    >
-                                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:scale-110 group-hover:border-accent/30 transition-all">
-                                            {app.icon}
-                                        </div>
-                                        <span className="text-[10px] text-white/70 text-center truncate w-full">
-                                            {app.title.split(' ')[0]}
-                                        </span>
-                                    </button>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
-
-            {/* Desktop Taskbar */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-2 pointer-events-none">
-                <motion.div
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5, type: "spring", damping: 20 }}
-                    className="pointer-events-auto flex items-center gap-1 px-3 py-2 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl"
-                >
-                    {/* Start Menu Button */}
-                    <button
-                        onClick={toggleMenu}
-                        onMouseEnter={() => playSound('hover')}
-                        className={`p-2 rounded-xl transition-colors ${menuOpen ? 'bg-accent/20 text-accent' : 'hover:bg-white/10 text-accent'}`}
+                {/* System tray — real data, not cosmetic */}
+                <div className="flex items-center gap-3 px-2 text-[var(--text-muted)]">
+                    <div
+                        title={tray.online ? 'Online' : 'Offline'}
+                        className={tray.online ? '' : 'text-red-400'}
                     >
-                        <Menu size={20} />
-                    </button>
-
-                    <div className="w-px h-6 bg-white/10 mx-1" />
-
-                    {/* Dock Icons */}
-                    <div className="flex items-center gap-1">
-                        {dockApps.map((app) => (
-                            <DockIcon
-                                key={app.id}
-                                icon={app.icon}
-                                title={app.title}
-                                isOpen={app.isOpen}
-                                isActive={activeWindowId === app.id}
-                                onClick={() => handleDockClick(app.id)}
-                            />
-                        ))}
+                        {tray.online ? <Wifi size={13} /> : <WifiOff size={13} />}
                     </div>
-
-                    <div className="w-px h-6 bg-white/10 mx-1" />
-
-                    {/* System Tray */}
-                    <div className="flex items-center gap-2 px-2">
-                        <Wifi size={14} className="text-white/50" />
-                        <Battery size={14} className="text-white/50" />
-                        <div className="text-xs text-white/70 font-mono tracking-wider">
-                            {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                    {tray.hasBattery && tray.batteryLevel !== null && (
+                        <div
+                            title={`Battery ${Math.round(tray.batteryLevel * 100)}%${tray.charging ? ' (charging)' : ''}`}
+                            className={`flex items-center gap-1 ${tray.batteryLevel < 0.2 && !tray.charging ? 'text-red-400' : ''}`}
+                        >
+                            {tray.charging
+                                ? <BatteryCharging size={13} className="text-accent" />
+                                : tray.batteryLevel < 0.2
+                                    ? <BatteryLow size={13} />
+                                    : <Battery size={13} />
+                            }
+                            <span className="text-[10px] tabular-nums">{Math.round(tray.batteryLevel * 100)}</span>
                         </div>
-                    </div>
-                </motion.div>
-            </div>
-        </>
+                    )}
+                    <div className="text-[11px] tabular-nums tracking-wider">{timeStr}</div>
+                </div>
+            </motion.div>
+        </div>
     );
 };
 
-// Dock Icon Component
-function DockIcon({ icon, title, isOpen, isActive, onClick }: {
-    icon: React.ReactNode,
-    title: string,
-    isOpen: boolean,
-    isActive: boolean,
-    onClick: () => void
-}) {
-    const { playSound } = useSound();
+interface OpenAppChipProps {
+    icon: React.ReactNode;
+    title: string;
+    isActive: boolean;
+    isMinimized: boolean;
+    onClick: () => void;
+}
 
+const OpenAppChip: React.FC<OpenAppChipProps> = ({ icon, title, isActive, isMinimized, onClick }) => {
+    const { playSound } = useSound();
     return (
         <motion.button
-            layout
             onClick={onClick}
             onMouseEnter={() => playSound('hover')}
-            whileHover={{
-                scale: 1.2,
-                y: -5,
-                transition: { type: "spring", damping: 10, stiffness: 300 }
-            }}
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.94 }}
+            aria-pressed={isActive}
             className={`
-                relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
-                transition-colors duration-200 group
-                ${isActive ? 'bg-white/10 border-accent/30' : 'bg-transparent hover:bg-white/5 border-transparent'}
-                border
+                relative flex items-center justify-center w-9 h-9 rounded transition-colors group
+                ${isActive
+                    ? 'bg-[rgba(var(--accent-rgb),0.15)] text-accent'
+                    : isMinimized
+                        ? 'text-[var(--text-faint)] hover:text-[var(--text-primary)]'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]'}
             `}
         >
-            <div className={`
-                text-2xl sm:text-3xl transition-all duration-300
-                ${isActive ? 'text-accent drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.6)]' : 'text-white/70 group-hover:text-white'}
-            `}>
-                {icon}
-            </div>
+            {icon}
 
-            {/* Active Dot */}
-            {isOpen && (
-                <motion.div
-                    layoutId={`dot-${title}`}
-                    className={`
-                        absolute -bottom-1 w-1 h-1 rounded-full
-                        ${isActive ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-white/30'}
-                    `}
-                />
-            )}
+            {/* Active underline */}
+            <span
+                className={`absolute -bottom-[2px] left-1/2 -translate-x-1/2 h-[2px] transition-all
+                    ${isActive ? 'w-5 bg-accent shadow-[0_0_6px_var(--accent)]' : 'w-1 bg-[var(--text-faint)]'}
+                `}
+            />
 
             {/* Tooltip */}
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-[10px] px-2 py-1 rounded border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm z-50">
+            <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-[var(--surface-raised)] border border-[var(--border)] text-[var(--text-primary)] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-wider">
                 {title}
             </div>
-
-            {/* Glow on Hover */}
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         </motion.button>
     );
-}
+};
 
 export default Taskbar;

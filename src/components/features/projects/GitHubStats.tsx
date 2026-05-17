@@ -83,23 +83,23 @@ const GitHubStats: React.FC<GitHubStatsProps> = ({ username, isVisible }) => {
   const entrance = isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4';
 
   const stats = [
-    { 
-      label: 'Repositories', 
-      value: data.public_repos, 
+    {
+      label: 'Repositories',
+      value: data.public_repos,
       icon: <Book className="w-4 h-4" />,
-      color: '#f97316' 
+      color: 'var(--accent)'
     },
-    { 
-      label: 'Stars', 
-      value: data.total_commits, 
+    {
+      label: 'Stars',
+      value: data.total_commits,
       icon: <GitCommit className="w-4 h-4" />,
-      color: '#eab308' 
+      color: 'var(--text-primary)'
     },
-    { 
-      label: 'Forks', 
-      value: data.total_forks, 
+    {
+      label: 'Forks',
+      value: data.total_forks,
       icon: <GitFork className="w-4 h-4" />,
-      color: '#10b981' 
+      color: 'var(--text-primary)'
     },
   ];
 

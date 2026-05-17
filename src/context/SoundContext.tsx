@@ -4,6 +4,7 @@ interface SoundContextType {
     playSound: (type: SoundType) => void;
     isMuted: boolean;
     toggleMute: () => void;
+    volume: number;
     setVolume: (volume: number) => void;
 }
 
@@ -143,7 +144,7 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, [isMuted, volume]);
 
     return (
-        <SoundContext.Provider value={{ playSound, isMuted, toggleMute, setVolume }}>
+        <SoundContext.Provider value={{ playSound, isMuted, toggleMute, volume, setVolume }}>
             {children}
         </SoundContext.Provider>
     );

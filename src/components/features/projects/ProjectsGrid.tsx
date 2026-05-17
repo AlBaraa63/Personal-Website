@@ -5,12 +5,14 @@ import { Project } from '@/data/portfolioData';
 interface ProjectsGridProps {
   projects: Project[];
   isVisible: boolean;
+  onDetails: (project: Project) => void;
   emptyMessage?: string;
 }
 
 const ProjectsGrid: React.FC<ProjectsGridProps> = ({
   projects,
   isVisible,
+  onDetails,
   emptyMessage = 'No projects found in this category'
 }) => {
   const transition = 'transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]';
@@ -57,6 +59,7 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
         <ProjectCard
           key={project.id}
           project={project}
+          onDetails={onDetails}
         />
       ))}
     </div>

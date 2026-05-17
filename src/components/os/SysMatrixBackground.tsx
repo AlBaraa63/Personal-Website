@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+
+// Note: the @keyframes grid-scroll and data-fall live in src/index.css.
 
 const SysMatrixBackground: React.FC = () => {
     return (
@@ -15,18 +17,16 @@ const SysMatrixBackground: React.FC = () => {
                     className="absolute inset-0"
                     style={{
                         backgroundImage: `
-              linear-gradient(to right, rgba(0, 255, 65, 0.1) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(0, 255, 65, 0.1) 1px, transparent 1px)
-            `,
+                            linear-gradient(to right, rgba(var(--accent-rgb), 0.1) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(var(--accent-rgb), 0.1) 1px, transparent 1px)
+                        `,
                         backgroundSize: '40px 40px',
                         transform: 'rotateX(60deg) scale(2)',
                         animation: 'grid-scroll 20s linear infinite',
                         transformOrigin: '50% 100%',
                     }}
                 />
-                <div
-                    className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"
-                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]" />
             </div>
 
             {/* Floating data particles */}
@@ -36,35 +36,20 @@ const SysMatrixBackground: React.FC = () => {
                 <DataStream size={25} speed={8} left="60%" delay={1} />
                 <DataStream size={10} speed={20} left="85%" delay={3} />
             </div>
-
-            <style jsx>{`
-        @keyframes grid-scroll {
-          0% { background-position: 0 0; }
-          100% { background-position: 0 1000px; }
-        }
-        @keyframes data-fall {
-          0% { transform: translateY(-100%); opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateY(100vh); opacity: 0; }
-        }
-      `}</style>
         </div>
     );
 };
 
-const DataStream: React.FC<{ size: number, speed: number, left: string, delay: number }> = ({ size, speed, left, delay }) => {
-    return (
-        <div
-            className="absolute top-0 w-[1px] bg-gradient-to-b from-transparent via-accent to-transparent"
-            style={{
-                left,
-                height: size * 10,
-                animation: `data-fall ${speed}s linear infinite`,
-                animationDelay: `${delay}s`,
-            }}
-        />
-    );
-};
+const DataStream: React.FC<{ size: number; speed: number; left: string; delay: number }> = ({ size, speed, left, delay }) => (
+    <div
+        className="absolute top-0 w-[1px] bg-gradient-to-b from-transparent via-accent to-transparent"
+        style={{
+            left,
+            height: size * 10,
+            animation: `data-fall ${speed}s linear infinite`,
+            animationDelay: `${delay}s`,
+        }}
+    />
+);
 
 export default SysMatrixBackground;

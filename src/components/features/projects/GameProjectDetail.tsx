@@ -227,17 +227,17 @@ const GameProjectDetail: React.FC<GameProjectDetailProps> = ({
         {/* Links */}
         <div className="flex flex-wrap gap-3 justify-center py-6">
           {linkSet.liveDemo && (
-            <a href={linkSet.liveDemo} target="_blank" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
+            <a href={linkSet.liveDemo} target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
               <ExternalLink className="inline w-4 h-4 mr-2" /> Live Demo
             </a>
           )}
           {linkSet.github && (
-            <a href={linkSet.github} target="_blank" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
+            <a href={linkSet.github} target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
               <Github className="inline w-4 h-4 mr-2" /> Source
             </a>
           )}
           {links?.paper && (
-            <a href={links.paper} target="_blank" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
+            <a href={links.paper} target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-md border bg-black/30 hover:-translate-y-0.5 hover:shadow transition text-sm sm:text-base" style={{ borderColor: 'var(--accent)', color: 'var(--text-primary)' }}>
               Paper / Report
             </a>
           )}

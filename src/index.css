@@ -44,47 +44,60 @@
 }
 
 /* ============================================
-   🎨 EPIC CSS FOUNDATION - HOLOGRAPHIC COMMAND CENTER
+   🎨 HOLO-OS DESIGN TOKENS — single accent (green)
    ============================================ */
 
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #1a1a1a;
-  --text-secondary: #4b5563;
-  --accent: #007a1f;
-  --accent-hover: #005a17;
-  --accent-rgb: 0, 122, 31;
-  --border: #e5e7eb;
+  /* Accent — the only intentional color in the OS */
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-dim: rgba(34, 197, 94, 0.5);
+  --accent-glow: rgba(34, 197, 94, 0.3);
+  --accent-rgb: 34, 197, 94;
 
-  --chip-inactive-bg: var(--bg-secondary);
+  /* Surfaces — layered grayscale */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --surface: #0a0a0a;
+  --surface-raised: #141414;
+  --surface-inset: #050505;
+
+  /* Text */
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #a3a3a3;
+  --text-faint: #525252;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Type */
+  --font-mono: 'JetBrains Mono', 'Fira Code', Monaco, monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Motion */
   --motion-duration: 0.7s;
   --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* New holographic variables */
-  --glow-strength: 0.4;
+  /* Effects */
+  --chip-inactive-bg: var(--surface);
+  --glow-strength: 0.6;
   --aurora-speed: 8s;
   --particle-opacity: 0.6;
+  --scanline-opacity: 0.03;
+  --bloom-strength: 1;
+  --glass-blur: 12px;
 }
 
+/* The OS is dark-first. `.dark` exists for the optional theme toggle but
+   tokens are identical for now — light mode is a future concern. */
 .dark {
-  --bg-primary: #030303;
-  --bg-secondary: #0a0a0a;
-  --text-primary: #ffffff;
-  --text-secondary: #a0aec0;
-  --accent: #00ff41;
-  --accent-hover: #00cc33;
-  --accent-rgb: 0, 255, 65;
-  --border: #1a1a2e;
-
-  --chip-inactive-bg: var(--bg-secondary);
-  --motion-duration: 0.7s;
-  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Enhanced dark mode holos */
-  --glow-strength: 0.6;
-  --aurora-speed: 6s;
-  --particle-opacity: 0.8;
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-dim: rgba(34, 197, 94, 0.5);
+  --accent-glow: rgba(34, 197, 94, 0.3);
+  --accent-rgb: 34, 197, 94;
 }
 
 html {
@@ -92,11 +105,20 @@ html {
 }
 
 body {
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
+}
+
+/* Monospace is for OS chrome, labels, code, and terminal output. */
+.font-mono,
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
 }
 
 /* ============================================
@@ -462,6 +484,77 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   🪟 HUD-FRAME — unified window/panel chrome
+   Corner brackets + thin border, accent-aware.
+   Use as the SINGLE chrome language for all OS windows.
+   ============================================ */
+
+.hud-frame {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.hud-frame.is-active {
+  border-color: var(--accent-dim);
+  box-shadow:
+    0 0 0 1px var(--accent-dim),
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(var(--accent-rgb), 0.12);
+}
+
+.hud-frame::before,
+.hud-frame::after,
+.hud-frame > .hud-corner-bl,
+.hud-frame > .hud-corner-br {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--accent);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  transition: border-color 0.2s ease;
+}
+
+.hud-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+
+.hud-frame::after {
+  top: -1px;
+  right: -1px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+
+.hud-frame > .hud-corner-bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+
+.hud-frame > .hud-corner-br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+.hud-frame:not(.is-active)::before,
+.hud-frame:not(.is-active)::after,
+.hud-frame:not(.is-active) > .hud-corner-bl,
+.hud-frame:not(.is-active) > .hud-corner-br {
+  border-color: var(--text-faint);
 }
 
 /* ============================================
@@ -1765,6 +1858,19 @@ span {
   100% {
     transform: skew(1deg);
   }
+}
+
+/* Background grid drift + data-stream rain (SysMatrixBackground) */
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 1000px; }
+}
+
+@keyframes data-fall {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
 }
 
 /* Utilities for fade/animate-in since no plugin */

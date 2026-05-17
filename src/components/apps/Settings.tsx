@@ -1,47 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Monitor, Volume2, Zap, Palette, Sun, Moon, VolumeX } from 'lucide-react';
+import { Settings as SettingsIcon, Volume2, Zap, Palette, Sun, Moon, VolumeX, Monitor } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
 import { useTheme } from '@/context/ThemeContext';
 
-// Accent color presets
+const DEFAULT_ACCENT = '#22c55e';
+const DEFAULT_ACCENT_RGB = '34, 197, 94';
+
 const ACCENT_COLORS = [
-    { name: 'Neon Green', value: '#00ff41', rgb: '0, 255, 65' },
-    { name: 'Cyber Cyan', value: '#00d4ff', rgb: '0, 212, 255' },
-    { name: 'Hot Pink', value: '#ff0080', rgb: '255, 0, 128' },
-    { name: 'Electric Orange', value: '#ff6600', rgb: '255, 102, 0' },
-    { name: 'Purple Haze', value: '#a855f7', rgb: '168, 85, 247' },
+    { name: 'Holo', value: '#22c55e', rgb: '34, 197, 94' },
+    { name: 'Neon', value: '#00ff41', rgb: '0, 255, 65' },
+    { name: 'Cyan', value: '#00d4ff', rgb: '0, 212, 255' },
+    { name: 'Pink', value: '#ff0080', rgb: '255, 0, 128' },
+    { name: 'Orange', value: '#ff6600', rgb: '255, 102, 0' },
+    { name: 'Purple', value: '#a855f7', rgb: '168, 85, 247' },
     { name: 'Gold', value: '#fbbf24', rgb: '251, 191, 36' },
 ];
+
+const SectionHeader: React.FC<{ icon: React.ReactNode; label: string }> = ({ icon, label }) => (
+    <h2 className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[var(--text-muted)] mb-3">
+        <span className="text-accent">{icon}</span>
+        {label}
+    </h2>
+);
 
 const Settings: React.FC = () => {
     const { playSound, isMuted, toggleMute, setVolume, volume } = useSound();
     const { theme, toggleTheme } = useTheme();
 
-    // Visual effects state (persisted to localStorage)
     const [scanlineIntensity, setScanlineIntensity] = useState(() => {
         const saved = localStorage.getItem('scanlineIntensity');
         return saved ? parseFloat(saved) : 0.03;
     });
-
     const [bloomStrength, setBloomStrength] = useState(() => {
         const saved = localStorage.getItem('bloomStrength');
         return saved ? parseFloat(saved) : 1;
     });
-
     const [glassBlur, setGlassBlur] = useState(() => {
         const saved = localStorage.getItem('glassBlur');
         return saved ? parseFloat(saved) : 12;
     });
 
-    // Accent color state
     const [selectedAccent, setSelectedAccent] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('accentColor') || '#00ff41';
+        if (typeof window === 'undefined') return DEFAULT_ACCENT;
+        const saved = localStorage.getItem('accentColor');
+        if (saved === '#00ff41' && !localStorage.getItem('accentColorMigrated')) {
+            localStorage.setItem('accentColorMigrated', '1');
+            return DEFAULT_ACCENT;
         }
-        return '#00ff41';
+        if (saved && ACCENT_COLORS.some(c => c.value === saved)) return saved;
+        return DEFAULT_ACCENT;
     });
 
-    // Apply visual effects to CSS
     useEffect(() => {
         document.documentElement.style.setProperty('--scanline-opacity', scanlineIntensity.toString());
         localStorage.setItem('scanlineIntensity', scanlineIntensity.toString());
@@ -57,48 +66,16 @@ const Settings: React.FC = () => {
         localStorage.setItem('glassBlur', glassBlur.toString());
     }, [glassBlur]);
 
-    // Apply accent color to CSS
     useEffect(() => {
         const color = ACCENT_COLORS.find(c => c.value === selectedAccent);
-        if (color) {
-            document.documentElement.style.setProperty('--accent', color.value);
-            document.documentElement.style.setProperty('--accent-rgb', color.rgb);
-            localStorage.setItem('accentColor', color.value);
-        }
+        const value = color?.value ?? DEFAULT_ACCENT;
+        const rgb = color?.rgb ?? DEFAULT_ACCENT_RGB;
+        document.documentElement.style.setProperty('--accent', value);
+        document.documentElement.style.setProperty('--accent-rgb', rgb);
+        document.documentElement.style.setProperty('--accent-glow', `rgba(${rgb}, 0.3)`);
+        document.documentElement.style.setProperty('--accent-dim', `rgba(${rgb}, 0.5)`);
+        localStorage.setItem('accentColor', value);
     }, [selectedAccent]);
-
-    // Load saved settings on mount
-    useEffect(() => {
-        const savedAccent = localStorage.getItem('accentColor');
-        if (savedAccent) {
-            const color = ACCENT_COLORS.find(c => c.value === savedAccent);
-            if (color) {
-                document.documentElement.style.setProperty('--accent', color.value);
-                document.documentElement.style.setProperty('--accent-rgb', color.rgb);
-            }
-        }
-
-        // Apply saved visual effects
-        const savedScanline = localStorage.getItem('scanlineIntensity');
-        if (savedScanline) {
-            document.documentElement.style.setProperty('--scanline-opacity', savedScanline);
-        }
-
-        const savedBloom = localStorage.getItem('bloomStrength');
-        if (savedBloom) {
-            document.documentElement.style.setProperty('--bloom-strength', savedBloom);
-        }
-
-        const savedBlur = localStorage.getItem('glassBlur');
-        if (savedBlur) {
-            document.documentElement.style.setProperty('--glass-blur', `${savedBlur}px`);
-        }
-    }, []);
-
-    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newVolume = parseFloat(e.target.value);
-        setVolume(newVolume);
-    };
 
     const handleAccentChange = (colorValue: string) => {
         playSound('click');
@@ -106,202 +83,176 @@ const Settings: React.FC = () => {
     };
 
     return (
-        <div className="h-full bg-black/80 backdrop-blur-xl text-white p-4 md:p-6 select-none overflow-y-auto custom-scrollbar">
-            <div className="flex items-center gap-3 mb-6 md:mb-8 pb-4 border-b border-white/10">
-                <SettingsIcon size={24} className="text-accent animate-spin-slow" />
-                <h1 className="text-lg md:text-xl font-bold tracking-widest">SYSTEM_CONFIG</h1>
-            </div>
+        <div className="h-full bg-[var(--surface-inset)] text-[var(--text-primary)] font-mono overflow-y-auto custom-scrollbar">
+            <div className="p-5 sm:p-6 max-w-2xl mx-auto">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border)]">
+                    <SettingsIcon size={18} className="text-accent" />
+                    <h1 className="text-sm font-bold tracking-[0.3em] uppercase">System Config</h1>
+                </div>
 
-            <div className="space-y-6 md:space-y-8">
-                {/* Theme Section */}
-                <section>
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-accent mb-4 uppercase tracking-wider">
-                        <Sun size={16} /> Appearance
-                    </h2>
+                <div className="space-y-7">
+                    {/* Accent */}
+                    <section>
+                        <SectionHeader icon={<Palette size={12} />} label="Accent Color" />
+                        <div className="grid grid-cols-7 gap-2 sm:gap-3">
+                            {ACCENT_COLORS.map(color => {
+                                const isActive = selectedAccent === color.value;
+                                return (
+                                    <button
+                                        key={color.value}
+                                        onClick={() => handleAccentChange(color.value)}
+                                        aria-label={color.name}
+                                        aria-pressed={isActive}
+                                        className="flex flex-col items-center gap-1.5 py-1 group"
+                                    >
+                                        <div
+                                            className={`w-9 h-9 rounded-full border-2 transition-all
+                                                ${isActive ? 'scale-110 border-[var(--text-primary)]' : 'border-transparent group-hover:scale-105'}
+                                            `}
+                                            style={{
+                                                backgroundColor: color.value,
+                                                boxShadow: isActive ? `0 0 16px ${color.value}` : undefined,
+                                            }}
+                                        />
+                                        <span className={`text-[9px] uppercase tracking-wider transition-colors
+                                            ${isActive ? 'text-accent' : 'text-[var(--text-faint)] group-hover:text-[var(--text-muted)]'}
+                                        `}>
+                                            {color.name}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </section>
 
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/5 space-y-4">
-                        {/* Theme Toggle */}
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm">
-                                <div className="text-white font-bold">THEME_MODE</div>
-                                <div className="text-xs text-white/50">Switch between light and dark modes</div>
+                    {/* Theme */}
+                    <section>
+                        <SectionHeader icon={<Sun size={12} />} label="Appearance" />
+                        <div className="flex items-center justify-between px-3 py-2.5 border border-[var(--border)]">
+                            <div>
+                                <div className="text-xs font-bold uppercase tracking-wider">Theme Mode</div>
+                                <div className="text-[10px] text-[var(--text-faint)] mt-0.5">Light / dark</div>
                             </div>
                             <button
-                                onClick={() => {
-                                    playSound('click');
-                                    toggleTheme();
-                                }}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all min-h-[44px]
-                                    ${theme === 'dark'
-                                        ? 'bg-accent/20 border-accent text-accent'
-                                        : 'bg-yellow-500/20 border-yellow-500 text-yellow-500'
-                                    }
+                                onClick={() => { playSound('click'); toggleTheme(); }}
+                                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                                className={`flex items-center gap-2 px-3 py-1.5 border transition-colors text-xs uppercase tracking-wider font-bold
+                                    ${theme === 'dark' ? 'border-accent text-accent' : 'border-[var(--border-strong)] text-[var(--text-primary)]'}
                                 `}
                             >
-                                {theme === 'dark' ? <Moon size={16} /> : <Sun size={16} />}
-                                <span className="text-xs font-bold uppercase">{theme}</span>
+                                {theme === 'dark' ? <Moon size={12} /> : <Sun size={12} />}
+                                {theme}
                             </button>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                {/* Accent Color Section */}
-                <section>
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-accent mb-4 uppercase tracking-wider">
-                        <Palette size={16} /> Accent Color
-                    </h2>
-
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/5">
-                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                            {ACCENT_COLORS.map((color) => (
-                                <button
-                                    key={color.value}
-                                    onClick={() => handleAccentChange(color.value)}
-                                    className={`
-                                        w-full aspect-square rounded-xl border-2 transition-all min-h-[44px]
-                                        hover:scale-110 active:scale-95
-                                        ${selectedAccent === color.value
-                                            ? 'border-white ring-2 ring-white/30 scale-110'
-                                            : 'border-transparent'
-                                        }
-                                    `}
-                                    style={{
-                                        backgroundColor: color.value,
-                                        boxShadow: selectedAccent === color.value
-                                            ? `0 0 20px ${color.value}`
-                                            : 'none'
-                                    }}
-                                    title={color.name}
-                                />
-                            ))}
-                        </div>
-                        <p className="text-xs text-white/40 text-center mt-3">
-                            {ACCENT_COLORS.find(c => c.value === selectedAccent)?.name || 'Custom'}
-                        </p>
-                    </div>
-                </section>
-
-                {/* Audio Section */}
-                <section>
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-accent mb-4 uppercase tracking-wider">
-                        <Volume2 size={16} /> Audio Output
-                    </h2>
-
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/5 space-y-4">
-                        <div className="flex items-center gap-4">
+                    {/* Audio */}
+                    <section>
+                        <SectionHeader icon={<Volume2 size={12} />} label="Audio Output" />
+                        <div className="flex items-center gap-3 px-3 py-2.5 border border-[var(--border)]">
                             <button
-                                onClick={() => {
-                                    playSound('click');
-                                    toggleMute();
-                                }}
-                                className={`p-3 rounded-full border transition-all min-w-[48px] min-h-[48px] flex items-center justify-center
-                                    ${isMuted ? 'bg-red-500/20 border-red-500 text-red-500' : 'bg-accent/20 border-accent text-accent'}
+                                onClick={() => { playSound('click'); toggleMute(); }}
+                                aria-label={isMuted ? 'Unmute' : 'Mute'}
+                                className={`p-2 border transition-colors
+                                    ${isMuted ? 'border-red-500/60 text-red-400' : 'border-accent text-accent'}
                                 `}
                             >
-                                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
                             </button>
-                            <div className="flex-1 space-y-2">
-                                <div className="flex justify-between text-xs text-white/70">
-                                    <span>MASTER_VOL</span>
-                                    <span>{isMuted ? 'MUTED' : `${Math.round((volume || 0.5) * 100)}%`}</span>
+                            <div className="flex-1 space-y-1.5">
+                                <div className="flex justify-between text-[10px] uppercase tracking-wider text-[var(--text-faint)]">
+                                    <span>Master Volume</span>
+                                    <span>{isMuted ? 'MUTED' : `${Math.round((volume ?? 0.5) * 100)}%`}</span>
                                 </div>
                                 <input
                                     type="range"
                                     min="0" max="1" step="0.05"
-                                    value={volume || 0.5}
-                                    onChange={handleVolumeChange}
+                                    value={volume ?? 0.5}
+                                    onChange={(e) => setVolume(parseFloat(e.target.value))}
                                     disabled={isMuted}
-                                    className="w-full accent-[var(--accent)] h-3 bg-white/20 rounded-lg appearance-none cursor-pointer disabled:opacity-50"
+                                    aria-label="Master volume"
+                                    className="w-full accent-[var(--accent)] h-2 bg-[var(--surface-raised)] rounded-none appearance-none cursor-pointer disabled:opacity-50"
                                 />
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                {/* Visuals Section */}
-                <section>
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-accent mb-4 uppercase tracking-wider">
-                        <Monitor size={16} /> Visual Effects
-                    </h2>
-
-                    <div className="space-y-4 bg-white/5 p-4 rounded-lg border border-white/5">
-                        {/* Scanlines */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs text-white/70">
-                                <span>SCANLINE_OPACITY</span>
-                                <span>{(scanlineIntensity * 100).toFixed(0)}%</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="0" max="0.15" step="0.01"
+                    {/* Visuals */}
+                    <section>
+                        <SectionHeader icon={<Monitor size={12} />} label="Visual Effects" />
+                        <div className="space-y-3 px-3 py-3 border border-[var(--border)]">
+                            <Slider
+                                label="Scanline Opacity"
+                                min={0} max={0.15} step={0.01}
                                 value={scanlineIntensity}
-                                onChange={(e) => {
-                                    setScanlineIntensity(parseFloat(e.target.value));
-                                }}
-                                className="w-full accent-[var(--accent)] h-3 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                                onChange={setScanlineIntensity}
+                                format={(v) => `${Math.round(v * 100)}%`}
                             />
-                        </div>
-
-                        {/* Bloom */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs text-white/70">
-                                <span>GLOW_INTENSITY</span>
-                                <span>{(bloomStrength * 100).toFixed(0)}%</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="0" max="2" step="0.1"
+                            <Slider
+                                label="Glow Intensity"
+                                min={0} max={2} step={0.1}
                                 value={bloomStrength}
-                                onChange={(e) => {
-                                    setBloomStrength(parseFloat(e.target.value));
-                                }}
-                                className="w-full accent-[var(--accent)] h-3 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                                onChange={setBloomStrength}
+                                format={(v) => `${Math.round(v * 100)}%`}
                             />
-                        </div>
-
-                        {/* Glass Blur */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs text-white/70">
-                                <span>GLASS_BLUR</span>
-                                <span>{glassBlur.toFixed(0)}px</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="0" max="30" step="1"
+                            <Slider
+                                label="Glass Blur"
+                                min={0} max={30} step={1}
                                 value={glassBlur}
-                                onChange={(e) => {
-                                    setGlassBlur(parseFloat(e.target.value));
-                                }}
-                                className="w-full accent-[var(--accent)] h-3 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                                onChange={setGlassBlur}
+                                format={(v) => `${Math.round(v)}px`}
                             />
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                {/* Performance Section */}
-                <section>
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-accent mb-4 uppercase tracking-wider">
-                        <Zap size={16} /> System Info
-                    </h2>
-
-                    <div className="bg-white/5 p-4 rounded-lg border border-white/5 space-y-3">
-                        <div className="flex justify-between text-xs">
-                            <span className="text-white/50">VERSION</span>
-                            <span className="text-accent font-mono">HOLO-OS v5.0.0</span>
+                    {/* System info */}
+                    <section>
+                        <SectionHeader icon={<Zap size={12} />} label="System Info" />
+                        <div className="space-y-1.5 px-3 py-3 border border-[var(--border)] text-[11px]">
+                            <InfoRow label="Version" value="HOLO-OS v5.0.0" />
+                            <InfoRow label="Kernel" value="React 18.3" />
+                            <InfoRow label="Renderer" value="Framer Motion" />
+                            <InfoRow label="Accent" value={ACCENT_COLORS.find(c => c.value === selectedAccent)?.name ?? 'Custom'} />
                         </div>
-                        <div className="flex justify-between text-xs">
-                            <span className="text-white/50">KERNEL</span>
-                            <span className="text-white/70 font-mono">React 18.3</span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                            <span className="text-white/50">RENDERER</span>
-                            <span className="text-white/70 font-mono">Framer Motion</span>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
         </div>
     );
 };
+
+interface SliderProps {
+    label: string;
+    value: number;
+    min: number;
+    max: number;
+    step: number;
+    onChange: (v: number) => void;
+    format: (v: number) => string;
+}
+
+const Slider: React.FC<SliderProps> = ({ label, value, min, max, step, onChange, format }) => (
+    <div>
+        <div className="flex justify-between text-[10px] uppercase tracking-wider text-[var(--text-faint)] mb-1">
+            <span>{label}</span>
+            <span className="text-[var(--text-muted)]">{format(value)}</span>
+        </div>
+        <input
+            type="range"
+            min={min} max={max} step={step}
+            value={value}
+            onChange={(e) => onChange(parseFloat(e.target.value))}
+            aria-label={label}
+            className="w-full accent-[var(--accent)] h-2 bg-[var(--surface-raised)] rounded-none appearance-none cursor-pointer"
+        />
+    </div>
+);
+
+const InfoRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+    <div className="flex justify-between">
+        <span className="text-[var(--text-faint)] uppercase tracking-wider">{label}</span>
+        <span className="text-[var(--text-primary)]">{value}</span>
+    </div>
+);
 
 export default Settings;

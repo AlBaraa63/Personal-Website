@@ -26,19 +26,6 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
         return () => window.removeEventListener('resize', checkTouchDevice);
     }, []);
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
-        // Smooth ring cursor
-        setPosition(prev => ({
-            x: prev.x + (e.clientX - prev.x) * 0.15,
-            y: prev.y + (e.clientY - prev.y) * 0.15
-        }));
-
-        // Instant dot cursor
-        setDotPosition({ x: e.clientX, y: e.clientY });
-
-        if (!isVisible) setIsVisible(true);
-    }, [isVisible]);
-
     const handleMouseEnter = useCallback(() => setIsVisible(true), []);
     const handleMouseLeave = useCallback(() => setIsVisible(false), []);
 
