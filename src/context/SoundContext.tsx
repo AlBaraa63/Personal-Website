@@ -140,6 +140,13 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 createOscillator(ctx, 'triangle', 800, 0.1, 0.05);
                 setTimeout(() => createOscillator(ctx, 'triangle', 400, 0.1, 0.05), 50);
                 break;
+
+            case 'success':
+                // Ascending two-tone chime for achievements/confirmations
+                createOscillator(ctx, 'sine', 523, 0.2, 0.12);
+                setTimeout(() => createOscillator(ctx, 'sine', 659, 0.3, 0.12), 120);
+                setTimeout(() => createOscillator(ctx, 'sine', 784, 0.4, 0.08), 240);
+                break;
         }
     }, [isMuted, volume]);
 

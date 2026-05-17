@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion
 import { X, Minus, Square, Maximize2 } from 'lucide-react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
+import { triggerWindowBurst } from '@/components/effects/WindowParticles';
 
 const useIsMobile = () => {
     const [isMobile, setIsMobile] = useState(false);
@@ -33,6 +34,13 @@ const Window: React.FC<WindowProps> = ({ id }) => {
     const dragControls = useDragControls();
     const isMobile = useIsMobile();
     const [snapPreview, setSnapPreview] = useState<DragSnapPreview>(null);
+
+    // Trigger particle burst on window open
+    useEffect(() => {
+        const cx = (windowState?.position?.x ?? 400) + (windowState?.size?.width ?? 400) / 2;
+        const cy = (windowState?.position?.y ?? 300) + (windowState?.size?.height ?? 400) / 2;
+        triggerWindowBurst(cx, cy, 'open');
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!windowState || !windowState.isOpen) return null;
 

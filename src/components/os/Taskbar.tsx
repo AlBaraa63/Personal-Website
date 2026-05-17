@@ -3,7 +3,7 @@ import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
 import { Wifi, WifiOff, Battery, BatteryCharging, BatteryLow, Grid3X3, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { APP_LAUNCHER } from './Desktop';
+import { APP_LAUNCHER, SECONDARY_APPS } from './Desktop';
 import { useSystemTray } from './useSystemTray';
 
 const useIsMobile = () => {
@@ -192,7 +192,7 @@ const Taskbar: React.FC = () => {
         );
     }
 
-    // Desktop taskbar — open windows only + system tray
+    // Desktop taskbar — utility launcher + open windows + system tray
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-end pb-3 pointer-events-none">
             <motion.div
@@ -202,6 +202,47 @@ const Taskbar: React.FC = () => {
                 className="pointer-events-auto flex items-center gap-3 px-3 py-2 bg-[var(--surface)]/85 backdrop-blur-xl border border-[var(--border)] rounded font-mono"
                 style={{ minWidth: 280 }}
             >
+                {/* Utility launcher — quick-launch icons on the left */}
+                <div className="flex items-center gap-1">
+                    {SECONDARY_APPS.map(app => {
+                        const win = windows[app.id];
+                        const isOpen = !!win?.isOpen;
+                        const isActive = activeWindowId === app.id && isOpen;
+                        return (
+                            <button
+                                key={app.id}
+                                onClick={() => handleAppClick(app.id)}
+                                onMouseEnter={() => playSound('hover')}
+                                aria-pressed={isActive}
+                                aria-label={app.label}
+                                title={app.label}
+                                className={`
+                                    relative w-9 h-9 flex items-center justify-center transition-colors group
+                                    ${isActive
+                                        ? 'text-accent'
+                                        : isOpen
+                                            ? 'text-[var(--text-primary)] hover:text-accent'
+                                            : 'text-[var(--text-muted)] hover:text-accent'}
+                                `}
+                            >
+                                {app.icon}
+                                {/* Active underline */}
+                                <span
+                                    className={`absolute -bottom-[2px] left-1/2 -translate-x-1/2 h-[2px] transition-all
+                                        ${isActive ? 'w-5 bg-accent shadow-[0_0_6px_var(--accent)]' : isOpen ? 'w-1 bg-[var(--text-faint)]' : 'w-0'}
+                                    `}
+                                />
+                                {/* Tooltip */}
+                                <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 bg-[var(--surface-raised)] border border-[var(--border)] text-[9px] uppercase tracking-widest text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                                    {app.label}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                <div className="w-px h-6 bg-[var(--border)]" />
+
                 {/* Open apps list */}
                 <div className="flex items-center gap-1 min-h-[36px]">
                     {openApps.length === 0 ? (

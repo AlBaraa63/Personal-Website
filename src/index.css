@@ -300,6 +300,28 @@ samp {
     0 0 20px rgba(var(--accent-rgb), 0.4);
 }
 
+.glow-pulse-text {
+  animation: glow-pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse-text {
+  0%, 100% {
+    text-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(var(--accent-rgb), 0.8), 0 0 16px rgba(var(--accent-rgb), 0.4);
+  }
+}
+
+/* Matrix Mode — triggered by Konami code */
+.matrix-mode * {
+  animation-duration: 0.5s !important;
+}
+
+.matrix-mode .matrix-rain-overlay {
+  opacity: 1 !important;
+}
+
 /* ============================================
    🎭 HOLOGRAPHIC / RGB SPLIT
    ============================================ */

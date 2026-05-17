@@ -2,6 +2,7 @@ import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { OSProvider } from '@/context/OSContext';
 import { SoundProvider } from '@/context/SoundContext';
 import { NotificationProvider } from '@/context/NotificationContext';
+import { AchievementProvider } from '@/context/AchievementContext';
 import Desktop from '@/components/os/Desktop';
 import CustomCursor from '@/components/effects/CustomCursor';
 
@@ -14,8 +15,10 @@ function App() {
             <SoundProvider>
                 <OSProvider>
                     <NotificationProvider>
-                        <CustomCursor />
-                        <Desktop />
+                        <AchievementProvider>
+                            <CustomCursor />
+                            <Desktop />
+                        </AchievementProvider>
                     </NotificationProvider>
                 </OSProvider>
             </SoundProvider>

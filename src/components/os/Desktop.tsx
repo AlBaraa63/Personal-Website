@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
 import { useNotifications } from '@/context/NotificationContext';
+import { useAchievements } from '@/context/AchievementContext';
 import WindowManager from './WindowManager';
 import Taskbar from './Taskbar';
 import BootSequence from './BootSequence';
@@ -11,8 +12,11 @@ import NotificationLayer from './NotificationLayer';
 import GitHubPresence from './GitHubPresence';
 import BigDesktopIcon, { BigDesktopIconConfig } from './BigDesktopIcon';
 import FeaturedProjects from './FeaturedProjects';
+import ContextMenu from './ContextMenu';
+import AchievementToast from './AchievementToast';
+import VisitorHUD from './VisitorHUD';
 import { useGlobalShortcuts } from './useGlobalShortcuts';
-import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, Loader2 } from 'lucide-react';
+import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, Loader2, Radar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Shape used by the launcher list — consumed by the command palette, taskbar
@@ -34,7 +38,10 @@ const TerminalApp = lazy(() => import('@/components/apps/TerminalApp'));
 const NeuralNet = lazy(() => import('@/components/apps/NeuralNet'));
 const RetroGrid = lazy(() => import('@/components/apps/RetroGrid'));
 const SettingsApp = lazy(() => import('@/components/apps/Settings'));
+const SkillRadar = lazy(() => import('@/components/apps/SkillRadar'));
 const FloatingOrbs = lazy(() => import('@/components/effects/FloatingOrbs'));
+const KonamiCode = lazy(() => import('@/components/effects/KonamiCode'));
+const WindowParticles = lazy(() => import('@/components/effects/WindowParticles'));
 
 const AppLoading: React.FC = () => (
     <div className="h-full w-full flex items-center justify-center font-mono text-[var(--text-faint)]">
@@ -48,42 +55,212 @@ const lazyApp = (node: React.ReactNode) => (
 );
 
 // ───────────────────────────────────────────────────────────────────────────
-// Hero — name + role + headline credentials. The first thing a visitor sees.
+// Scramble text hook — decrypts text character-by-character like a sci-fi
+// identity scan. Each character cycles through random glyphs before settling.
 // ───────────────────────────────────────────────────────────────────────────
 
-const DesktopHero: React.FC = () => (
-    <motion.header
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-5xl mx-auto px-4 sm:px-6 text-center"
-    >
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.45em] text-[var(--text-faint)] mb-3"
+const GLITCH_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZアイウエオカキクケコ0123456789@#$%&';
+
+const useScrambleText = (target: string, startDelay = 0, charDelay = 40) => {
+    const [display, setDisplay] = useState('');
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        let cancelled = false;
+        const timeout = window.setTimeout(() => {
+            let resolved = 0;
+            const interval = window.setInterval(() => {
+                if (cancelled) return;
+                resolved++;
+                const out = target.split('').map((ch, i) => {
+                    if (ch === ' ') return ' ';
+                    if (i < resolved) return ch;
+                    return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+                }).join('');
+                setDisplay(out);
+                if (resolved >= target.length) {
+                    clearInterval(interval);
+                    setDone(true);
+                }
+            }, charDelay);
+        }, startDelay);
+        return () => { cancelled = true; window.clearTimeout(timeout); };
+    }, [target, startDelay, charDelay]);
+
+    return { display: display || target.split('').map(c => c === ' ' ? ' ' : '█').join(''), done };
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// Typewriter hook — types text character by character with a blinking cursor.
+// ───────────────────────────────────────────────────────────────────────────
+
+const useTypewriter = (text: string, startDelay = 0, speed = 50) => {
+    const [display, setDisplay] = useState('');
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        let cancelled = false;
+        const timeout = window.setTimeout(() => {
+            let idx = 0;
+            const interval = window.setInterval(() => {
+                if (cancelled) return;
+                idx++;
+                setDisplay(text.slice(0, idx));
+                if (idx >= text.length) {
+                    clearInterval(interval);
+                    setDone(true);
+                }
+            }, speed);
+        }, startDelay);
+        return () => { cancelled = true; window.clearTimeout(timeout); };
+    }, [text, startDelay, speed]);
+
+    return { display, done };
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// Count-up hook — animates a number from 0 to target.
+// ───────────────────────────────────────────────────────────────────────────
+
+const useCountUp = (target: number, duration = 1500, startDelay = 0) => {
+    const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        const timeout = window.setTimeout(() => {
+            const start = performance.now();
+            const tick = () => {
+                const elapsed = performance.now() - start;
+                const progress = Math.min(elapsed / duration, 1);
+                // ease-out cubic
+                const eased = 1 - Math.pow(1 - progress, 3);
+                setValue(Math.round(eased * target));
+                if (progress < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }, startDelay);
+        return () => window.clearTimeout(timeout);
+    }, [target, duration, startDelay]);
+
+    return value;
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// Hero — name + role + headline credentials. The first thing a visitor sees.
+// Now with cinematic text-decryption and typing effects.
+// ───────────────────────────────────────────────────────────────────────────
+
+const CREDENTIALS = [
+    { label: 'CV Engineer Intern @', highlight: 'Cellula Technologies' },
+    { label: 'Published author at', highlight: 'IEEE SNAMS 2025' },
+    { label: '', highlight: '🟢 Open to opportunities' },
+];
+
+const DesktopHero: React.FC = () => {
+    const firstName = useScrambleText('AlBaraa', 200, 45);
+    const lastName = useScrambleText('AlOlabi', 500, 45);
+    const role = useTypewriter('AI Researcher · Computer Vision Engineer', 1200, 35);
+
+    return (
+        <motion.header
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-5xl mx-auto px-4 sm:px-6 text-center"
         >
-            // Holo-OS · Identity Loaded
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.45em] text-[var(--text-faint)] mb-3"
+            >
+                {'>'} Holo-OS · Resolving Identity<span className="animate-pulse">_</span>
+            </motion.div>
+
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-[1.02]">
+                <span className={firstName.done ? '' : 'text-accent/70'}>{firstName.display}</span>
+                {' '}
+                <span className={`text-accent ${lastName.done ? '' : 'opacity-70'}`}>{lastName.display}</span>
+            </h1>
+
+            <h2 className="mt-3 sm:mt-4 text-sm sm:text-lg md:text-xl font-mono uppercase tracking-[0.28em] text-[var(--text-primary)] min-h-[1.6em]">
+                {role.display}
+                {!role.done && <span className="text-accent animate-pulse">▌</span>}
+            </h2>
+
+            <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-center gap-x-1 gap-y-1">
+                {CREDENTIALS.map((cred, i) => (
+                    <motion.span
+                        key={i}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 2.0 + i * 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-[11px] sm:text-sm text-[var(--text-muted)]"
+                    >
+                        {cred.label}{cred.label ? ' ' : ''}
+                        <span className={cred.highlight.includes('Open') ? 'text-accent font-semibold glow-pulse-text' : 'text-accent'}>
+                            {cred.highlight}
+                        </span>
+                        {i < CREDENTIALS.length - 1 && (
+                            <span className="text-[var(--text-faint)] mx-1">·</span>
+                        )}
+                    </motion.span>
+                ))}
+            </div>
+        </motion.header>
+    );
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// Quick Stats — recruiter-focused at-a-glance numbers with count-up.
+// ───────────────────────────────────────────────────────────────────────────
+
+const STATS = [
+    { value: 12, suffix: '+', label: 'Projects' },
+    { value: 1, suffix: '', label: 'IEEE Paper' },
+    { value: 2, suffix: '', label: 'Hackathon Wins' },
+    { value: 5, suffix: '', label: 'Certifications' },
+];
+
+const QuickStats: React.FC = () => {
+    const counts = STATS.map((s, i) =>
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useCountUp(s.value, 1200, 600 + i * 150)
+    );
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="w-full max-w-3xl mx-auto px-4 sm:px-6"
+        >
+            <div className="flex items-center justify-center gap-0 border border-[var(--border)] bg-[var(--surface)]/60 backdrop-blur-sm font-mono divide-x divide-[var(--border)]">
+                {STATS.map((stat, i) => (
+                    <div key={stat.label} className="flex-1 py-2.5 sm:py-3 text-center">
+                        <div className="text-lg sm:text-xl font-bold text-accent tabular-nums leading-none">
+                            {counts[i]}{stat.suffix}
+                        </div>
+                        <div className="text-[8px] sm:text-[10px] uppercase tracking-[0.25em] text-[var(--text-faint)] mt-1">
+                            {stat.label}
+                        </div>
+                    </div>
+                ))}
+                <div className="flex-1 py-2.5 sm:py-3 text-center">
+                    <div className="text-xs sm:text-sm font-bold text-accent leading-none flex items-center justify-center gap-1.5">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                        </span>
+                        Hiring
+                    </div>
+                    <div className="text-[8px] sm:text-[10px] uppercase tracking-[0.25em] text-[var(--text-faint)] mt-1">
+                        Open to Work
+                    </div>
+                </div>
+            </div>
         </motion.div>
-
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-[1.02]">
-            AlBaraa <span className="text-accent">AlOlabi</span>
-        </h1>
-
-        <h2 className="mt-3 sm:mt-4 text-sm sm:text-lg md:text-xl font-mono uppercase tracking-[0.28em] text-[var(--text-primary)]">
-            AI Researcher · Computer Vision Engineer
-        </h2>
-
-        <p className="mt-3 sm:mt-4 max-w-2xl mx-auto text-[11px] sm:text-sm text-[var(--text-muted)] leading-relaxed">
-            CV Engineer Intern @ <span className="text-accent">Cellula Technologies</span>
-            <span className="text-[var(--text-faint)]"> · </span>
-            Published author at <span className="text-accent">IEEE SNAMS 2025</span>
-            <span className="text-[var(--text-faint)]"> · </span>
-            Open to opportunities
-        </p>
-    </motion.header>
-);
+    );
+};
 
 // ───────────────────────────────────────────────────────────────────────────
 // Live clock — small, top-left so it doesn't compete with the hero.
@@ -152,9 +329,10 @@ const PRIMARY_APPS: BigDesktopIconConfig[] = [
     },
 ];
 
-const SECONDARY_APPS: LauncherApp[] = [
+export const SECONDARY_APPS: LauncherApp[] = [
     { id: 'terminal', label: 'Terminal', subtitle: 'shell · drives the OS', icon: <Terminal size={18} /> },
     { id: 'neural', label: 'Holo-AI', subtitle: 'agent · runs the OS', icon: <Cpu size={18} /> },
+    { id: 'skills', label: 'Skill Radar', subtitle: 'tech stack visualizer', icon: <Radar size={18} /> },
     { id: 'retro', label: 'Arcade', subtitle: '// easter_egg.exe', icon: <Gamepad2 size={18} /> },
     { id: 'settings', label: 'Config', subtitle: 'theme · accent · audio', icon: <Settings size={18} /> },
 ];
@@ -166,71 +344,6 @@ export const APP_LAUNCHER: LauncherApp[] = [
     ...SECONDARY_APPS,
 ];
 
-// ───────────────────────────────────────────────────────────────────────────
-// Secondary mini-dock — a thin strip of small accent-tinted app icons. Lives
-// just above the taskbar so they're reachable without competing with the
-// primary center grid.
-// ───────────────────────────────────────────────────────────────────────────
-
-const SecondaryDock: React.FC = () => {
-    const { windows, activeWindowId, openWindow, focusWindow } = useOS();
-    const { playSound } = useSound();
-
-    const handleClick = (id: string) => {
-        playSound('click');
-        const win = windows[id];
-        if (win?.isOpen) focusWindow(id);
-        else {
-            playSound('open');
-            openWindow(id);
-        }
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.5 }}
-            className="hidden sm:flex items-center gap-2 px-3 py-2 bg-[var(--surface)]/70 backdrop-blur-md border border-[var(--border)] font-mono pointer-events-auto"
-        >
-            <span className="text-[9px] uppercase tracking-[0.25em] text-[var(--text-faint)] pr-2 border-r border-[var(--border)]">
-                Utilities
-            </span>
-            {SECONDARY_APPS.map(app => {
-                const win = windows[app.id];
-                const isOpen = !!win?.isOpen;
-                const isActive = activeWindowId === app.id && isOpen;
-                return (
-                    <button
-                        key={app.id}
-                        onClick={() => handleClick(app.id)}
-                        onMouseEnter={() => playSound('hover')}
-                        aria-pressed={isActive}
-                        aria-label={app.label}
-                        title={app.label}
-                        className={`
-                            relative w-9 h-9 flex items-center justify-center border transition-colors group
-                            ${isActive
-                                ? 'border-accent text-accent bg-[rgba(var(--accent-rgb),0.12)]'
-                                : isOpen
-                                    ? 'border-[var(--border-strong)] text-[var(--text-primary)] hover:border-accent hover:text-accent'
-                                    : 'border-[var(--border)] text-[var(--text-muted)] hover:border-accent hover:text-accent'}
-                        `}
-                    >
-                        {app.icon}
-                        {isOpen && !isActive && (
-                            <span aria-hidden className="absolute bottom-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-accent" />
-                        )}
-                        {/* Tooltip */}
-                        <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 bg-[var(--surface-raised)] border border-[var(--border)] text-[9px] uppercase tracking-widest text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                            {app.label}
-                        </span>
-                    </button>
-                );
-            })}
-        </motion.div>
-    );
-};
 
 // ───────────────────────────────────────────────────────────────────────────
 // Desktop — the full landing layout.
@@ -240,7 +353,9 @@ const Desktop: React.FC = () => {
     const { registerWindow, openWindow, focusWindow, windows, activeWindowId, isBooting, setBooting } = useOS();
     const { playSound } = useSound();
     const { notify } = useNotifications();
+    const { unlock } = useAchievements();
     const welcomedRef = useRef(false);
+    const openedWindowsRef = useRef(new Set<string>());
 
     useEffect(() => {
         registerWindow({
@@ -298,6 +413,15 @@ const Desktop: React.FC = () => {
         });
 
         registerWindow({
+            id: 'skills',
+            title: 'Skill Radar',
+            icon: <Radar size={16} />,
+            component: lazyApp(<SkillRadar />),
+            size: { width: 660, height: 480 },
+            position: { x: 180, y: 90 },
+        });
+
+        registerWindow({
             id: 'contact',
             title: 'Comm Link',
             icon: <Mail size={16} />,
@@ -348,6 +472,13 @@ const Desktop: React.FC = () => {
         else {
             playSound('open');
             openWindow(id);
+            // Achievement: first window open
+            if (!openedWindowsRef.current.has('any')) {
+                openedWindowsRef.current.add('any');
+                unlock('first-contact');
+            }
+            // Achievement: contact window
+            if (id === 'contact') unlock('mission-briefing');
         }
     };
 
@@ -362,9 +493,15 @@ const Desktop: React.FC = () => {
             {/* Small live clock — top-left, doesn't compete with hero */}
             <LiveClock />
 
+            {/* Visitor analytics HUD — top-right */}
+            <VisitorHUD />
+
             {/* Main landing column — hero, icon grid, featured projects */}
             <div className="relative z-10 min-h-screen flex flex-col items-center justify-start pt-16 sm:pt-20 md:pt-24 pb-32 gap-10 sm:gap-12 md:gap-14">
                 <DesktopHero />
+
+                {/* Quick stats — recruiter-focused at-a-glance numbers */}
+                <QuickStats />
 
                 {/* Primary app icons — the desktop centerpiece */}
                 <motion.section
@@ -393,11 +530,6 @@ const Desktop: React.FC = () => {
 
                 {/* Featured projects — visible without needing to open Projects */}
                 <FeaturedProjects />
-
-                {/* Secondary apps — thin utility dock */}
-                <div className="mt-2 flex justify-center">
-                    <SecondaryDock />
-                </div>
             </div>
 
             {/* Live GitHub presence */}
@@ -408,11 +540,27 @@ const Desktop: React.FC = () => {
                 <WindowManager />
             </div>
 
+            {/* Window particle effects */}
+            <Suspense fallback={null}>
+                <WindowParticles />
+            </Suspense>
+
             {/* Command palette overlay */}
             <CommandPalette apps={APP_LAUNCHER} />
 
             {/* Notification toasts */}
             <NotificationLayer />
+
+            {/* Achievement toasts */}
+            <AchievementToast />
+
+            {/* Konami code easter egg */}
+            <Suspense fallback={null}>
+                <KonamiCode />
+            </Suspense>
+
+            {/* Desktop right-click context menu */}
+            <ContextMenu />
 
             {/* Taskbar */}
             <Taskbar />
