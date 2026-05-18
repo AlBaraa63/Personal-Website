@@ -43,6 +43,88 @@
   border-width: 1px;
 }
 
+/* Cursor comet trail dots */
+.cursor-trail-dot {
+  pointer-events: none;
+  position: fixed;
+  z-index: 99998;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 4px var(--accent);
+  will-change: opacity, width, height;
+}
+
+/* Click ripple ring */
+.click-ripple-ring {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: click-ripple-expand 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.3);
+}
+
+@keyframes click-ripple-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+  }
+}
+
+/* CRT Shutdown overlay */
+.crt-shutdown-overlay {
+  background: black;
+  animation: crt-shutdown-bg 0.6s ease-in forwards;
+}
+
+.crt-shutdown-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: white;
+  box-shadow: 0 0 30px white, 0 0 60px rgba(255,255,255,0.5);
+  transform: translateY(-50%);
+  animation: crt-shutdown-line 0.6s ease-in forwards;
+}
+
+@keyframes crt-shutdown-bg {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes crt-shutdown-line {
+  0% {
+    left: 0;
+    right: 0;
+    height: 100vh;
+    opacity: 1;
+  }
+  40% {
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 1;
+  }
+  100% {
+    left: 50%;
+    right: 50%;
+    height: 2px;
+    opacity: 0;
+  }
+}
+
 /* ============================================
    🎨 HOLO-OS DESIGN TOKENS — single accent (green)
    ============================================ */

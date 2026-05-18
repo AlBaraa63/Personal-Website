@@ -1,8 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 interface CustomCursorProps {
     enabled?: boolean;
 }
+
+interface TrailDot {
+    x: number;
+    y: number;
+    age: number;
+}
+
+const TRAIL_LENGTH = 12;
+const TRAIL_INTERVAL = 16; // ~60fps
 
 const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -10,6 +19,9 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [trail, setTrail] = useState<TrailDot[]>([]);
+    const lastPosRef = useRef({ x: 0, y: 0 });
+    const trailTimerRef = useRef(0);
 
     // Check for touch device on mount
     useEffect(() => {
@@ -27,7 +39,10 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
     }, []);
 
     const handleMouseEnter = useCallback(() => setIsVisible(true), []);
-    const handleMouseLeave = useCallback(() => setIsVisible(false), []);
+    const handleMouseLeave = useCallback(() => {
+        setIsVisible(false);
+        setTrail([]);
+    }, []);
 
     useEffect(() => {
         if (!enabled || isTouchDevice) return;
@@ -49,6 +64,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
         const onMouseMove = (e: MouseEvent) => {
             lastX = e.clientX;
             lastY = e.clientY;
+            lastPosRef.current = { x: e.clientX, y: e.clientY };
             setDotPosition({ x: e.clientX, y: e.clientY });
             if (!isVisible) setIsVisible(true);
         };
@@ -57,6 +73,20 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
         document.addEventListener('mouseenter', handleMouseEnter);
         document.addEventListener('mouseleave', handleMouseLeave);
         animationId = requestAnimationFrame(animate);
+
+        // Trail update loop
+        trailTimerRef.current = window.setInterval(() => {
+            setTrail(prev => {
+                const aged = prev.map(d => ({ ...d, age: d.age + 1 })).filter(d => d.age < TRAIL_LENGTH);
+                // Only add if cursor has moved
+                const last = aged[0];
+                const cur = lastPosRef.current;
+                if (!last || Math.abs(last.x - cur.x) > 2 || Math.abs(last.y - cur.y) > 2) {
+                    return [{ x: cur.x, y: cur.y, age: 0 }, ...aged];
+                }
+                return aged;
+            });
+        }, TRAIL_INTERVAL);
 
         // Detect hoverable elements
         const handleHoverableElements = () => {
@@ -78,6 +108,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
             document.removeEventListener('mouseenter', handleMouseEnter);
             document.removeEventListener('mouseleave', handleMouseLeave);
             cancelAnimationFrame(animationId);
+            clearInterval(trailTimerRef.current);
             observer.disconnect();
         };
     }, [enabled, isTouchDevice, isVisible, handleMouseEnter, handleMouseLeave]);
@@ -87,6 +118,27 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
 
     return (
         <>
+            {/* Comet trail */}
+            {trail.map((dot, i) => {
+                const progress = dot.age / TRAIL_LENGTH; // 0 = newest, 1 = oldest
+                const size = Math.max(1, 6 * (1 - progress));
+                const opacity = (1 - progress) * 0.5;
+                return (
+                    <div
+                        key={i}
+                        className="cursor-trail-dot"
+                        style={{
+                            left: dot.x,
+                            top: dot.y,
+                            width: size,
+                            height: size,
+                            opacity: isVisible ? opacity : 0,
+                            transform: 'translate(-50%, -50%)',
+                        }}
+                    />
+                );
+            })}
+
             {/* Ring cursor */}
             <div
                 className={`custom-cursor ${isHovering ? 'hovering' : ''}`}

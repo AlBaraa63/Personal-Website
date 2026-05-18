@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSound } from '@/context/SoundContext';
 import { useOS } from '@/context/OSContext';
+import { useAchievements } from '@/context/AchievementContext';
 import { resumeConfig } from '@/data/portfolioData';
 
 interface HistoryEntry {
@@ -26,6 +27,7 @@ papers    : IEEE SNAMS 2025 — AI in Education (published author)`;
 const TerminalApp: React.FC = () => {
     const { playSound } = useSound();
     const { openWindow, windows, minimizeWindow } = useOS();
+    const { unlock } = useAchievements();
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [, setRecall] = useState<{ list: string[]; index: number }>({ list: [], index: -1 });
@@ -53,6 +55,7 @@ const TerminalApp: React.FC = () => {
             <Row cmd="projects" desc="open the projects app" />
             <Row cmd="contact" desc="open the contact app" />
             <Row cmd="resume" desc="download the résumé" />
+            <Row cmd="hack" desc="🔒 initiate neural breach protocol" />
             <Row cmd="date" desc="current date/time" />
             <Row cmd="clear" desc="clear the terminal" />
             <Row cmd="exit" desc="close this terminal" />
@@ -172,7 +175,44 @@ const TerminalApp: React.FC = () => {
 
             case 'sudo':
                 output = <span className="text-red-400 font-bold">access denied. this incident has been logged.</span>;
+                unlock('sudo-master');
                 playSound('error');
+                break;
+
+            case 'hack':
+            case 'breach':
+                output = <HackGame onComplete={(success) => {
+                    if (success) {
+                        unlock('sudo-master');
+                        playSound('success');
+                        setHistory(prev => [...prev, {
+                            id: nextId(),
+                            command: '',
+                            output: (
+                                <pre className="text-accent whitespace-pre font-mono text-xs leading-tight">
+{`
+ ██████  ██████  ██████  ███████ ██████  ██████ 
+██   ██ ██   ██ ██      ██      ██      ██      
+██████  ██████  █████   ██████  ██      █████  
+██   ██ ██   ██ ██      ██   ██ ██      ██   ██
+██████  ██   ██ ██████  ██   ██  ██████ ██   ██
+
+█ NEURAL BREACH SUCCESSFUL █
+█ ACCESS LEVEL: ROOT       █
+█ WELCOME, OPERATOR.       █
+`}
+                                </pre>
+                            ),
+                        }]);
+                    } else {
+                        playSound('error');
+                        setHistory(prev => [...prev, {
+                            id: nextId(),
+                            command: '',
+                            output: <span className="text-red-400 font-bold">CONNECTION TERMINATED — breach failed. try again with `hack`.</span>,
+                        }]);
+                    }
+                }} />;
                 break;
 
             case 'clear':
@@ -194,7 +234,7 @@ const TerminalApp: React.FC = () => {
             setHistory(prev => [...prev, { id: nextId(), command: trimmed, output }]);
             setRecall(prev => ({ list: [...prev.list, trimmed], index: -1 }));
         }
-    }, [helpOutput, openWindow, playSound]);
+    }, [helpOutput, openWindow, playSound, unlock]);
 
     // Auto-run `help` on first open so the empty-black-space problem goes away.
     useEffect(() => {
@@ -286,5 +326,129 @@ const Row: React.FC<{ cmd: string; desc: string }> = ({ cmd, desc }) => (
         <span className="text-[var(--text-muted)]">{desc}</span>
     </div>
 );
+
+// ─────────────────────────────────────────────────────────────
+// Hack mini-game — type hex codes before the timer runs out
+// ─────────────────────────────────────────────────────────────
+
+const genHex = () => {
+    const chars = '0123456789ABCDEF';
+    let s = '0x';
+    for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * 16)];
+    return s;
+};
+
+interface HackGameProps {
+    onComplete: (success: boolean) => void;
+}
+
+const HackGame: React.FC<HackGameProps> = ({ onComplete }) => {
+    const [codes] = useState(() => Array.from({ length: 4 }, genHex));
+    const [current, setCurrent] = useState(0);
+    const [input, setInput] = useState('');
+    const [timeLeft, setTimeLeft] = useState(30);
+    const [done, setDone] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const { playSound } = useSound();
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [current]);
+
+    useEffect(() => {
+        if (done) return;
+        const timer = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    setDone(true);
+                    onComplete(false);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [done, onComplete]);
+
+    const handleSubmit = () => {
+        if (input.toUpperCase() === codes[current]) {
+            playSound('success');
+            if (current + 1 >= codes.length) {
+                setDone(true);
+                onComplete(true);
+            } else {
+                setCurrent(prev => prev + 1);
+                setInput('');
+            }
+        } else {
+            playSound('error');
+            setInput('');
+        }
+    };
+
+    if (done) return null;
+
+    return (
+        <div className="space-y-2 my-1" onClick={(e) => e.stopPropagation()}>
+            <div className="text-accent text-xs font-bold uppercase tracking-widest">
+                ⚡ NEURAL BREACH PROTOCOL INITIATED
+            </div>
+            <div className="text-[var(--text-faint)] text-[10px] uppercase tracking-widest">
+                Type each hex code to breach the firewall
+            </div>
+            <div className="flex gap-2 items-center flex-wrap">
+                {codes.map((code, i) => (
+                    <span
+                        key={i}
+                        className={`px-2 py-0.5 border text-xs font-mono ${
+                            i < current
+                                ? 'border-accent text-accent line-through opacity-50'
+                                : i === current
+                                    ? 'border-accent text-accent animate-pulse'
+                                    : 'border-[var(--border)] text-[var(--text-faint)]'
+                        }`}
+                    >
+                        {i <= current ? code : '0x??????'}
+                    </span>
+                ))}
+            </div>
+            <div className="flex items-center gap-2">
+                <span className={`text-xs font-mono tabular-nums ${
+                    timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-[var(--text-muted)]'
+                }`}>
+                    [{timeLeft}s]
+                </span>
+                <span className="text-accent">→</span>
+                <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSubmit();
+                        }
+                        e.stopPropagation();
+                    }}
+                    placeholder="type hex code..."
+                    className="flex-1 bg-transparent border border-[var(--border)] px-2 py-1 text-xs text-accent font-mono outline-none focus:border-accent caret-accent"
+                    autoFocus
+                    spellCheck={false}
+                    autoComplete="off"
+                />
+            </div>
+            {/* Progress bar */}
+            <div className="h-1 bg-[var(--surface-inset)] overflow-hidden">
+                <div
+                    className="h-full bg-accent transition-all duration-300"
+                    style={{ width: `${(current / codes.length) * 100}%` }}
+                />
+            </div>
+        </div>
+    );
+};
 
 export default TerminalApp;

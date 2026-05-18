@@ -42,6 +42,9 @@ const SkillRadar = lazy(() => import('@/components/apps/SkillRadar'));
 const FloatingOrbs = lazy(() => import('@/components/effects/FloatingOrbs'));
 const KonamiCode = lazy(() => import('@/components/effects/KonamiCode'));
 const WindowParticles = lazy(() => import('@/components/effects/WindowParticles'));
+const ClickRipple = lazy(() => import('@/components/effects/ClickRipple'));
+const Screensaver = lazy(() => import('@/components/effects/Screensaver'));
+const CRTShutdown = lazy(() => import('@/components/effects/CRTShutdown'));
 
 const AppLoading: React.FC = () => (
     <div className="h-full w-full flex items-center justify-center font-mono text-[var(--text-faint)]">
@@ -290,6 +293,36 @@ const LiveClock: React.FC = () => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
+// Time-of-day hook — returns a dynamic background tint based on local time.
+// ───────────────────────────────────────────────────────────────────────────
+
+type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
+
+const getTimeOfDay = (): TimeOfDay => {
+    const h = new Date().getHours();
+    if (h >= 6 && h < 12) return 'morning';
+    if (h >= 12 && h < 18) return 'afternoon';
+    if (h >= 18 && h < 22) return 'evening';
+    return 'night';
+};
+
+const TIME_TINTS: Record<TimeOfDay, string> = {
+    morning:   'radial-gradient(ellipse at 30% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 70%)',
+    afternoon: 'none',
+    evening:   'radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 70%)',
+    night:     'radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.03) 0%, transparent 60%)',
+};
+
+const useTimeOfDay = () => {
+    const [tod, setTod] = useState<TimeOfDay>(getTimeOfDay);
+    useEffect(() => {
+        const interval = setInterval(() => setTod(getTimeOfDay()), 60_000);
+        return () => clearInterval(interval);
+    }, []);
+    return tod;
+};
+
+// ───────────────────────────────────────────────────────────────────────────
 // App launcher data — split into primary (big colored center icons) and
 // secondary (small accent-only mini-dock).
 // ───────────────────────────────────────────────────────────────────────────
@@ -461,6 +494,8 @@ const Desktop: React.FC = () => {
         return () => window.clearTimeout(t);
     }, [isBooting, notify, openWindow]);
 
+    const timeOfDay = useTimeOfDay();
+
     if (isBooting) {
         return <BootSequence onComplete={() => setBooting(false)} />;
     }
@@ -489,6 +524,12 @@ const Desktop: React.FC = () => {
             <Suspense fallback={null}>
                 <FloatingOrbs className="opacity-40" />
             </Suspense>
+
+            {/* Time-of-day ambient tint */}
+            <div
+                className="fixed inset-0 pointer-events-none z-[1] transition-all duration-[5000ms]"
+                style={{ background: TIME_TINTS[timeOfDay] }}
+            />
 
             {/* Small live clock — top-left, doesn't compete with hero */}
             <LiveClock />
@@ -545,6 +586,11 @@ const Desktop: React.FC = () => {
                 <WindowParticles />
             </Suspense>
 
+            {/* Click ripple rings */}
+            <Suspense fallback={null}>
+                <ClickRipple />
+            </Suspense>
+
             {/* Command palette overlay */}
             <CommandPalette apps={APP_LAUNCHER} />
 
@@ -568,6 +614,16 @@ const Desktop: React.FC = () => {
             {/* Atmosphere overlays */}
             <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)] z-40" />
             <div className="fixed inset-0 pointer-events-none opacity-[var(--scanline-opacity)] z-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
+
+            {/* Screensaver — activates after 30s idle */}
+            <Suspense fallback={null}>
+                <Screensaver />
+            </Suspense>
+
+            {/* CRT shutdown when leaving tab */}
+            <Suspense fallback={null}>
+                <CRTShutdown />
+            </Suspense>
         </div>
     );
 };
