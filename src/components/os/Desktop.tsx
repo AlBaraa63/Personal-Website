@@ -221,7 +221,7 @@ const DesktopHero: React.FC = () => {
 const STATS = [
     { value: projects.length, suffix: '', label: 'Projects' },
     { value: 2, suffix: '', label: 'Papers' },
-    { value: 1, suffix: '', label: 'Hackathon Win' },
+    { value: 2, suffix: '', label: 'Hackathons' },
     { value: certifications.length, suffix: '', label: 'Certifications' },
 ];
 

@@ -100,7 +100,7 @@ const About: React.FC = () => {
                 </motion.div>
 
                 {/* Right — bio + resume */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-5">
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
                         animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -113,14 +113,7 @@ const About: React.FC = () => {
                             </h2>
                         </div>
                         <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
-                            I'm a <span className="text-accent font-semibold">Computer Vision Researcher & Engineer</span> — currently a Research Assistant at Al Ain University designing novel segmentation architectures for medical imaging, and an IT Intern at the Abu Dhabi Social Support Authority. Previously a CV Research Intern at Cellula Technologies.
-                        </p>
-                        <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed mt-3">
-                            Recent work includes two submissions to the{' '}
-                            <span className="text-accent font-semibold">Anthropic MCP 1st Birthday Hackathon</span>
-                            {' '}—{' '}
-                            <span className="text-[var(--text-primary)]">CleanCity Agent</span> (winner, Consumer Track) and{' '}
-                            <span className="text-[var(--text-primary)]">Mission Control MCP</span> — both leveraging the Model Context Protocol to build autonomous, multi-tool AI pipelines for real-world impact.
+                            I'm a <span className="text-accent font-semibold">Computer Vision Researcher and Engineer</span>, currently a Research Assistant at Al Ain University designing novel segmentation architectures for medical imaging. Previously a CV Research Intern at Cellula Technologies. I also build agentic tools with MCP, including <span className="text-[var(--text-primary)]">CleanCity Agent</span> and <span className="text-[var(--text-primary)]">Mission Control MCP</span>, both submitted to the MCP 1st Birthday Hackathon.
                         </p>
                     </motion.div>
 
@@ -158,9 +151,9 @@ const About: React.FC = () => {
                         <div className="text-accent mt-0.5 flex-shrink-0 font-mono text-sm">🎓</div>
                         <div className="flex-1 min-w-0">
                             <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--text-faint)] mb-0.5">Education</p>
-                            <p className="text-sm font-bold text-[var(--text-primary)] truncate">Al Ain University — Abu Dhabi, UAE</p>
-                            <p className="text-xs text-[var(--text-muted)]">B.Sc. Computer Science &nbsp;·&nbsp; GPA 3.5 / 4.0</p>
-                            <p className="text-[10px] font-mono text-[var(--text-faint)] mt-0.5">Sep 2022 — Expected Jun 2026</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] truncate">Al Ain University, Abu Dhabi, UAE</p>
+                            <p className="text-xs text-[var(--text-muted)]">B.Sc. Computer Science</p>
+                            <p className="text-[10px] font-mono text-[var(--text-faint)] mt-0.5">Sep 2022 - Expected Jul 2026</p>
                         </div>
                     </motion.div>
 
@@ -192,17 +185,16 @@ const About: React.FC = () => {
 
                             <motion.div
                                 initial={false}
-                                animate={{ height: showResumePreview ? 500 : 0, opacity: showResumePreview ? 1 : 0 }}
+                                animate={{ height: showResumePreview ? 520 : 0, opacity: showResumePreview ? 1 : 0 }}
                                 transition={{ duration: 0.3 }}
                                 className="overflow-hidden border-t border-[var(--border)]"
                             >
-                                <div className="w-full h-full pt-5">
-                                    <iframe
-                                        src={resumeConfig.previewUrl}
-                                        className="w-full h-full border border-[var(--border)]"
-                                        title="Resume Preview"
-                                    />
-                                </div>
+                                <iframe
+                                    src={resumeConfig.previewUrl}
+                                    className="w-full border border-[var(--border)] mt-4"
+                                    style={{ height: '480px', display: 'block' }}
+                                    title="Resume Preview"
+                                />
                             </motion.div>
                         </div>
                     </motion.div>
