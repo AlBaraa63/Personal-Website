@@ -1567,6 +1567,20 @@ export const experience: Experience[] = [
     skills: ['IT Operations', 'Digital Services', 'Government Tech'],
   },
   {
+    id: '42-abu-dhabi-piscine',
+    title: 'Piscine – Intensive Coding Selection Program',
+    company: '42 Abu Dhabi',
+    type: 'program',
+    period: 'Jun 2026 - Present',
+    current: true,
+    description: 'Intensive 4-week peer-to-peer coding immersion and selection process at 42 Abu Dhabi — one of the global 42 Network campuses.',
+    highlights: [
+      'Intensive daily coding challenges covering C programming, Unix, and algorithms entirely through peer-to-peer learning',
+      'Selection process for the full 42 curriculum — a tuition-free, project-based software engineering program',
+    ],
+    skills: ['C', 'Unix', 'Algorithms', 'Peer Learning', 'Problem Solving'],
+  },
+  {
     id: 'aau-research-assistant',
     title: 'Research Assistant',
     company: 'Al Ain University (Under Dr. Nuha Hamada & Dr. Armagan Elibol)',
