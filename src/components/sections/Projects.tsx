@@ -21,7 +21,7 @@ const Projects: React.FC = () => {
         { id: 'ai-cv', label: 'AI & CV', icon: '🤖', count: projects.filter(p => p.category === 'ai-cv').length },
         { id: 'web-dev', label: 'Web', icon: '🌐', count: projects.filter(p => p.category === 'web-dev').length },
         { id: 'robotics', label: 'Robotics', icon: '⚙️', count: projects.filter(p => p.category === 'robotics').length },
-    ];
+    ].filter(f => f.id === 'all' || f.count > 0) as CategoryFilterType[];
 
     const totalProjects = projects.length;
     const liveDemoCount = projects.filter(project => project.liveDemo).length;

@@ -1333,6 +1333,20 @@ export const experience: Experience[] = [
     ],
     skills: ['Machine Learning', 'Deep Learning', 'NLP', 'MobileNetV2', 'Python'],
   },
+  {
+    id: 'ieee-snams-2025',
+    title: 'Published Author & Conference Presenter',
+    company: 'IEEE SNAMS 2025',
+    type: 'program',
+    period: '2025',
+    current: false,
+    description: 'Authored and presented a peer-reviewed research paper at the 12th International Conference on Social Networks Analysis, Management and Security (IEEE SNAMS 2025).',
+    highlights: [
+      'Paper: "The Impact of Artificial Intelligence in Education on Student Learning Outcomes and Teaching Methods"',
+      'Explored AI-powered personalised learning, adaptive systems, and the evolving role of educators in AI-augmented classrooms',
+    ],
+    skills: ['Research', 'Academic Writing', 'AI in Education', 'Peer Review'],
+  },
 ];
 
 export const research: Research[] = [

@@ -218,10 +218,10 @@ const DesktopHero: React.FC = () => {
 // ───────────────────────────────────────────────────────────────────────────
 
 const STATS = [
-    { value: 12, suffix: '+', label: 'Projects' },
+    { value: 18, suffix: '', label: 'Projects' },
     { value: 1, suffix: '', label: 'IEEE Paper' },
-    { value: 2, suffix: '', label: 'Hackathon Wins' },
-    { value: 5, suffix: '', label: 'Certifications' },
+    { value: 1, suffix: '', label: 'Hackathon Win' },
+    { value: 17, suffix: '', label: 'Certifications' },
 ];
 
 const QuickStats: React.FC = () => {

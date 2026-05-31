@@ -16,13 +16,15 @@ const ABOUT_TEXT =
     `name      : AlBaraa AlOlabi
 role      : AI Researcher & Computer Vision Engineer
 company   : Cellula Technologies (Intern, since Jan 2026)
-focus     : Computer Vision, Edge AI, Deep Learning
+focus     : Computer Vision, Edge AI, Deep Learning, MCP Tooling
 location  : UAE
 status    : Open to opportunities
 
 stack     : Python, PyTorch, OpenCV, YOLOv8, MediaPipe, TensorFlow,
-            HuggingFace BART, TypeScript, React, FastAPI, MCP
-papers    : IEEE SNAMS 2025 — AI in Education (published author)`;
+            FAISS, Claude API, Gradio, Streamlit, FastAPI, MCP,
+            HuggingFace BART, TypeScript, React
+papers    : IEEE SNAMS 2025 — AI in Education (published author)
+hackathon : Anthropic MCP 1st Birthday — CleanCity Agent (Winner)`;
 
 const TerminalApp: React.FC = () => {
     const { playSound } = useSound();
@@ -94,7 +96,7 @@ const TerminalApp: React.FC = () => {
                 if (file === 'about.txt' || file === 'about') {
                     output = <pre className="whitespace-pre-wrap text-[var(--text-muted)]">{ABOUT_TEXT}</pre>;
                 } else if (file === 'skills.txt' || file === 'skills') {
-                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · OpenCV · YOLOv8 · MediaPipe · TensorFlow · HuggingFace BART · TypeScript · React · FastAPI · MCP</span>;
+                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · OpenCV · YOLOv8 · MediaPipe · TensorFlow · FAISS · Claude API · Gradio · Streamlit · FastAPI · MCP · HuggingFace BART · TypeScript · React</span>;
                 } else if (file === 'contact.txt' || file === 'contact') {
                     output = (
                         <div className="text-[var(--text-muted)] space-y-0.5">

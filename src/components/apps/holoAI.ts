@@ -50,17 +50,17 @@ const FAQ: FaqEntry[] = [
     {
         keywords: ['who', 'about', 'yourself', 'bio', 'identity', 'tell me about'],
         answer:
-            "AlBaraa AlOlabi — AI Researcher and Computer Vision Engineer, currently interning at Cellula Technologies on production CV pipelines. Published author at IEEE SNAMS 2025 on AI in education. Based in the UAE, open to opportunities.",
+            "AlBaraa AlOlabi — AI Researcher and Computer Vision Engineer, interning at Cellula Technologies on production CV pipelines. Winner of the Anthropic MCP 1st Birthday Hackathon with CleanCity Agent. Published author at IEEE SNAMS 2025 on AI in education. Based in the UAE, open to opportunities.",
     },
     {
         keywords: ['skill', 'tech', 'stack', 'language', 'tool', 'framework'],
         answer:
-            "Core stack: Python, PyTorch, OpenCV, YOLOv8, MediaPipe, TensorFlow, HuggingFace BART for NLP. Web: TypeScript, React, Node.js, FastAPI. Also working with MCP (Model Context Protocol), Gradio, Streamlit, SQLite, React Native.",
+            "Core stack: Python, PyTorch, OpenCV, YOLOv8, FAISS, TensorFlow, Claude API, Gradio, Streamlit, FastAPI, MCP (Model Context Protocol). Web: TypeScript, React, React Native. ML/NLP: HuggingFace BART, MediaPipe, scikit-learn.",
     },
     {
         keywords: ['experience', 'job', 'intern', 'cellula', 'career'],
         answer:
-            "Computer Vision Engineer Intern at Cellula Technologies since January 2026 — building production CV models with PyTorch, OpenCV, and YOLO. Previously selected for the Samsung Innovation Campus AI & ML program (Sep–Dec 2025).",
+            "Computer Vision Engineer Intern at Cellula Technologies since January 2026 — building production CV models with PyTorch, OpenCV, and YOLOv8. Won the Anthropic MCP 1st Birthday Hackathon (CleanCity Agent, Consumer Track). Previously selected for Samsung Innovation Campus AI & ML program (Sep–Dec 2025) and presented a paper at IEEE SNAMS 2025.",
     },
     {
         keywords: ['research', 'paper', 'ieee', 'snams', 'publication'],
@@ -71,6 +71,11 @@ const FAQ: FaqEntry[] = [
         keywords: ['certif', 'cs50', 'samsung', 'harvard'],
         answer:
             "CS50x and CS50P completed at Harvard (online). CS50AI in progress. Selected participant in Samsung Innovation Campus AI & ML program. IEEE SNAMS 2025 published author.",
+    },
+    {
+        keywords: ['hackathon', 'mcp', 'cleancity', 'anthropic', 'won', 'win', 'competition'],
+        answer:
+            "Won the Anthropic MCP 1st Birthday Hackathon — Consumer Track — with CleanCity Agent, an agentic AI that turns trash photos into full cleanup campaigns using YOLOv8, MCP, and Gemini Vision. Also submitted Mission Control MCP, an enterprise automation server with 8 tools.",
     },
 ];
 

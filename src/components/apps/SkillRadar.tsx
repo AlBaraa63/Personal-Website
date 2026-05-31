@@ -19,8 +19,8 @@ const CATEGORIES: SkillCategory[] = [
             { name: 'PyTorch', level: 0.9 },
             { name: 'TensorFlow', level: 0.85 },
             { name: 'scikit-learn', level: 0.85 },
-            { name: 'HuggingFace', level: 0.8 },
-            { name: 'FAISS', level: 0.75 },
+            { name: 'FAISS', level: 0.8 },
+            { name: 'Claude API', level: 0.8 },
         ],
     },
     {
@@ -69,10 +69,10 @@ const CATEGORIES: SkillCategory[] = [
         color: '#ef4444',
         skills: [
             { name: 'Git / GitHub', level: 0.9 },
-            { name: 'MCP Protocol', level: 0.85 },
-            { name: 'Gradio', level: 0.8 },
-            { name: 'Streamlit', level: 0.8 },
-            { name: 'Docker', level: 0.65 },
+            { name: 'MCP Protocol', level: 0.88 },
+            { name: 'Gradio', level: 0.85 },
+            { name: 'Streamlit', level: 0.85 },
+            { name: 'HuggingFace', level: 0.8 },
         ],
     },
     {
