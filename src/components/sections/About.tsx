@@ -6,8 +6,8 @@ import HudFrame from '@/components/ui/HudFrame';
 import CyberButton from '@/components/ui/CyberButton';
 
 const codeContent = `{
-  "role": "CV Engineer @ Cellula Technologies",
-  "focus": "Computer Vision, Edge AI & Deep Learning",
+  "role": "Research Assistant @ Al Ain University",
+  "focus": "Computer Vision, Medical Imaging, Edge AI & MCP Tooling",
 
   "expertise": {
     "ai_ml": [
@@ -113,10 +113,7 @@ const About: React.FC = () => {
                             </h2>
                         </div>
                         <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
-                            I'm a <span className="text-accent font-semibold">Computer Vision Engineer</span> focused
-                            on bridging theoretical AI models and real-world edge deployment. My work centers on
-                            optimizing deep learning algorithms to run efficiently on resource-constrained devices
-                            without compromising accuracy.
+                            I'm a <span className="text-accent font-semibold">Computer Vision Researcher & Engineer</span> — currently a Research Assistant at Al Ain University designing novel segmentation architectures for medical imaging, and an IT Intern at the Abu Dhabi Social Support Authority. Previously a CV Research Intern at Cellula Technologies.
                         </p>
                         <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed mt-3">
                             Recent work includes two submissions to the{' '}
@@ -148,6 +145,22 @@ const About: React.FC = () => {
                                     {skill}
                                 </span>
                             ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Education */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.5, delay: 0.32 }}
+                        className="border border-[var(--border)] bg-[var(--surface)] p-4 flex items-start gap-4"
+                    >
+                        <div className="text-accent mt-0.5 flex-shrink-0 font-mono text-sm">🎓</div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--text-faint)] mb-0.5">Education</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] truncate">Al Ain University — Abu Dhabi, UAE</p>
+                            <p className="text-xs text-[var(--text-muted)]">B.Sc. Computer Science &nbsp;·&nbsp; GPA 3.5 / 4.0</p>
+                            <p className="text-[10px] font-mono text-[var(--text-faint)] mt-0.5">Sep 2022 — Expected Jun 2026</p>
                         </div>
                     </motion.div>
 

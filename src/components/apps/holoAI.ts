@@ -50,27 +50,27 @@ const FAQ: FaqEntry[] = [
     {
         keywords: ['who', 'about', 'yourself', 'bio', 'identity', 'tell me about'],
         answer:
-            "AlBaraa AlOlabi — AI Researcher and Computer Vision Engineer, interning at Cellula Technologies on production CV pipelines. Winner of the Anthropic MCP 1st Birthday Hackathon with CleanCity Agent. Published author at IEEE SNAMS 2025 on AI in education. Based in the UAE, open to opportunities.",
+            "AlBaraa AlOlabi — Computer Vision Researcher and Engineer. Currently a Research Assistant at Al Ain University (medical image segmentation, under Dr. Nuha Hamada & Dr. Armagan Elibol) and IT Intern at Abu Dhabi Social Support Authority. Previously CV Research Intern at Cellula Technologies. IEEE-published author, Anthropic MCP Hackathon winner, Harvard CS50 certified. Based in UAE, open to opportunities.",
     },
     {
         keywords: ['skill', 'tech', 'stack', 'language', 'tool', 'framework'],
         answer:
-            "Core stack: Python, PyTorch, OpenCV, YOLOv8, FAISS, TensorFlow, Claude API, Gradio, Streamlit, FastAPI, MCP (Model Context Protocol). Web: TypeScript, React, React Native. ML/NLP: HuggingFace BART, MediaPipe, scikit-learn.",
+            "Core: Python, PyTorch, TensorFlow/TFLite, OpenCV, YOLOv8, FAISS, Claude API. Deployment: ONNX, Model Quantization, Edge AI, Gradio, Streamlit, FastAPI, MCP. Web: TypeScript, React, Kotlin (Android), React Native. Languages: Python, C++, C, Java, TypeScript.",
     },
     {
-        keywords: ['experience', 'job', 'intern', 'cellula', 'career'],
+        keywords: ['experience', 'job', 'intern', 'cellula', 'career', 'work', 'role'],
         answer:
-            "Computer Vision Engineer Intern at Cellula Technologies since January 2026 — building production CV models with PyTorch, OpenCV, and YOLOv8. Won the Anthropic MCP 1st Birthday Hackathon (CleanCity Agent, Consumer Track). Previously selected for Samsung Innovation Campus AI & ML program (Sep–Dec 2025) and presented a paper at IEEE SNAMS 2025.",
+            "Current: Research Assistant at Al Ain University (Feb 2025–Present, medical AI research + F-UNet segmentation architecture) and IT Intern at Abu Dhabi Social Support Authority (Jul 2026–Present). Previous: CV Research Intern at Cellula Technologies (Jan–Apr 2026), Samsung Innovation Campus AI & ML program (Sep–Dec 2025).",
     },
     {
-        keywords: ['research', 'paper', 'ieee', 'snams', 'publication'],
+        keywords: ['research', 'paper', 'ieee', 'snams', 'publication', 'src', 'funet', 'segmentation'],
         answer:
-            "Published author at IEEE SNAMS 2025 — 'The Impact of Artificial Intelligence in Education on Student Learning Outcomes and Teaching Methods.'",
+            "Two publications: (1) IEEE SNAMS 2025 — 'The Impact of AI in Education on Student Learning Outcomes' (sole author, Vienna). (2) SRC2026 — 'Novel Parameter-Efficient Encoder–Decoder Architecture for Multi-Modal Medical Image Segmentation' (accepted, poster) — the F-UNet framework, 82% smaller than U-Net baselines.",
     },
     {
-        keywords: ['certif', 'cs50', 'samsung', 'harvard'],
+        keywords: ['certif', 'cs50', 'samsung', 'harvard', 'education', 'university', 'degree'],
         answer:
-            "CS50x and CS50P completed at Harvard (online). CS50AI in progress. Selected participant in Samsung Innovation Campus AI & ML program. IEEE SNAMS 2025 published author.",
+            "B.Sc. Computer Science at Al Ain University, Abu Dhabi (GPA 3.5/4.0, expected Jun 2026). CS50x and CS50P completed at Harvard; CS50AI in progress. Samsung Innovation Campus AI & ML program (2025). 17 total certifications including IBM, LinkedIn Learning, Google, edX, Coursera.",
     },
     {
         keywords: ['hackathon', 'mcp', 'cleancity', 'anthropic', 'won', 'win', 'competition'],

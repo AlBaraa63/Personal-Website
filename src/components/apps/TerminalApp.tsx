@@ -14,16 +14,18 @@ const KNOWN_APP_IDS = ['bio', 'projects', 'experience', 'contact', 'terminal', '
 
 const ABOUT_TEXT =
     `name      : AlBaraa AlOlabi
-role      : AI Researcher & Computer Vision Engineer
-company   : Cellula Technologies (Intern, since Jan 2026)
-focus     : Computer Vision, Edge AI, Deep Learning, MCP Tooling
-location  : UAE
+role      : Computer Vision Researcher & Engineer
+current   : Research Assistant @ Al Ain University
+            IT Intern @ Abu Dhabi Social Support Authority
+focus     : Medical Imaging, Computer Vision, Edge AI, MCP Tooling
+location  : UAE (Abu Dhabi)
 status    : Open to opportunities
 
-stack     : Python, PyTorch, OpenCV, YOLOv8, MediaPipe, TensorFlow,
+stack     : Python, PyTorch, TFLite, OpenCV, YOLOv8, ONNX,
             FAISS, Claude API, Gradio, Streamlit, FastAPI, MCP,
-            HuggingFace BART, TypeScript, React
-papers    : IEEE SNAMS 2025 — AI in Education (published author)
+            TensorFlow, TypeScript, React, Kotlin
+education : B.Sc. CS — Al Ain University (GPA 3.5, Jun 2026)
+papers    : IEEE SNAMS 2025 | SRC2026 (F-UNet, accepted poster)
 hackathon : Anthropic MCP 1st Birthday — CleanCity Agent (Winner)`;
 
 const TerminalApp: React.FC = () => {
@@ -96,7 +98,7 @@ const TerminalApp: React.FC = () => {
                 if (file === 'about.txt' || file === 'about') {
                     output = <pre className="whitespace-pre-wrap text-[var(--text-muted)]">{ABOUT_TEXT}</pre>;
                 } else if (file === 'skills.txt' || file === 'skills') {
-                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · OpenCV · YOLOv8 · MediaPipe · TensorFlow · FAISS · Claude API · Gradio · Streamlit · FastAPI · MCP · HuggingFace BART · TypeScript · React</span>;
+                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · TFLite · ONNX · OpenCV · YOLOv8 · FAISS · Claude API · Gradio · Streamlit · FastAPI · MCP · TensorFlow · TypeScript · React · Kotlin · C++ · C · Java</span>;
                 } else if (file === 'contact.txt' || file === 'contact') {
                     output = (
                         <div className="text-[var(--text-muted)] space-y-0.5">

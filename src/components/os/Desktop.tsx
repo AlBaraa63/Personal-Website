@@ -17,6 +17,7 @@ import AchievementToast from './AchievementToast';
 import VisitorHUD from './VisitorHUD';
 import { useGlobalShortcuts } from './useGlobalShortcuts';
 import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, Loader2, Radar } from 'lucide-react';
+import { projects, certifications } from '@/data/portfolioData';
 import { motion } from 'framer-motion';
 
 // Shape used by the launcher list — consumed by the command palette, taskbar
@@ -153,7 +154,7 @@ const useCountUp = (target: number, duration = 1500, startDelay = 0) => {
 // ───────────────────────────────────────────────────────────────────────────
 
 const CREDENTIALS = [
-    { label: 'CV Engineer Intern @', highlight: 'Cellula Technologies' },
+    { label: 'Research Assistant @', highlight: 'Al Ain University' },
     { label: 'Published author at', highlight: 'IEEE SNAMS 2025' },
     { label: '', highlight: '🟢 Open to opportunities' },
 ];
@@ -218,10 +219,10 @@ const DesktopHero: React.FC = () => {
 // ───────────────────────────────────────────────────────────────────────────
 
 const STATS = [
-    { value: 18, suffix: '', label: 'Projects' },
-    { value: 1, suffix: '', label: 'IEEE Paper' },
+    { value: projects.length, suffix: '', label: 'Projects' },
+    { value: 2, suffix: '', label: 'Papers' },
     { value: 1, suffix: '', label: 'Hackathon Win' },
-    { value: 17, suffix: '', label: 'Certifications' },
+    { value: certifications.length, suffix: '', label: 'Certifications' },
 ];
 
 const QuickStats: React.FC = () => {
