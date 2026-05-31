@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#050a06"/>
+    </linearGradient>
+    <!-- Green glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-strong" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Scanline pattern -->
+    <pattern id="scanlines" x="0" y="0" width="800" height="3" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="800" height="1" fill="#00ff41" fill-opacity="0.03"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#00ff41" stroke-opacity="0.04" stroke-width="0.5">
+    <line x1="0" y1="50" x2="800" y2="50"/>
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="250" x2="800" y2="250"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="350" x2="800" y2="350"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="100" y1="0" x2="100" y2="450"/>
+    <line x1="200" y1="0" x2="200" y2="450"/>
+    <line x1="300" y1="0" x2="300" y2="450"/>
+    <line x1="400" y1="0" x2="400" y2="450"/>
+    <line x1="500" y1="0" x2="500" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+    <line x1="700" y1="0" x2="700" y2="450"/>
+  </g>
+
+  <!-- City silhouette -->
+  <g fill="#00ff41" fill-opacity="0.07">
+    <!-- Far buildings -->
+    <rect x="0"   y="310" width="40"  height="140"/>
+    <rect x="45"  y="290" width="30"  height="160"/>
+    <rect x="80"  y="320" width="50"  height="130"/>
+    <rect x="135" y="270" width="35"  height="180"/>
+    <rect x="175" y="300" width="25"  height="150"/>
+    <rect x="205" y="260" width="60"  height="190"/>
+    <rect x="270" y="285" width="30"  height="165"/>
+    <rect x="305" y="305" width="45"  height="145"/>
+    <rect x="355" y="250" width="40"  height="200"/>
+    <rect x="400" y="280" width="55"  height="170"/>
+    <rect x="460" y="265" width="35"  height="185"/>
+    <rect x="500" y="295" width="50"  height="155"/>
+    <rect x="555" y="270" width="30"  height="180"/>
+    <rect x="590" y="310" width="45"  height="140"/>
+    <rect x="640" y="285" width="35"  height="165"/>
+    <rect x="680" y="300" width="60"  height="150"/>
+    <rect x="745" y="260" width="55"  height="190"/>
+    <!-- Windows dots on buildings -->
+  </g>
+  <!-- Building outlines -->
+  <g fill="none" stroke="#00ff41" stroke-opacity="0.12" stroke-width="0.5">
+    <rect x="205" y="260" width="60"  height="190"/>
+    <rect x="355" y="250" width="40"  height="200"/>
+    <rect x="400" y="280" width="55"  height="170"/>
+  </g>
+
+  <!-- Horizon line -->
+  <line x1="0" y1="315" x2="800" y2="315" stroke="#00ff41" stroke-opacity="0.15" stroke-width="1"/>
+
+  <!-- Main bounding box - central element -->
+  <!-- Outer detection frame with corner marks -->
+  <g filter="url(#glow)" stroke="#00ff41" fill="none">
+    <!-- Main box -->
+    <rect x="270" y="130" width="260" height="190" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="6,3"/>
+    <!-- Corner brackets - TL -->
+    <polyline points="270,160 270,130 300,130" stroke-width="2.5" stroke-opacity="1"/>
+    <!-- Corner brackets - TR -->
+    <polyline points="500,130 530,130 530,160" stroke-width="2.5" stroke-opacity="1"/>
+    <!-- Corner brackets - BL -->
+    <polyline points="270,290 270,320 300,320" stroke-width="2.5" stroke-opacity="1"/>
+    <!-- Corner brackets - BR -->
+    <polyline points="500,320 530,320 530,290" stroke-width="2.5" stroke-opacity="1"/>
+  </g>
+
+  <!-- Trash bag icon inside bounding box -->
+  <g transform="translate(400,220)" filter="url(#glow)">
+    <!-- Bag body -->
+    <path d="M-22,8 Q-24,30 -16,44 Q-8,56 0,56 Q8,56 16,44 Q24,30 22,8 Z"
+          fill="#00ff41" fill-opacity="0.15" stroke="#00ff41" stroke-width="1.5" stroke-opacity="0.8"/>
+    <!-- Bag tie -->
+    <path d="M-10,-2 Q-6,-12 0,-14 Q6,-12 10,-2 Q4,4 0,4 Q-4,4 -10,-2 Z"
+          fill="#00ff41" fill-opacity="0.2" stroke="#00ff41" stroke-width="1.5" stroke-opacity="0.9"/>
+    <!-- Bag highlight line -->
+    <path d="M-14,16 Q-14,38 -8,48" stroke="#00ff41" stroke-opacity="0.4" stroke-width="1" fill="none"/>
+  </g>
+
+  <!-- Confidence label on bounding box -->
+  <rect x="270" y="112" width="100" height="18" fill="#00ff41" rx="0"/>
+  <text x="278" y="125" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="10" fill="#000000" font-weight="700" letter-spacing="0.5">GARBAGE 0.94</text>
+
+  <!-- Secondary smaller detection boxes -->
+  <g stroke="#00ff41" fill="none" stroke-opacity="0.35" stroke-width="1">
+    <rect x="90" y="240" width="80" height="65" stroke-dasharray="4,2"/>
+    <polyline points="90,255 90,240 105,240" stroke-opacity="0.8" stroke-width="1.5"/>
+    <polyline points="155,240 170,240 170,255" stroke-opacity="0.8" stroke-width="1.5"/>
+    <polyline points="90,290 90,305 105,305" stroke-opacity="0.8" stroke-width="1.5"/>
+    <polyline points="155,305 170,305 170,290" stroke-opacity="0.8" stroke-width="1.5"/>
+  </g>
+  <rect x="90" y="228" width="64" height="13" fill="#00ff41" fill-opacity="0.8" rx="0"/>
+  <text x="95" y="238" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8" fill="#000000" font-weight="600">WASTE 0.87</text>
+
+  <g stroke="#00ff41" fill="none" stroke-opacity="0.3" stroke-width="1">
+    <rect x="620" y="215" width="90" height="75" stroke-dasharray="4,2"/>
+    <polyline points="620,230 620,215 635,215" stroke-opacity="0.7" stroke-width="1.5"/>
+    <polyline points="695,215 710,215 710,230" stroke-opacity="0.7" stroke-width="1.5"/>
+    <polyline points="620,275 620,290 635,290" stroke-opacity="0.7" stroke-width="1.5"/>
+    <polyline points="695,290 710,290 710,275" stroke-opacity="0.7" stroke-width="1.5"/>
+  </g>
+  <rect x="620" y="202" width="60" height="13" fill="#00ff41" fill-opacity="0.7" rx="0"/>
+  <text x="624" y="212" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8" fill="#000000" font-weight="600">LITTER 0.81</text>
+
+  <!-- Scan line sweep animation hint (static) -->
+  <line x1="270" y1="200" x2="530" y2="200" stroke="#00ff41" stroke-opacity="0.12" stroke-width="1"/>
+  <line x1="270" y1="201" x2="530" y2="201" stroke="#00ff41" stroke-opacity="0.06" stroke-width="2"/>
+
+  <!-- HUD corner decorations -->
+  <g stroke="#00ff41" stroke-opacity="0.25" fill="none" stroke-width="1">
+    <polyline points="0,20 20,20 20,0"/>
+    <polyline points="780,0 780,20 800,20"/>
+    <polyline points="0,430 20,430 20,450"/>
+    <polyline points="780,450 780,430 800,430"/>
+  </g>
+
+  <!-- Top status bar -->
+  <rect x="0" y="0" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">CLEANEYE_SYSTEM v1.0</text>
+  <text x="580" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">ADIPEC 2025 · LIVE</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="428" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">DETECTIONS: 3 · YOLOv8 · STREAMLIT · FOLIUM</text>
+  <text x="700" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">ENV_AI</text>
+
+  <!-- Main title -->
+  <text x="400" y="60" text-anchor="middle"
+        font-family="'JetBrains Mono', 'Courier New', monospace"
+        font-size="32" font-weight="700" fill="#00ff41"
+        letter-spacing="4" filter="url(#glow-strong)">CleanEye</text>
+
+  <!-- Subtitle -->
+  <text x="400" y="85" text-anchor="middle"
+        font-family="'JetBrains Mono', 'Courier New', monospace"
+        font-size="11" fill="#00ff41" fill-opacity="0.6"
+        letter-spacing="3">REAL-TIME GARBAGE DETECTION</text>
+
+  <!-- Scanline overlay -->
+  <rect width="800" height="450" fill="url(#scanlines)"/>
+
+  <!-- Vignette -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+    <stop offset="0%" stop-color="transparent"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+  </radialGradient>
+  <rect width="800" height="450" fill="url(#vignette)"/>
+</svg>

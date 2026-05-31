@@ -1004,6 +1004,53 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'clean-eye',
+    title: 'CleanEye - Real-Time Garbage Detection System',
+    description: 'Real-time waste detection system built for ADIPEC 2025 using YOLOv8 to identify and classify garbage in live video feeds. Features an interactive Streamlit dashboard with detection heatmaps, location mapping via Folium, and live analytics for environmental monitoring.',
+    category: 'ai-cv',
+    skills: ['Python', 'YOLOv8', 'Streamlit', 'OpenCV', 'Folium', 'Computer Vision', 'Environmental Tech'],
+    image: '/assets/images/clean-eye/cover.svg',
+    github: 'https://github.com/AlBaraa63/Clean-Eye',
+    detailedDescription: 'CleanEye is a real-time garbage detection and monitoring system developed for ADIPEC 2025. It uses a fine-tuned YOLOv8 model to detect and classify waste in live video streams, webcam feeds, and uploaded images. The Streamlit-based dashboard provides live detection analytics, hotspot heatmaps powered by Folium, confidence score tracking, and exportable reports — enabling municipalities and organizations to monitor cleanliness in real time.',
+    challenges: [
+      'Achieving high detection accuracy across diverse waste types and real-world lighting conditions',
+      'Rendering interactive geographic heatmaps in a Streamlit environment without performance degradation',
+      'Designing a dashboard that balances real-time performance with rich analytics and visualization',
+    ],
+    solutions: [
+      'Fine-tuned YOLOv8 on a curated waste detection dataset with augmentation for varied lighting and angles',
+      'Integrated Folium for interactive map rendering with detection location overlays',
+      'Structured Streamlit layout with cached inference pipeline for smooth real-time throughput',
+    ],
+    outcomes: [
+      'Deployed real-time detection pipeline handling webcam and video stream inputs at smooth frame rates',
+      'Interactive Folium heatmap visualizing waste hotspots geographically',
+      'Analytics dashboard with per-class detection counts, confidence distributions, and exportable session logs',
+      'Demonstrated at ADIPEC 2025 as part of an environmental monitoring showcase',
+    ],
+    techStack: {
+      frontend: ['Streamlit', 'Folium (Interactive Maps)', 'Plotly Charts'],
+      backend: ['Python', 'OpenCV', 'File I/O'],
+      ai: ['YOLOv8 (Ultralytics)', 'Object Detection', 'Computer Vision'],
+      other: ['GPS Coordinate Mapping', 'Session State Management', 'CSV Export'],
+    },
+    gameDetails: {
+      questOverview: '🗑️ Environmental Vision Quest! Built a real-time garbage detection system for ADIPEC 2025 — fine-tuned YOLOv8 to spot waste in live feeds and turned raw detections into geographic heatmaps and actionable analytics.',
+      skillsUnlocked: [
+        '👁️ Real-Time Object Detection — YOLOv8 inference on live webcam and video streams',
+        '🗺️ Geographic Visualization — Folium heatmaps showing waste hotspot locations',
+        '📊 Analytics Dashboard — Per-class counts, confidence distributions, exportable reports',
+        '⚡ Streamlit Performance — Cached inference pipeline for smooth real-time throughput',
+      ],
+      bossFights: [
+        '🌗 The Lighting Phantom — Robust detection under diverse real-world illumination',
+        '🗺️ The Map Render Beast — Interactive Folium maps inside a Streamlit app without slowdown',
+        '⚡ The Real-Time Hydra — Balancing frame rate with analytics computation',
+      ],
+      bonusLevel: '🏆 ADIPEC 2025 Showcase: Demonstrated live waste detection to industry professionals as part of an environmental technology exhibition — bridging AI and sustainability.',
+    },
+  },
+  {
     id: 'weather-recognition',
     title: 'Weather Recognition with Random Forest',
     description: 'Machine learning weather classifier using Random Forest algorithm to categorize weather conditions (cloudy, rainy, shine, sunrise) from images. Features comprehensive data preprocessing, model persistence with joblib, and detailed performance metrics visualization.',

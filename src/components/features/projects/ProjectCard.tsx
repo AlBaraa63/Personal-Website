@@ -43,7 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDetails, priority 
                 tabIndex={0}
                 onClick={handleClick}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
-                className="relative flex-1 flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-colors duration-200 group-hover:border-accent cursor-pointer focus-visible:outline-none focus-visible:border-accent"
+                className="relative flex-1 flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-300 group-hover:border-accent group-hover:shadow-[0_0_18px_rgba(var(--accent-rgb),0.18)] cursor-pointer focus-visible:outline-none focus-visible:border-accent"
             >
                 {/* Thumbnail — fixed 16:9 aspect ratio, gradient overlay for consistency */}
                 <div className="relative aspect-video overflow-hidden bg-[var(--surface-inset)] border-b border-[var(--border)]">
@@ -119,7 +119,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDetails, priority 
                 {/* Body */}
                 <div className="flex-1 p-5 flex flex-col">
                     <div className="mb-4">
-                        <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-accent transition-colors truncate">
+                        <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-accent transition-colors duration-300 truncate">
                             {project.title}
                         </h3>
                         <p className="text-sm text-[var(--text-muted)] line-clamp-2 leading-relaxed">

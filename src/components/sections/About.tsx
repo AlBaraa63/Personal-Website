@@ -24,7 +24,8 @@ const codeContent = `{
       "Git & GitHub",
       "Gradio", "Streamlit", "FastAPI",
       "React Native", "Node.js", "SQLite",
-      "MCP (Model Context Protocol)"
+      "MCP (Model Context Protocol)",
+      "FAISS", "Claude API (Anthropic)"
     ]
   },
 
@@ -117,6 +118,37 @@ const About: React.FC = () => {
                             optimizing deep learning algorithms to run efficiently on resource-constrained devices
                             without compromising accuracy.
                         </p>
+                        <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed mt-3">
+                            Recent work includes two submissions to the{' '}
+                            <span className="text-accent font-semibold">Anthropic MCP 1st Birthday Hackathon</span>
+                            {' '}—{' '}
+                            <span className="text-[var(--text-primary)]">CleanCity Agent</span> (winner, Consumer Track) and{' '}
+                            <span className="text-[var(--text-primary)]">Mission Control MCP</span> — both leveraging the Model Context Protocol to build autonomous, multi-tool AI pipelines for real-world impact.
+                        </p>
+                    </motion.div>
+
+                    {/* Skills grid */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.5, delay: 0.25 }}
+                        className="border border-[var(--border)] bg-[var(--surface)] p-4"
+                    >
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--text-faint)] mb-3">Core Stack</p>
+                        <div className="flex flex-wrap gap-1.5">
+                            {[
+                                'Python', 'PyTorch', 'OpenCV', 'YOLOv8', 'TensorFlow',
+                                'Gradio', 'Streamlit', 'FastAPI', 'MCP', 'FAISS',
+                                'Claude API', 'React', 'TypeScript',
+                            ].map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="text-[10px] px-2 py-0.5 border border-accent/40 text-accent font-mono hover:border-accent hover:bg-accent/5 transition-colors"
+                                >
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
                     </motion.div>
 
                     <motion.div
