@@ -1,36 +1,12 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Build outputs
-dist/
-build/
-.next/
-
-# Environment variables
+node_modules
+dist
+dist-ssr
+*.local
 .env
 .env.local
 .env.*.local
-
-# IDE settings
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
+.supabase
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-
-# Debug logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Cache
-.cache/
-.eslintcache
-*.tsbuildinfo
-
-claude/

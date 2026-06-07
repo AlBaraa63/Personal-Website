@@ -1,29 +1,37 @@
-import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import { OSProvider } from '@/context/OSContext';
-import { SoundProvider } from '@/context/SoundContext';
-import { NotificationProvider } from '@/context/NotificationContext';
-import { AchievementProvider } from '@/context/AchievementContext';
-import Desktop from '@/components/os/Desktop';
-import CustomCursor from '@/components/effects/CustomCursor';
+import { Toaster } from 'react-hot-toast';
+import { useAuth } from './hooks/useAuth';
+import { AuthPage } from './components/auth/AuthPage';
+import { Dashboard } from './pages/Dashboard';
 
-// HOLO-OS is dark-first. The previous ThemeProvider/light-mode toggle was vestigial
-// from an earlier non-OS version of the site and never rendered correctly inside the OS,
-// so it's been removed.
-function App() {
+export default function App() {
+  const { user, profile, loading, signInWithEmail, signUpWithEmail, signOut } = useAuth();
+
+  if (loading) {
     return (
-        <ErrorBoundary>
-            <SoundProvider>
-                <OSProvider>
-                    <NotificationProvider>
-                        <AchievementProvider>
-                            <CustomCursor />
-                            <Desktop />
-                        </AchievementProvider>
-                    </NotificationProvider>
-                </OSProvider>
-            </SoundProvider>
-        </ErrorBoundary>
+      <div className="flex items-center justify-center min-h-screen bg-zinc-950">
+        <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      </div>
     );
-}
+  }
 
-export default App;
+  return (
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#18181b',
+            color: '#f4f4f5',
+            border: '1px solid #3f3f46',
+            fontSize: '13px',
+          },
+        }}
+      />
+      {user ? (
+        <Dashboard user={user} profile={profile} signOut={signOut} />
+      ) : (
+        <AuthPage signInWithEmail={signInWithEmail} signUpWithEmail={signUpWithEmail} />
+      )}
+    </>
+  );
+}
