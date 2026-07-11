@@ -14,9 +14,9 @@ const KNOWN_APP_IDS = ['bio', 'projects', 'experience', 'contact', 'terminal', '
 
 const ABOUT_TEXT =
     `name      : AlBaraa AlOlabi
-role      : Computer Vision Researcher & Engineer
+role      : AI Engineer & Computer Vision Specialist
 current   : Research Assistant @ Al Ain University
-            IT Intern @ Abu Dhabi Social Support Authority
+            AI & Data Science Intern @ Abu Dhabi Social Support Authority
 focus     : Medical Imaging, Computer Vision, Edge AI, MCP Tooling
 location  : UAE (Abu Dhabi)
 status    : Open to opportunities
@@ -24,9 +24,12 @@ status    : Open to opportunities
 stack     : Python, PyTorch, TFLite, OpenCV, YOLOv8, ONNX,
             FAISS, Claude API, Gradio, Streamlit, FastAPI, MCP,
             TensorFlow, TypeScript, React, Kotlin
-education : B.Sc. CS — Al Ain University (GPA 3.5, Jun 2026)
-papers    : IEEE SNAMS 2025 | SRC2026 (F-UNet, accepted poster)
-hackathon : Anthropic MCP 1st Birthday — CleanCity Agent (Winner)`;
+education : B.Sc. CS — Al Ain University (expected Aug 2026)
+programs  : 42 Abu Dhabi Piscine — graduate
+papers    : IEEE SNAMS 2025 (published)
+            SRC'26 poster (presented)
+            F-UNet — IEEE JBHI (under review)
+hackathon : Anthropic MCP 1st Birthday — CleanCity Agent`;
 
 const TerminalApp: React.FC = () => {
     const { playSound } = useSound();
@@ -98,7 +101,7 @@ const TerminalApp: React.FC = () => {
                 if (file === 'about.txt' || file === 'about') {
                     output = <pre className="whitespace-pre-wrap text-[var(--text-muted)]">{ABOUT_TEXT}</pre>;
                 } else if (file === 'skills.txt' || file === 'skills') {
-                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · TFLite · ONNX · OpenCV · YOLOv8 · FAISS · Claude API · Gradio · Streamlit · FastAPI · MCP · TensorFlow · TypeScript · React · Kotlin · C++ · C · Java</span>;
+                    output = <span className="text-[var(--text-muted)]">Python · PyTorch · TFLite · ONNX · OpenCV · YOLOv8 · FAISS · Claude API · Gradio · Streamlit · FastAPI · MCP · TensorFlow · TypeScript · React · Kotlin · C++ · C</span>;
                 } else if (file === 'contact.txt' || file === 'contact') {
                     output = (
                         <div className="text-[var(--text-muted)] space-y-0.5">

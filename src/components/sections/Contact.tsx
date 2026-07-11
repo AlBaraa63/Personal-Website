@@ -28,7 +28,7 @@ const CHANNELS: Channel[] = [
         id: 'linkedin',
         label: 'LinkedIn',
         value: '/in/albaraa-alolabi',
-        href: 'https://www.linkedin.com/in/albaraa-alolabi-0693b5278',
+        href: 'https://www.linkedin.com/in/albaraa-alolabi',
         icon: <Linkedin size={18} />,
     },
     {

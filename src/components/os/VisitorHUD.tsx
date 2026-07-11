@@ -110,6 +110,14 @@ const VisitorHUD: React.FC = () => {
                         Session: {formatTime(sessionTime)}
                     </span>
                 </div>
+
+                {/* Timezone */}
+                <div className="flex items-center gap-1.5">
+                    <Globe size={9} className="text-[var(--text-faint)] flex-shrink-0" />
+                    <span className="text-[10px] text-[var(--text-faint)]">
+                        {timezone}
+                    </span>
+                </div>
             </div>
         </motion.div>
     );

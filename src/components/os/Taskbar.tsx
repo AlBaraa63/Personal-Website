@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useOS } from '@/context/OSContext';
 import { useSound } from '@/context/SoundContext';
-import { Wifi, WifiOff, Battery, BatteryCharging, BatteryLow, Grid3X3, X } from 'lucide-react';
+import { Wifi, WifiOff, Battery, BatteryCharging, BatteryLow, Grid3X3, X, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { APP_LAUNCHER, SECONDARY_APPS } from './Desktop';
 import { useSystemTray } from './useSystemTray';
 
@@ -171,7 +172,14 @@ const Taskbar: React.FC = () => {
                 {/* Mobile bottom bar — hamburger + clock only, per brief */}
                 <div className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--surface)]/90 backdrop-blur-md border-t border-[var(--border)]">
                     <div className="flex items-center justify-between px-4 h-14 font-mono">
-                        <div className="w-10" />
+                        <Link
+                            to="/resume"
+                            onClick={() => playSound('click')}
+                            aria-label="Recruiter View — clean resume"
+                            className="flex items-center justify-center w-10 h-10 rounded border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-accent hover:text-accent transition-colors"
+                        >
+                            <FileText size={18} />
+                        </Link>
                         <button
                             onClick={() => {
                                 playSound('click');
@@ -239,6 +247,23 @@ const Taskbar: React.FC = () => {
                             </button>
                         );
                     })}
+
+                    {/* Recruiter View — navigates to the clean /resume page */}
+                    <Link
+                        to="/resume"
+                        onMouseEnter={() => playSound('hover')}
+                        onClick={() => playSound('click')}
+                        aria-label="Recruiter View — clean resume"
+                        title="Recruiter View"
+                        className="group relative ml-1 flex items-center gap-1.5 h-9 px-2.5 border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-accent hover:text-accent transition-colors"
+                    >
+                        <FileText size={15} />
+                        <span className="text-[9px] uppercase tracking-[0.18em] hidden lg:inline">Résumé</span>
+                        {/* Tooltip */}
+                        <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 bg-[var(--surface-raised)] border border-[var(--border)] text-[9px] uppercase tracking-widest text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            Recruiter View
+                        </span>
+                    </Link>
                 </div>
 
                 <div className="w-px h-6 bg-[var(--border)]" />

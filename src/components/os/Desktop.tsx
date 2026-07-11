@@ -16,9 +16,10 @@ import ContextMenu from './ContextMenu';
 import AchievementToast from './AchievementToast';
 import VisitorHUD from './VisitorHUD';
 import { useGlobalShortcuts } from './useGlobalShortcuts';
-import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, Loader2, Radar } from 'lucide-react';
+import { User, Terminal, Briefcase, FolderGit2, Mail, Cpu, Gamepad2, Settings, Loader2, Radar, FileText, ArrowRight } from 'lucide-react';
 import { projects, certifications } from '@/data/portfolioData';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 // Shape used by the launcher list — consumed by the command palette, taskbar
 // mobile drawer, and keyboard-shortcut hook. Kept here since the old Sidebar
@@ -153,16 +154,18 @@ const useCountUp = (target: number, duration = 1500, startDelay = 0) => {
 // Now with cinematic text-decryption and typing effects.
 // ───────────────────────────────────────────────────────────────────────────
 
-const CREDENTIALS = [
-    { label: 'Research Assistant @', highlight: 'Al Ain University' },
-    { label: 'Published author at', highlight: 'IEEE SNAMS 2025' },
-    { label: '', highlight: '🟢 Open to opportunities' },
+// 3 headline proof points — signal, not noise. The SNAMS credential links to the
+// published paper's DOI; F-UNet / IEEE JBHI adds concrete first-author research.
+const CREDENTIALS: { label: string; highlight: string; href?: string }[] = [
+    { label: 'AI & Data Science Intern @', highlight: 'Abu Dhabi Social Support Authority' },
+    { label: 'Published sole author ·', highlight: 'IEEE SNAMS 2025', href: 'https://doi.org/10.1109/SNAMS67467.2025.11391039' },
+    { label: 'F-UNet · first author ·', highlight: 'under review at IEEE JBHI' },
 ];
 
 const DesktopHero: React.FC = () => {
     const firstName = useScrambleText('AlBaraa', 200, 45);
     const lastName = useScrambleText('AlOlabi', 500, 45);
-    const role = useTypewriter('AI Researcher · Computer Vision Engineer', 1200, 35);
+    const role = useTypewriter('AI Engineer · Computer Vision Specialist', 1200, 35);
 
     return (
         <motion.header
@@ -201,9 +204,19 @@ const DesktopHero: React.FC = () => {
                         className="text-[11px] sm:text-sm text-[var(--text-muted)]"
                     >
                         {cred.label}{cred.label ? ' ' : ''}
-                        <span className={cred.highlight.includes('Open') ? 'text-accent font-semibold glow-pulse-text' : 'text-accent'}>
-                            {cred.highlight}
-                        </span>
+                        {cred.href ? (
+                            <a
+                                href={cred.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-accent hover:underline underline-offset-2"
+                                title="View published paper (DOI)"
+                            >
+                                {cred.highlight}
+                            </a>
+                        ) : (
+                            <span className="text-accent">{cred.highlight}</span>
+                        )}
                         {i < CREDENTIALS.length - 1 && (
                             <span className="text-[var(--text-faint)] mx-1">·</span>
                         )}
@@ -249,18 +262,6 @@ const QuickStats: React.FC = () => {
                         </div>
                     </div>
                 ))}
-                <div className="flex-1 py-2.5 sm:py-3 text-center">
-                    <div className="text-xs sm:text-sm font-bold text-accent leading-none flex items-center justify-center gap-1.5">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-                        </span>
-                        Hiring
-                    </div>
-                    <div className="text-[8px] sm:text-[10px] uppercase tracking-[0.25em] text-[var(--text-faint)] mt-1">
-                        Open to Work
-                    </div>
-                </div>
             </div>
         </motion.div>
     );
@@ -383,13 +384,20 @@ export const APP_LAUNCHER: LauncherApp[] = [
 // Desktop — the full landing layout.
 // ───────────────────────────────────────────────────────────────────────────
 
-const Desktop: React.FC = () => {
+interface DesktopProps {
+    // Set on the `/projects/:id` route — opens the Projects window and selects
+    // that project once the boot sequence has finished. Invalid ids are ignored.
+    deepLinkProjectId?: string;
+}
+
+const Desktop: React.FC<DesktopProps> = ({ deepLinkProjectId }) => {
     const { registerWindow, openWindow, focusWindow, windows, activeWindowId, isBooting, setBooting } = useOS();
     const { playSound } = useSound();
     const { notify } = useNotifications();
     const { unlock } = useAchievements();
     const welcomedRef = useRef(false);
     const openedWindowsRef = useRef(new Set<string>());
+    const deepLinkHandledRef = useRef(false);
 
     useEffect(() => {
         registerWindow({
@@ -495,6 +503,16 @@ const Desktop: React.FC = () => {
         return () => window.clearTimeout(t);
     }, [isBooting, notify, openWindow]);
 
+    // Deep link: /projects/:id opens the Projects window once boot is done.
+    // The Projects section reads the URL on mount and selects the project, so
+    // opening the window is all that's needed here. Invalid ids are ignored.
+    useEffect(() => {
+        if (isBooting || deepLinkHandledRef.current || !deepLinkProjectId) return;
+        if (!projects.some(p => p.id === deepLinkProjectId)) return;
+        deepLinkHandledRef.current = true;
+        openWindow('projects');
+    }, [isBooting, deepLinkProjectId, openWindow]);
+
     const timeOfDay = useTimeOfDay();
 
     if (isBooting) {
@@ -541,6 +559,25 @@ const Desktop: React.FC = () => {
             {/* Main landing column — hero, icon grid, featured projects */}
             <div className="relative z-10 min-h-screen flex flex-col items-center justify-start pt-16 sm:pt-20 md:pt-24 pb-32 gap-10 sm:gap-12 md:gap-14">
                 <DesktopHero />
+
+                {/* Recruiter View — tasteful escape hatch to the clean /resume page */}
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="-mt-4 sm:-mt-6"
+                >
+                    <Link
+                        to="/resume"
+                        onMouseEnter={() => playSound('hover')}
+                        onClick={() => playSound('click')}
+                        className="group inline-flex items-center gap-2 px-4 py-2 border border-[var(--border-strong)] bg-[var(--surface)]/60 backdrop-blur-sm font-mono text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[var(--text-primary)] hover:border-accent hover:text-accent transition-colors"
+                    >
+                        <FileText size={14} />
+                        Recruiter View
+                        <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                </motion.div>
 
                 {/* Quick stats — recruiter-focused at-a-glance numbers */}
                 <QuickStats />
