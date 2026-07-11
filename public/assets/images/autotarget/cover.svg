@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#050a06"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="scanlines" x="0" y="0" width="800" height="3" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="800" height="1" fill="#00ff41" fill-opacity="0.03"/>
+    </pattern>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+
+  <g stroke="#00ff41" stroke-opacity="0.04" stroke-width="0.5">
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="150" y1="0" x2="150" y2="450"/>
+    <line x1="300" y1="0" x2="300" y2="450"/>
+    <line x1="450" y1="0" x2="450" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+  </g>
+
+  <!-- Radar sweep -->
+  <g transform="translate(400,250)" filter="url(#glow)">
+    <circle r="130" fill="none" stroke="#00ff41" stroke-opacity="0.25" stroke-width="1"/>
+    <circle r="95" fill="none" stroke="#00ff41" stroke-opacity="0.25" stroke-width="1"/>
+    <circle r="60" fill="none" stroke="#00ff41" stroke-opacity="0.25" stroke-width="1"/>
+    <circle r="25" fill="none" stroke="#00ff41" stroke-opacity="0.25" stroke-width="1"/>
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="#00ff41" stroke-opacity="0.15" stroke-width="1"/>
+    <line x1="0" y1="-130" x2="0" y2="130" stroke="#00ff41" stroke-opacity="0.15" stroke-width="1"/>
+    <!-- Sweep wedge -->
+    <path d="M0,0 L0,-130 A130,130 0 0,1 92,-92 Z" fill="#00ff41" fill-opacity="0.1"/>
+    <line x1="0" y1="0" x2="92" y2="-92" stroke="#00ff41" stroke-width="1.5"/>
+
+    <!-- Predicted trajectory arc (Kalman prediction) -->
+    <path d="M-100,-70 Q-20,-140 70,-40 Q95,-10 60,40" fill="none" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="6,4" stroke-opacity="0.8"/>
+
+    <!-- Tracked ball -->
+    <circle cx="-100" cy="-70" r="6" fill="#f59e0b" fill-opacity="0.9"/>
+    <circle cx="60" cy="40" r="5" fill="#00ff41" fill-opacity="0.9"/>
+
+    <!-- Robotic plane / interceptor icon -->
+    <g transform="translate(60,40)" stroke="#00ff41" stroke-width="1.5" fill="none">
+      <path d="M-18,0 L18,0 M0,-10 L0,10 M-10,8 L10,8" stroke-opacity="0.9"/>
+    </g>
+  </g>
+
+  <!-- Tracking label -->
+  <rect x="245" y="140" width="120" height="15" fill="#00ff41" fill-opacity="0.85"/>
+  <text x="251" y="151" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8" fill="#000000" font-weight="700">TARGET LOCK 0.96</text>
+
+  <g stroke="#00ff41" stroke-opacity="0.25" fill="none" stroke-width="1">
+    <polyline points="0,20 20,20 20,0"/>
+    <polyline points="780,0 780,20 800,20"/>
+    <polyline points="0,430 20,430 20,450"/>
+    <polyline points="780,450 780,430 800,430"/>
+  </g>
+
+  <rect x="0" y="0" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">AUTOTARGET v1.0</text>
+  <text x="640" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">IEEE STUDENT DAY</text>
+
+  <rect x="0" y="428" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">KALMAN · HOMOGRAPHY · &lt;100MS LATENCY</text>
+  <text x="720" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">ROBOTICS</text>
+
+  <text x="400" y="60" text-anchor="middle" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="30" font-weight="700" fill="#00ff41" letter-spacing="3" filter="url(#glow-strong)">AutoTarget</text>
+  <text x="400" y="85" text-anchor="middle" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" fill="#00ff41" fill-opacity="0.6" letter-spacing="2">AUTONOMOUS ROBOTIC INTERCEPTION</text>
+
+  <rect width="800" height="450" fill="url(#scanlines)"/>
+  <rect width="800" height="450" fill="url(#vignette)"/>
+</svg>

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#050a06"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="scanlines" x="0" y="0" width="800" height="3" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="800" height="1" fill="#00ff41" fill-opacity="0.03"/>
+    </pattern>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+
+  <g stroke="#00ff41" stroke-opacity="0.04" stroke-width="0.5">
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="150" y1="0" x2="150" y2="450"/>
+    <line x1="300" y1="0" x2="300" y2="450"/>
+    <line x1="450" y1="0" x2="450" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+  </g>
+
+  <!-- Conveyor belt -->
+  <g filter="url(#glow)">
+    <line x1="60" y1="330" x2="740" y2="330" stroke="#00ff41" stroke-opacity="0.5" stroke-width="2"/>
+    <line x1="60" y1="360" x2="740" y2="360" stroke="#00ff41" stroke-opacity="0.5" stroke-width="2"/>
+    <g fill="#00ff41" fill-opacity="0.5">
+      <circle cx="90" cy="345" r="9"/>
+      <circle cx="710" cy="345" r="9"/>
+    </g>
+    <g stroke="#00ff41" stroke-opacity="0.25" stroke-width="1">
+      <line x1="140" y1="330" x2="140" y2="360"/>
+      <line x1="220" y1="330" x2="220" y2="360"/>
+      <line x1="300" y1="330" x2="300" y2="360"/>
+      <line x1="500" y1="330" x2="500" y2="360"/>
+      <line x1="580" y1="330" x2="580" y2="360"/>
+      <line x1="660" y1="330" x2="660" y2="360"/>
+    </g>
+  </g>
+
+  <!-- Parts on belt: OK (green) and defective (amber) -->
+  <g filter="url(#glow)">
+    <rect x="150" y="305" width="34" height="24" rx="3" fill="none" stroke="#00ff41" stroke-opacity="0.8" stroke-width="1.5"/>
+    <rect x="240" y="305" width="34" height="24" rx="3" fill="none" stroke="#00ff41" stroke-opacity="0.8" stroke-width="1.5"/>
+    <rect x="510" y="305" width="34" height="24" rx="3" fill="none" stroke="#00ff41" stroke-opacity="0.8" stroke-width="1.5"/>
+  </g>
+  <g filter="url(#glow)">
+    <rect x="368" y="300" width="38" height="28" rx="3" fill="#ef4444" fill-opacity="0.18" stroke="#ef4444" stroke-width="2"/>
+  </g>
+
+  <!-- Camera above the defective part with detection frame -->
+  <g filter="url(#glow)">
+    <path d="M370,150 L410,150 L400,175 L380,175 Z" fill="#00ff41" fill-opacity="0.1" stroke="#00ff41" stroke-width="1.5"/>
+    <rect x="365" y="130" width="50" height="24" rx="4" fill="none" stroke="#00ff41" stroke-width="1.5"/>
+    <circle cx="390" cy="142" r="6" fill="none" stroke="#00ff41" stroke-width="1.5"/>
+    <line x1="390" y1="175" x2="387" y2="298" stroke="#00ff41" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="3,3"/>
+  </g>
+  <g stroke="#ef4444" fill="none" stroke-opacity="0.9" stroke-width="1.5">
+    <polyline points="360,290 360,275 375,275"/>
+    <polyline points="405,275 420,275 420,290"/>
+    <polyline points="360,335 360,350 375,350"/>
+    <polyline points="405,350 420,350 420,335"/>
+  </g>
+  <rect x="360" y="280" width="76" height="13" fill="#ef4444" fill-opacity="0.85"/>
+  <text x="365" y="290" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="8" fill="#000000" font-weight="700">DEFECT 0.97</text>
+
+  <!-- Arduino / actuator ejecting part -->
+  <g filter="url(#glow)">
+    <rect x="440" y="360" width="46" height="30" rx="3" fill="none" stroke="#00ff41" stroke-opacity="0.7" stroke-width="1.5"/>
+    <text x="447" y="380" font-family="'JetBrains Mono', monospace" font-size="8" fill="#00ff41" fill-opacity="0.7">MCU</text>
+    <path d="M410,318 L440,318" stroke="#00ff41" stroke-width="2" stroke-opacity="0.8"/>
+    <polygon points="440,313 452,318 440,323" fill="#ef4444" fill-opacity="0.9"/>
+  </g>
+
+  <g stroke="#00ff41" stroke-opacity="0.25" fill="none" stroke-width="1">
+    <polyline points="0,20 20,20 20,0"/>
+    <polyline points="780,0 780,20 800,20"/>
+    <polyline points="0,430 20,430 20,450"/>
+    <polyline points="780,450 780,430 800,430"/>
+  </g>
+
+  <rect x="0" y="0" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">DEFECT_SYS v1.0</text>
+  <text x="700" y="14" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">REAL-TIME</text>
+
+  <rect x="0" y="428" width="800" height="22" fill="#00ff41" fill-opacity="0.04"/>
+  <text x="16" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">CNN · PYSERIAL · ARDUINO ACTUATION</text>
+  <text x="700" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="9" fill="#00ff41" fill-opacity="0.5" letter-spacing="1">EMBEDDED_AI</text>
+
+  <text x="400" y="60" text-anchor="middle" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="28" font-weight="700" fill="#00ff41" letter-spacing="2" filter="url(#glow-strong)">Defect Detection</text>
+  <text x="400" y="85" text-anchor="middle" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" fill="#00ff41" fill-opacity="0.6" letter-spacing="2">CAMERA → CNN → ARDUINO ACTUATION</text>
+
+  <rect width="800" height="450" fill="url(#scanlines)"/>
+  <rect width="800" height="450" fill="url(#vignette)"/>
+</svg>

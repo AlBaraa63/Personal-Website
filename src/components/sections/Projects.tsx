@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { projects, Project } from '@/data/portfolioData';
 import ProjectsHeader from '@/components/features/projects/ProjectsHeader';
@@ -54,17 +54,43 @@ const Projects: React.FC = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    // Select a project and mirror it into the URL (best-effort, one-way) so the
+    // detail view is shareable/bookmarkable as /projects/:id. Uses replaceState
+    // rather than router navigation to avoid remounting the OS or fighting
+    // window behaviour. Passing null clears the URL back to `/`.
+    const selectProject = useCallback((project: Project | null) => {
+        setSelectedProject(project);
+        if (typeof window === 'undefined') return;
+        if (project) {
+            const path = `/projects/${project.id}`;
+            if (window.location.pathname !== path) {
+                window.history.replaceState(null, '', path);
+            }
+        } else if (/^\/projects\//.test(window.location.pathname)) {
+            window.history.replaceState(null, '', '/');
+        }
+    }, []);
+
+    // Deep link (URL → state): on mount, if the page loaded at /projects/:id,
+    // select that project. Runs once; the URL already matches so no replaceState.
+    useEffect(() => {
+        const match = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/);
+        if (!match) return;
+        const project = projects.find(p => p.id === decodeURIComponent(match[1]));
+        if (project) setSelectedProject(project);
+    }, []);
+
     // Allow the Command Palette and Holo-AI to deep-link to a specific project.
     useEffect(() => {
         const onSelect = (e: Event) => {
             const detail = (e as CustomEvent<{ id: string }>).detail;
             if (!detail?.id) return;
             const project = projects.find(p => p.id === detail.id);
-            if (project) setSelectedProject(project);
+            if (project) selectProject(project);
         };
         window.addEventListener('holo-os:projects:select', onSelect);
         return () => window.removeEventListener('holo-os:projects:select', onSelect);
-    }, []);
+    }, [selectProject]);
 
     return (
         <section id="projects" className="relative h-full w-full overflow-hidden">
@@ -80,7 +106,7 @@ const Projects: React.FC = () => {
                     >
                         <ProjectInlineDetail
                             project={selectedProject}
-                            onBack={() => setSelectedProject(null)}
+                            onBack={() => selectProject(null)}
                         />
                     </motion.div>
                 ) : (
@@ -109,7 +135,7 @@ const Projects: React.FC = () => {
                                         <ProjectsGrid
                                             projects={filteredProjects}
                                             isVisible={true}
-                                            onDetails={(project) => setSelectedProject(project)}
+                                            onDetails={(project) => selectProject(project)}
                                             emptyMessage="No projects found in this category"
                                         />
 
