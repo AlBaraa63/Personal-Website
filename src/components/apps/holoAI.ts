@@ -50,32 +50,32 @@ const FAQ: FaqEntry[] = [
     {
         keywords: ['who', 'about', 'yourself', 'bio', 'identity', 'tell me about'],
         answer:
-            "AlBaraa AlOlabi — Computer Vision Researcher and Engineer. Currently a Research Assistant at Al Ain University (medical image segmentation) and IT Intern at Abu Dhabi Social Support Authority. Previously CV Research Intern at Cellula Technologies. IEEE-published author, MCP 1st Birthday Hackathon participant, Harvard CS50 certified. Based in UAE, open to opportunities.",
+            "AlBaraa AlOlabi — AI Engineer and Computer Vision Specialist. Currently a Research Assistant at Al Ain University (medical image segmentation) and AI & Data Science Intern at Abu Dhabi Social Support Authority. Previously CV Research Intern at Cellula Technologies. IEEE-published author, MCP 1st Birthday Hackathon participant, Harvard CS50 certified, 42 Abu Dhabi Piscine graduate. Based in UAE, open to opportunities.",
     },
     {
         keywords: ['skill', 'tech', 'stack', 'language', 'tool', 'framework'],
         answer:
-            "Core: Python, PyTorch, TensorFlow/TFLite, OpenCV, YOLOv8, FAISS, Claude API. Deployment: ONNX, Model Quantization, Edge AI, Gradio, Streamlit, FastAPI, MCP. Web: TypeScript, React, Kotlin (Android), React Native. Languages: Python, C++, C, Java, TypeScript.",
+            "Core: Python, PyTorch, TensorFlow/TFLite, OpenCV, YOLOv8, FAISS, Claude API. Deployment: ONNX, Model Quantization, Edge AI, Gradio, Streamlit, FastAPI, MCP. Web: TypeScript, React, Kotlin (Android), React Native. Languages: Python, C++, C, Kotlin.",
     },
     {
         keywords: ['experience', 'job', 'intern', 'cellula', 'career', 'work', 'role'],
         answer:
-            "Current: Research Assistant at Al Ain University (Feb 2025–Present, medical AI research + F-UNet segmentation) and IT Intern at Abu Dhabi Social Support Authority (Jul 2026–Present). Previous: CV Research Intern at Cellula Technologies (Jan–Apr 2026), Samsung Innovation Campus AI & ML program (Sep–Dec 2025).",
+            "Current: Research Assistant at Al Ain University (Feb 2025–Present, medical AI research + F-UNet segmentation) and AI & Data Science Intern at Abu Dhabi Social Support Authority (Jun 2026–Present). Previous: CV Research Intern at Cellula Technologies (Jan–Apr 2026), Samsung Innovation Campus AI & ML program (Sep–Dec 2025).",
     },
     {
         keywords: ['research', 'paper', 'ieee', 'snams', 'publication', 'src', 'funet', 'segmentation'],
         answer:
-            "Two publications: (1) IEEE SNAMS 2025 — 'The Impact of AI in Education on Student Learning Outcomes' (sole author, Vienna). (2) SRC2026 — 'Novel Parameter-Efficient Encoder–Decoder Architecture for Multi-Modal Medical Image Segmentation' (accepted, poster) — the F-UNet framework, 82% smaller than U-Net baselines.",
+            "Three publications: (1) IEEE SNAMS 2025 — 'The Impact of AI in Education on Student Learning Outcomes' (sole author, Vienna, published, DOI 10.1109/SNAMS67467.2025.11391039). (2) F-UNet — 'A Modular Encoder-Decoder Framework for Parameter-Efficient Medical Image Segmentation' (first author, IEEE Journal of Biomedical and Health Informatics, under review). (3) SRC'26 — 'Novel Parameter-Efficient Encoder–Decoder Architecture for Multi-Modal Medical Image Segmentation' (first author, poster, presented June 17–18, 2026) — the F-UNet framework, 82% smaller than U-Net baselines.",
     },
     {
         keywords: ['certif', 'cs50', 'samsung', 'harvard', 'education', 'university', 'degree'],
         answer:
-            "B.Sc. Computer Science at Al Ain University, Abu Dhabi (GPA 3.5/4.0, expected Jun 2026). CS50x and CS50P completed at Harvard; CS50AI in progress. Samsung Innovation Campus AI & ML program (2025). 17 total certifications including IBM, LinkedIn Learning, Google, edX, Coursera.",
+            "B.Sc. Computer Science at Al Ain University, Abu Dhabi (expected Aug 2026). CS50x, CS50P, and CS50AI completed at Harvard. Samsung Innovation Campus AI & ML program (2025). 17 total certifications including IBM, LinkedIn Learning, Google, edX, Coursera.",
     },
     {
         keywords: ['hackathon', 'mcp', 'cleancity', 'won', 'win', 'competition'],
         answer:
-            "Submitted two projects to the MCP 1st Birthday Hackathon: CleanCity Agent (Consumer Track) — an agentic AI that turns trash photos into full cleanup campaigns using YOLOv8, MCP, and Gemini Vision — and Mission Control MCP, an enterprise automation server with 8 tools.",
+            "Submitted two projects to Anthropic's MCP 1st Birthday Hackathon: CleanCity Agent (Consumer Track) — an agentic AI that turns trash photos into full cleanup campaigns using YOLOv8, MCP, and Gemini Vision — and Mission Control MCP, an enterprise automation server with 8 tools.",
     },
 ];
 

@@ -250,6 +250,13 @@ const NeuralNet: React.FC = () => {
                     <Send size={16} />
                 </button>
             </div>
+
+            {/* Footer note */}
+            <div className="px-3 pb-2 bg-[var(--surface)] text-center">
+                <span className="text-[9px] font-mono text-[var(--text-faint)] tracking-wide">
+                    Powered by Claude tool-use · falls back to local agent
+                </span>
+            </div>
         </div>
     );
 };
