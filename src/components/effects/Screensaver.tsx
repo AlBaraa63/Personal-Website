@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 const IDLE_TIMEOUT = 30_000; // 30 seconds
 const LOGO_W = 180;
@@ -21,9 +22,10 @@ const Screensaver: React.FC = () => {
     const posRef = useRef({ x: 100, y: 100 });
     const velRef = useRef({ vx: SPEED, vy: SPEED * 0.7 });
     const colorRef = useRef(0);
-    const [color, setColor] = useState(COLORS[0]);
+    const [, setColor] = useState(COLORS[0]);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rafRef = useRef(0);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     const resetTimer = useCallback(() => {
         if (active) {
@@ -35,6 +37,9 @@ const Screensaver: React.FC = () => {
     }, [active]);
 
     useEffect(() => {
+        // The DVD-bounce screensaver is pure continuous motion — disable entirely
+        // for reduced-motion users rather than ever activating it.
+        if (prefersReducedMotion) return;
         const events = ['mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
         events.forEach(e => window.addEventListener(e, resetTimer, { passive: true }));
         // Start initial timer
@@ -43,11 +48,11 @@ const Screensaver: React.FC = () => {
             events.forEach(e => window.removeEventListener(e, resetTimer));
             window.clearTimeout(timerRef.current);
         };
-    }, [resetTimer]);
+    }, [resetTimer, prefersReducedMotion]);
 
     // Animation loop
     useEffect(() => {
-        if (!active) {
+        if (!active || prefersReducedMotion) {
             cancelAnimationFrame(rafRef.current);
             return;
         }
@@ -125,7 +130,7 @@ const Screensaver: React.FC = () => {
             cancelAnimationFrame(rafRef.current);
             window.removeEventListener('resize', resize);
         };
-    }, [active]);
+    }, [active, prefersReducedMotion]);
 
     return (
         <AnimatePresence>

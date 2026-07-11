@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 interface Particle {
     x: number;
@@ -25,6 +26,7 @@ const ParticleField: React.FC<ParticleFieldProps> = ({
     const mouseRef = useRef({ x: 0, y: 0 });
     const animationRef = useRef<number>();
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     // Colors based on accent
     const colors = [
@@ -159,6 +161,9 @@ const ParticleField: React.FC<ParticleFieldProps> = ({
             }
         };
     }, [dimensions]);
+
+    // Continuous animated background — skip entirely for reduced-motion users.
+    if (prefersReducedMotion) return null;
 
     return (
         <canvas

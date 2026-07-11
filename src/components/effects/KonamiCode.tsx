@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useAchievements } from '@/context/AchievementContext';
 import { useSound } from '@/context/SoundContext';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 const KONAMI_SEQUENCE = [
     'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
@@ -22,6 +23,7 @@ const KonamiCode: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { unlock } = useAchievements();
     const { playSound } = useSound();
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     const triggerMatrix = useCallback(() => {
         if (active) return;
@@ -32,15 +34,17 @@ const KonamiCode: React.FC = () => {
         playSound('boot');
         setTimeout(() => playSound('success'), 300);
 
-        // Add matrix-mode class to html
-        document.documentElement.classList.add('matrix-mode');
+        // Add matrix-mode class to html — skip the RGB-glitch styling for reduced-motion users.
+        if (!prefersReducedMotion) {
+            document.documentElement.classList.add('matrix-mode');
+        }
 
         // Auto-dismiss
         setTimeout(() => {
             setActive(false);
             document.documentElement.classList.remove('matrix-mode');
         }, 8000);
-    }, [active, unlock, playSound]);
+    }, [active, unlock, playSound, prefersReducedMotion]);
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
@@ -106,7 +110,10 @@ const KonamiCode: React.FC = () => {
                 }
                 drops[i]++;
             }
-            raf = requestAnimationFrame(draw);
+            // Reduced motion: render a single static frame instead of a continuous loop.
+            if (!prefersReducedMotion) {
+                raf = requestAnimationFrame(draw);
+            }
         };
 
         raf = requestAnimationFrame(draw);
@@ -121,13 +128,13 @@ const KonamiCode: React.FC = () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', handleResize);
         };
-    }, [active]);
+    }, [active, prefersReducedMotion]);
 
     if (!active) return null;
 
     return (
         <div className="fixed inset-0 z-[500] pointer-events-none">
-            {/* Dense matrix rain */}
+            {/* Dense matrix rain — static single frame when reduced motion is preferred */}
             <canvas
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full"
@@ -136,9 +143,11 @@ const KonamiCode: React.FC = () => {
             {/* Center text */}
             <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                    className="text-accent text-4xl sm:text-6xl font-black tracking-[0.4em] uppercase font-mono animate-pulse"
+                    className={`text-accent text-4xl sm:text-6xl font-black tracking-[0.4em] uppercase font-mono ${prefersReducedMotion ? '' : 'animate-pulse'}`}
                     style={{
-                        textShadow: '0 0 30px rgba(34,197,94,0.9), 0 0 60px rgba(34,197,94,0.5), -3px 0 #ff0040, 3px 0 #00ffff',
+                        textShadow: prefersReducedMotion
+                            ? '0 0 20px rgba(34,197,94,0.7)'
+                            : '0 0 30px rgba(34,197,94,0.9), 0 0 60px rgba(34,197,94,0.5), -3px 0 #ff0040, 3px 0 #00ffff',
                     }}
                 >
                     THE MATRIX

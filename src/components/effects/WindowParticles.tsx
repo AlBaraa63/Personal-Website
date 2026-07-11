@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 interface Particle {
     x: number;
@@ -31,8 +32,11 @@ const WindowParticles: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<Particle[]>([]);
     const [hasParticles, setHasParticles] = useState(false);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     const spawnBurst = useCallback((config: BurstConfig) => {
+        // Skip the particle burst entirely for reduced-motion users.
+        if (prefersReducedMotion) return;
         const count = 24;
         const isClose = config.type === 'close';
 
@@ -53,7 +57,7 @@ const WindowParticles: React.FC = () => {
             });
         }
         setHasParticles(true);
-    }, []);
+    }, [prefersReducedMotion]);
 
     useEffect(() => {
         listeners.add(spawnBurst);

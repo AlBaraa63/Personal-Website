@@ -1,10 +1,16 @@
 import React from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 interface FloatingOrbsProps {
     className?: string;
 }
 
 const FloatingOrbs: React.FC<FloatingOrbsProps> = ({ className = '' }) => {
+    const prefersReducedMotion = usePrefersReducedMotion();
+
+    // Continuously-animated CSS background — skip entirely for reduced-motion users.
+    if (prefersReducedMotion) return null;
+
     return (
         <div className={`fixed inset-0 pointer-events-none overflow-hidden z-0 ${className}`}>
             {/* Main accent orb - top left */}

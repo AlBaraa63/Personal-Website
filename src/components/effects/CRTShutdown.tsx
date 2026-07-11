@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 /**
  * Classic CRT TV shutdown effect — when the user navigates away,
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
  */
 const CRTShutdown: React.FC = () => {
     const [shutting, setShutting] = useState(false);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -47,7 +49,7 @@ const CRTShutdown: React.FC = () => {
         });
     }, [shutting]);
 
-    if (!shutting) return null;
+    if (!shutting || prefersReducedMotion) return null;
 
     return (
         <div className="fixed inset-0 z-[9999] pointer-events-none crt-shutdown-overlay" aria-hidden>

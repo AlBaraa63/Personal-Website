@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
 
 interface BootSequenceProps {
@@ -279,8 +278,8 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
                             >
                                 Skip Intro ▸
                             </button>
-                            <div className="text-[10px] text-[var(--text-faint)] tracking-widest uppercase">
-                                Press Esc or Enter to skip
+                            <div className="text-[10px] text-[var(--text-faint)] tracking-widest uppercase animate-pulse">
+                                Click anywhere · press Esc or Enter to skip
                             </div>
                         </div>
                     </motion.div>

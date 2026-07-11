@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 interface CustomCursorProps {
     enabled?: boolean;
@@ -22,6 +23,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
     const [trail, setTrail] = useState<TrailDot[]>([]);
     const lastPosRef = useRef({ x: 0, y: 0 });
     const trailTimerRef = useRef(0);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     // Check for touch device on mount
     useEffect(() => {
@@ -66,27 +68,33 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
             lastY = e.clientY;
             lastPosRef.current = { x: e.clientX, y: e.clientY };
             setDotPosition({ x: e.clientX, y: e.clientY });
+            // Reduced motion: snap the ring directly to the pointer instead of easing.
+            if (prefersReducedMotion) setPosition({ x: e.clientX, y: e.clientY });
             if (!isVisible) setIsVisible(true);
         };
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseenter', handleMouseEnter);
         document.addEventListener('mouseleave', handleMouseLeave);
-        animationId = requestAnimationFrame(animate);
+        if (!prefersReducedMotion) {
+            animationId = requestAnimationFrame(animate);
+        }
 
-        // Trail update loop
-        trailTimerRef.current = window.setInterval(() => {
-            setTrail(prev => {
-                const aged = prev.map(d => ({ ...d, age: d.age + 1 })).filter(d => d.age < TRAIL_LENGTH);
-                // Only add if cursor has moved
-                const last = aged[0];
-                const cur = lastPosRef.current;
-                if (!last || Math.abs(last.x - cur.x) > 2 || Math.abs(last.y - cur.y) > 2) {
-                    return [{ x: cur.x, y: cur.y, age: 0 }, ...aged];
-                }
-                return aged;
-            });
-        }, TRAIL_INTERVAL);
+        // Trail (comet) update loop — skipped under reduced motion.
+        if (!prefersReducedMotion) {
+            trailTimerRef.current = window.setInterval(() => {
+                setTrail(prev => {
+                    const aged = prev.map(d => ({ ...d, age: d.age + 1 })).filter(d => d.age < TRAIL_LENGTH);
+                    // Only add if cursor has moved
+                    const last = aged[0];
+                    const cur = lastPosRef.current;
+                    if (!last || Math.abs(last.x - cur.x) > 2 || Math.abs(last.y - cur.y) > 2) {
+                        return [{ x: cur.x, y: cur.y, age: 0 }, ...aged];
+                    }
+                    return aged;
+                });
+            }, TRAIL_INTERVAL);
+        }
 
         // Detect hoverable elements
         const handleHoverableElements = () => {
@@ -111,7 +119,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ enabled = true }) => {
             clearInterval(trailTimerRef.current);
             observer.disconnect();
         };
-    }, [enabled, isTouchDevice, isVisible, handleMouseEnter, handleMouseLeave]);
+    }, [enabled, isTouchDevice, isVisible, handleMouseEnter, handleMouseLeave, prefersReducedMotion]);
 
     // Don't render on touch devices or when disabled
     if (!enabled || isTouchDevice) return null;

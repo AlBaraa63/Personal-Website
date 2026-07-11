@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { usePrefersReducedMotion } from './useReducedMotion';
 
 interface Ripple {
     id: number;
@@ -14,6 +15,7 @@ let nextId = 0;
  */
 const ClickRipple: React.FC = () => {
     const [ripples, setRipples] = useState<Ripple[]>([]);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     const handleClick = useCallback((e: MouseEvent) => {
         const ripple: Ripple = { id: nextId++, x: e.clientX, y: e.clientY };
@@ -25,9 +27,11 @@ const ClickRipple: React.FC = () => {
     }, []);
 
     useEffect(() => {
+        // Expanding ring is a continuous motion effect — skip it entirely for reduced-motion users.
+        if (prefersReducedMotion) return;
         window.addEventListener('click', handleClick, true);
         return () => window.removeEventListener('click', handleClick, true);
-    }, [handleClick]);
+    }, [handleClick, prefersReducedMotion]);
 
     if (ripples.length === 0) return null;
 
